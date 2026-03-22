@@ -1,0 +1,285 @@
+/* ===============================
+   Modal Container
+=============================== */
+.pt-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.pt-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pt-modal.hidden {
+  display: none;
+}
+
+/* ===============================
+   Overlay
+=============================== */
+.pt-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.pt-modal.is-open .pt-modal__overlay {
+  opacity: 1;
+}
+
+/* ===============================
+   Panel
+=============================== */
+.pt-modal__panel {
+  position: relative;
+  width: min(860px, calc(100% - 32px));
+  margin: 80px auto;
+  background: rgba(20, 20, 28, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+  transform: translateY(10px) scale(0.98);
+  opacity: 0;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.pt-modal.is-open .pt-modal__panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* ===============================
+   Header
+=============================== */
+.pt-modal__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pt-modal__header h3 {
+  margin: 0;
+}
+
+/* Close Button */
+.pt-modal__close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.08);
+
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffffff;
+
+  line-height: 1;      /* 🔥 prevents vertical shift */
+  padding: 0;          /* 🔥 removes default button padding */
+
+  cursor: pointer;
+}
+
+.pt-modal__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.08);
+}
+
+.pt-modal__sub {
+  margin: 6px 0 12px;
+  opacity: 0.8;
+}
+
+/* ===============================
+   Chips
+=============================== */
+.pt-modal__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  min-height: 56px;
+}
+
+.pt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 12px;
+}
+
+.pt-chip__x {
+  cursor: pointer;
+  font-size: 11px;
+}
+
+/* Drag states */
+.pt-chip.is-dragging {
+  opacity: 0.5;
+}
+
+.pt-chip.is-drop-target {
+  outline: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+/* ===============================
+   Input Row
+=============================== */
+.pt-modal__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pt-modal__row input {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  outline: none;
+}
+
+.pt-modal__row input:focus {
+  border-color: rgba(102, 252, 241, 0.6);
+  box-shadow: 0 0 0 3px rgba(102, 252, 241, 0.15);
+}
+
+/* ===============================
+   Modal Buttons (APP MATCHED)
+=============================== */
+.pt-modal__btn,
+.pt-modal__add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.pt-modal__btn--primary {
+  background: linear-gradient(90deg, var(--primary), var(--accent-2));
+  color: #001517;
+  border: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.pt-modal__btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+.pt-modal__btn--primary.is-disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  cursor: default;
+}
+
+.pt-modal__btn {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-color);
+}
+
+.pt-modal__btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pt-modal__add {
+  background: rgba(102, 252, 241, 0.12);
+  border: 1px solid rgba(102, 252, 241, 0.35);
+  color: var(--text-color);
+}
+
+.pt-modal__add:hover {
+  background: rgba(102, 252, 241, 0.2);
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   Footer
+=============================== */
+.pt-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* ===============================
+   Override Shield
+=============================== */
+
+.pt-modal .pt-modal__footer .pt-modal__btn {
+  width: auto !important;
+}
+
+.pt-modal .pt-modal__row input {
+  margin-bottom: 0 !important;
+}
+
+.pt-modal .pt-chip__x {
+  height: auto !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* ===============================
+   Responsive
+=============================== */
+@media (max-width: 700px) {
+  .pt-modal__panel {
+    width: calc(100% - 20px);
+    margin: 40px auto;
+    padding: 18px;
+  }
+
+  .pt-modal__row {
+    grid-template-columns: 1fr;
+  }
+
+  .pt-modal__footer {
+    flex-direction: column-reverse;
+  }
+
+  .pt-modal__btn,
+  .pt-modal__add {
+    width: 100%;
+  }
+}

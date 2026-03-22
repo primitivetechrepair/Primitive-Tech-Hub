@@ -1,0 +1,483 @@
+/* =========================================================
+   Primitive Tech Hub — UI Polish Layer (Safe Overrides)
+   ========================================================= */
+
+/* ---------- Tokens (lightweight) ---------- */
+:root {
+  --pth-radius: 14px;
+  --pth-radius-sm: 10px;
+  --pth-pad: 12px;
+  --pth-pad-lg: 16px;
+
+  --pth-border: 1px solid rgba(255, 255, 255, 0.14);
+  --pth-border-strong: 1px solid rgba(255, 255, 255, 0.22);
+
+  --pth-bg-soft: rgba(255, 255, 255, 0.06);
+  --pth-bg-softer: rgba(255, 255, 255, 0.04);
+  --pth-bg-hover: rgba(255, 255, 255, 0.09);
+
+  --pth-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Global polish ---------- */
+:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 2px;
+}
+
+button {
+  min-height: 36px;
+  border-radius: var(--pth-radius-sm);
+  transition: transform 120ms ease, filter 120ms ease, opacity 120ms ease;
+}
+button:hover { filter: brightness(1.06); }
+button:active { transform: translateY(1px); }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+input,
+select,
+textarea {
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+/* ✅ Single focus rule (duplicate removed) */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(102, 252, 242, 0.45);
+  box-shadow: 0 0 0 2px rgba(102, 252, 242, 0.15);
+}
+
+/* Make selects feel less “default” without breaking your theme */
+select {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* ---------- Section containers (cards) ---------- */
+.section,
+.panel,
+.card,
+.pt-card {
+  border-radius: var(--pth-radius);
+}
+
+.main-card,
+.auth-card,
+.settings-card,
+.inventory-card,
+.leads-card,
+.analytics-card {
+  border: var(--pth-border);
+  background: var(--pth-bg-soft);
+  box-shadow: var(--pth-shadow);
+  border-radius: var(--pth-radius);
+}
+
+/* ---------- Inventory & Lead dropdown alignment ---------- */
+#itemDevice,
+#itemBrand,
+#deviceType,
+#repairType {
+  width: 100%;
+}
+
+/* Form row spacing: targets common patterns */
+form .row,
+.form-row,
+.field-row,
+.form-group {
+  margin-bottom: 12px;
+}
+
+/* If you have label + input stacks */
+label {
+  display: inline-block;
+  margin-bottom: 6px;
+  opacity: 0.92;
+}
+
+/* ---------- Dropdown polish ---------- */
+#itemDevice,
+#itemBrand,
+#deviceType,
+#repairType {
+  border: var(--pth-border);
+  background: rgba(255, 255, 255, 0.05);
+}
+#itemDevice:hover,
+#itemBrand:hover,
+#deviceType:hover,
+#repairType:hover {
+  background: var(--pth-bg-hover);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* ---------- List Manager Chips (kept) ---------- */
+.pt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: var(--pth-border);
+  background: rgba(255,255,255,0.07);
+  user-select: none;
+  transition: transform 120ms ease, filter 120ms ease, border-color 120ms ease;
+}
+.pt-chip:hover { filter: brightness(1.08); border-color: rgba(255,255,255,0.22); }
+.pt-chip.is-dragging { opacity: 0.6; transform: scale(0.985); }
+.pt-chip.is-drop-target {
+  border-color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.12);
+}
+
+.pt-chip__x {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.18);
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+.pt-chip__x:hover { filter: brightness(1.12); }
+.pt-chip__x:active { transform: scale(0.98); }
+
+/* =========================================================
+   Table Density + Professional Polish
+   ========================================================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 12px 14px;
+  background: linear-gradient(
+    180deg,
+    rgba(30, 40, 60, 0.85),
+    rgba(20, 25, 40, 0.9)
+  );
+  border-bottom: 1px solid rgba(102, 252, 242, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+tbody td {
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+}
+
+tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+tbody tr:hover td {
+  background: rgba(102, 252, 242, 0.06);
+}
+
+tbody tr {
+  transition: background 120ms ease;
+}
+
+tbody td:first-child {
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+tbody td:not(:first-child) {
+  opacity: 0.9;
+}
+
+tbody button {
+  min-height: 30px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+/* ---------- Tiny “saving” spinner utility (kept) ---------- */
+.pt-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  animation: ptspin 0.7s linear infinite;
+  vertical-align: -2px;
+  margin-right: 8px;
+}
+@keyframes ptspin { to { transform: rotate(360deg); } }
+
+/* =========================================================
+   Unified Form Container Surface (kept)
+   Applies to both inventory + lead forms (both are .form-grid)
+   ========================================================= */
+.form-grid {
+  border: 1px solid rgba(102, 252, 242, 0.25);
+  background: linear-gradient(
+    160deg,
+    rgba(76, 96, 133, 0.55),
+    rgba(30, 40, 60, 0.65)
+  );
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   Inventory Form Polish
+   Targets: #inventoryForm.form-grid
+   ========================================================= */
+#inventoryForm.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#inventoryForm input,
+#inventoryForm select,
+#inventoryForm textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  font-family: inherit;
+}
+
+#inventoryForm textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+#inventoryForm .span-full {
+  grid-column: 1 / -1;
+}
+
+#inventoryForm .inventory-notes-submit-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 4px;
+}
+
+/* =========================================================
+   Lead Form Polish
+   Targets: #leadForm.form-grid
+   ========================================================= */
+#leadForm.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#leadForm input,
+#leadForm select,
+#leadForm textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  font-family: inherit;
+}
+
+#leadForm textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+#leadForm .span-full {
+  grid-column: 1 / -1;
+}
+
+#leadForm .repair-leads-split-row {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 12px;
+  align-items: start;
+  padding-top: 4px;
+}
+
+#leadForm .repair-leads-split-row label {
+  display: grid;
+  gap: 6px;
+  opacity: 0.95;
+}
+
+#leadInventoryUsed {
+  min-height: 110px;
+}
+
+#leadFiles {
+  min-height: 40px;
+  padding: 8px 10px;
+}
+
+/* =========================================================
+   Primary submit buttons (kept)
+   ========================================================= */
+#inventoryForm .inventory-submit-btn,
+#leadForm .lead-submit-btn {
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(102, 252, 242, 0.45);
+  background: linear-gradient(
+    135deg,
+    rgba(102, 252, 242, 0.25),
+    rgba(76, 96, 133, 0.65)
+  );
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease;
+}
+
+#inventoryForm .inventory-submit-btn:hover,
+#leadForm .lead-submit-btn:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+#inventoryForm .inventory-submit-btn:active,
+#leadForm .lead-submit-btn:active {
+  transform: translateY(1px);
+}
+
+/* =========================================================
+   Mobile Uniform Layout
+   ========================================================= */
+@media (max-width: 720px) {
+  #inventoryForm.form-grid,
+  #leadForm.form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  #inventoryForm.form-grid > *,
+  #leadForm.form-grid > * {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+  #inventoryForm .inventory-notes-submit-row {
+    justify-content: stretch;
+    padding-top: 0;
+  }
+  #inventoryForm .inventory-submit-btn {
+    width: 100%;
+  }
+
+  #leadForm .repair-leads-split-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding-top: 0;
+  }
+
+  #leadForm .lead-submit-btn {
+    width: 100%;
+    justify-self: stretch;
+    min-width: 0;
+  }
+
+  #leadInventoryUsed {
+    min-height: 120px;
+  }
+
+  /* Normalize date fields on mobile */
+  #inventoryForm input[type="date"],
+  #leadForm input[type="date"] {
+    min-height: 42px;
+    padding: 10px 12px;
+    line-height: 1.2;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+}
+
+/* =========================================================
+   Form visual rhythm (desktop only)
+   ========================================================= */
+#inventoryForm.form-grid > *:nth-child(4n),
+#leadForm.form-grid > *:nth-child(4n) {
+  margin-bottom: 4px;
+}
+
+#inventoryForm textarea,
+#leadForm textarea,
+#leadForm .repair-leads-split-row {
+  margin-top: 6px;
+}
+
+/* ✅ Disable rhythm spacing on mobile for true uniform spacing */
+@media (max-width: 720px) {
+  #inventoryForm.form-grid > *:nth-child(4n),
+  #leadForm.form-grid > *:nth-child(4n) {
+    margin-bottom: 0 !important;
+  }
+
+  #inventoryForm textarea,
+  #leadForm textarea,
+  #leadForm .repair-leads-split-row {
+    margin-top: 0 !important;
+  }
+}
+
+/* =========================================================
+   Lead Status Visual Indicator
+   ========================================================= */
+.leadStatusSel {
+  min-height: 30px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+}
+
+td:has(.leadStatusSel option:checked[value="New"]) {
+  background: rgba(0, 140, 255, 0.08);
+}
+td:has(.leadStatusSel option:checked[value="In Progress"]) {
+  background: rgba(255, 180, 0, 0.10);
+}
+td:has(.leadStatusSel option:checked[value="Waiting for Parts"]) {
+  background: rgba(180, 120, 255, 0.10);
+}
+td:has(.leadStatusSel option:checked[value="Completed"]) {
+  background: rgba(0, 200, 120, 0.10);
+}

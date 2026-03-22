@@ -1,0 +1,2748 @@
+/* =============================== 1) Design Tokens / Theme =============================== */
+:root {
+  color-scheme: dark;
+
+  --bg-color: #0b0c10;
+  --card-bg: #1f2833;
+  --text-color: #ffffff;
+  --muted: #c5c6c7;
+  --heading: #66fcf1;
+  --primary: #66fcf1;
+  --accent-2: #45a29e;
+  --danger: #ff0000;
+  --ok: #00ff19;
+  --warn: #ffd500;
+  --radius: 20px;
+
+  --space-1: 10px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
+}
+
+/* Light theme variable overrides */
+body.light-theme {
+  --bg-color: #f3f6fb;
+  --card-bg: #ffffff;
+  --text-color: #0f172a;
+  --muted: #475569;
+  --heading: #0f766e;
+  --primary: #0ea5a5;
+}
+
+/* =============================== 2) Reset / Base =============================== */
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #4c5562 #111722;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #111722;
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #4c5562;
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #5b6777;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 20% 0%, rgba(102,252,241, .08), transparent 60%),
+              radial-gradient(900px 500px at 90% 10%, rgba(69,162,158,.06), transparent 55%),
+              url("your-background.jpg");
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: center, center, center;
+  background-size: cover, cover, cover;
+  background-attachment: scroll, scroll, scroll;
+
+  color: var(--text-color);
+  font-family: "Oswald", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+input, select, textarea, button {
+  font-size: 16px;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-3);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* =============================== 3) Typography =============================== */
+h1, h2, h3, h4 {
+  color: var(--heading);
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+  background: #000;
+  border-radius: var(--radius);
+  text-transform: uppercase;
+}
+
+body.light-theme h1, body.light-theme h2, body.light-theme h3, body.light-theme h4 {
+  background: #e2e8f0;
+}
+
+h1 {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  font-size: 35px;
+  font-weight: 700;
+}
+
+h2 {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  font-size: 35px;
+  font-weight: 600;
+}
+
+h3, h4 {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.section-subtitle {
+  margin: 0 0 var(--space-1);
+  text-align: center;
+}
+
+/* =============================== 4) Layout / Containers =============================== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.card,
+.auth-card,
+.table-wrap,
+table {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+}
+
+.card,
+.auth-card {
+  padding: var(--space-3);
+  margin-bottom: var(--space-5);
+  border: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 16px 40px rgba(0,0,0,.22);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  width: 100%;
+}
+
+.wrap { flex-wrap: wrap; }
+
+.stack { display: grid; gap: var(--space-2); }
+
+.inline-check {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  white-space: nowrap;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.form-grid > * {
+  flex: 1 1 192px;
+  min-width: 0;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+}
+
+.analytics-grid > div {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+}
+
+.analytics-grid ul,
+#auditLog,
+#customerHistory {
+  max-height: 184px;
+  overflow: auto;
+  padding-left: var(--space-3);
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+.span-full {
+  grid-column: 1 / -1;
+}
+
+.form-grid .span-full {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+/* =============================== 5) Forms / Inputs / Buttons =============================== */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+input,
+select,
+button,
+textarea {
+  width: 100%;
+  border: 1px solid #3d4957;
+  border-radius: var(--radius);
+  padding: var(--space-1) var(--space-2);
+  margin-bottom: var(--space-2);
+  background: #0f141a;
+  color: var(--text-color);
+}
+
+/* Improved dropdown styling */
+/* ===== FINAL SELECT ARROW FIX ===== */
+select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+
+  padding-right: 40px !important;
+  background-color: #0f141a !important;
+  color: var(--text-color) !important;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3E%3Cpath d='M5.5 7.5 10 12l4.5-4.5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 14px 14px !important;
+}
+
+/* Hide old IE/Edge native arrow */
+select::-ms-expand {
+  display: none;
+}
+
+/* Keep option colors readable */
+select option {
+  background: #0f141a !important;
+  color: var(--text-color) !important;
+}
+
+/* focus ring */
+input:focus, select:focus, textarea:focus, button:focus {
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(102,252,241,.55);
+  box-shadow: 0 0 0 3px rgba(102,252,241,.12);
+}
+
+/* buttons */
+button {
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--primary), var(--accent-2));
+  color: #001517;
+  border: none;
+  min-height: var(--space-5);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+  border-radius: var(--radius);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
+}
+
+button.secondary {
+  background: #2d3a47;
+  color: #fff;
+  border: 1px solid #425468;
+  box-shadow: none;
+}
+
+button.secondary:hover {
+  background: #3a4a5d;
+}
+
+button.delete-btn {
+  background: var(--danger);
+  color: #fff;
+  border: 1px solid #ff6b6b;
+  box-shadow: none;
+}
+
+button.delete-btn:hover {
+  background: #d10000;
+}
+
+button.tiny {
+  width: auto;
+  min-width: 96px;
+  min-height: var(--space-5);
+  padding: var(--space-1) var(--space-2);
+  font-size: 14px;
+  border-radius: var(--space-2);
+  margin: 0;
+}
+
+.action-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+/* =============================== 6) Tables (Base) =============================== */
+.table-wrap {
+  overflow: auto;
+  width: 100%;
+  max-height: 70vh;
+  padding: var(--space-1);
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 1280px;
+  overflow: hidden;
+}
+
+th, td {
+  border-bottom: 1px solid #3d4957; /* Horizontal row separators */
+  border-right: 1px solid #32404d; /* Vertical column separators */
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+
+th:last-child,
+td:last-child {
+  border-right: none; /* Remove right border for the last column */
+}
+
+th {
+  color: var(--heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qty-input {
+  min-width: 80px;
+}
+
+tr.stock-out td {
+  background: rgba(255, 0, 0, 0.25);
+}
+
+tr.stock-low td {
+  background: rgba(255, 213, 0, 0.22);
+  color: #fff;
+}
+
+tr.stock-healthy td {
+  background: rgba(0, 255, 25, 0.18);
+  color: #fff;
+}
+
+tbody tr td {
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+tbody tr:hover td {
+  background-color: rgba(102,252,241,.05);
+}
+
+/* Default ellipsis inside bodies (Leads overrides later) */
+#inventoryBody td, #leadsBody td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Inventory columns (kept; only applies if you still want fixed widths) */
+.inventory-table thead th:nth-child(1) { width: 16%; }
+.inventory-table thead th:nth-child(2),
+.inventory-table thead th:nth-child(3) { width: 10%; }
+.inventory-table thead th:nth-child(4),
+.inventory-table thead th:nth-child(5),
+.inventory-table thead th:nth-child(6) { width: 9%; }
+.inventory-table thead th:nth-child(7) { width: 11%; }
+.inventory-table thead th:nth-child(8) { width: 18%; }
+.inventory-table thead th:nth-child(9) { width: 8%; }
+
+/* =============================== 7) Auth Screen =============================== */
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-3);
+}
+
+.error {
+  color: #ff8a8a;
+  min-height: var(--space-3);
+}
+
+/* =============================== 8) Dashboard / Responsive Layout =============================== */
+
+/* Default Layout for Desktop and Larger Screens (2 columns) */
+.charts {
+  display: grid;
+  gap: var(--space-4);  /* Vertical gap between rows */
+  grid-template-columns: repeat(2, 1fr); /* Two columns, each taking 50% width */
+  grid-template-rows: auto auto auto auto;  /* Four rows */
+  align-items: stretch;
+  margin-bottom: var(--space-4);  /* Bottom margin for overall spacing */
+}
+
+/* Adjust individual chart card styling */
+.charts > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-2);  /* Vertical gap between components inside each card */
+  background: #161d28;
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  animation: cardFadeIn 0.35s ease both;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  margin-bottom: 10px !important;  /* Apply 10px margin at the bottom of each card */
+}
+
+/* Hover effect for cards */
+.charts > div:hover {
+  transform: translateY(-2px);
+}
+
+/* Title style for charts inside the cards */
+.charts > div > h3 {
+  text-align: left;
+  background: transparent;
+  padding: 0;
+  margin: 0 0 var(--space-1) 0;
+  font-weight: 500;
+  letter-spacing: 0px;
+  text-transform: uppercase;
+  color: var(--heading);
+}
+
+/* Bar chart container adjustments */
+.bar-chart {
+  display: grid;
+  gap: var(--space-1);  /* Space between chart components */
+}
+
+/* Pie chart specific styles */
+.pie {
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  border: 2px solid #3d4957;
+}
+
+/* Legend styling */
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.legend li {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  font-size: 14px;
+  padding: 2px 0;
+}
+
+.dot {
+  width: var(--space-1);
+  height: var(--space-1);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* =============================== Button: Hide Device Pie =============================== */
+.dashboard-toggle-btn {
+  background: #66fcf1;  /* Same as other buttons */
+  color: #001517;
+  border: none;
+  padding: var(--space-2) var(--space-3);  /* Padding for consistent button size */
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+/* Hover effect for the button */
+.dashboard-toggle-btn:hover {
+  background: #45a29e;  /* Hover color to match the rest */
+}
+
+/* Optional: Specific alignment or adjustments (if needed) */
+.dashboard-toggle-btn {
+  display: inline-block;
+  margin-top: var(--space-3);  /* Optional: Adjust margin as needed */
+  width: 100%;  /* Optional: Stretch button to full width */
+}
+
+/* =============================== 8) Mobile Layout (Single Column) =============================== */
+
+/* Adjust the layout for mobile devices */
+@media (max-width: 900px) {
+  .charts {
+    grid-template-columns: 1fr;  /* Single column layout for mobile */
+    grid-template-rows: auto auto auto auto auto auto auto auto;  /* Each section is stacked vertically */
+  }
+
+  /* Apply the 10px bottom margin on mobile only */
+  .charts > div {
+    width: 100%;  /* Make each chart/card take up the full width of the container */
+    margin-bottom: 10px !important;  /* Apply 10px bottom margin for each card */
+  }
+
+  /* Pie chart size adjustment for mobile */
+  .pie {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 10px !important;  /* Ensure proper margin for mobile */
+  }
+
+  /* Legends in the pie charts for mobile */
+  .legend li {
+    font-size: 12px;
+  }
+
+  /* Bar chart adjustments */
+  .bar-chart {
+    gap: var(--space-2);  /* Adjust space between bars for mobile */
+  }
+
+  /* Adjustments to the width and layout for all elements */
+  .device-chart-card,
+  .common-repair-card,
+  .leads-trend-card,
+  .inventory-forecast-card,
+  .profit-tracking-card,
+  .restock-suggestions-card,
+  .follow-up-reminders-card {
+    width: 100%;  /* Make all cards take full width on mobile */
+    margin-bottom: 10px !important;  /* Apply 10px bottom margin to each card */
+  }
+}
+
+/* =============================== 9) Search Inputs =============================== */
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Search Icon (magnifying glass) inside the input field */
+.search-icon {
+  position: absolute;
+  left: var(--space-1);  /* Adjust this value to move the icon to the left */
+  top: 25%;  /* Vertically center the icon */
+  transform: translateY(-50%);  /* Center vertically */
+  font-size: 18px; /* Adjust size for the magnifying glass emoji */
+  color: var(--muted); /* Change to your preferred color */
+  pointer-events: none;  /* Ensure the icon doesn't block input interactions */
+  opacity: 0.9;  /* Initially visible */
+  transition: opacity 0.2s ease;  /* Smooth transition for hiding the icon */
+}
+
+/* Inventory and Leads Search input fields */
+.inventory-search-row .search-wrapper input,
+.lead-search-row .search-wrapper input {
+  padding-left: calc(var(--space-5) + 1px + 1px) !important;  /* Adds space for the icon and shifts text to the right */
+  margin-bottom: 50px !important;
+  width: 100%;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-2);
+  margin-bottom: var(--space-2);
+  background: #373F47;
+  color: var(--text-color);
+  font-size: 14px;
+  transition: all 0.3s ease;  /* Smooth transitions for focus */
+  
+  /* Add the line separator */
+  border-bottom: 2px solid #66fcf1; /* Adjust the color and thickness */
+}
+
+/* Input field focus state */
+.inventory-search-row .search-wrapper input:focus,
+.lead-search-row .search-wrapper input:focus {
+  outline: none;
+  border-color: #66fcf1;
+  box-shadow: 0 0 0 3px rgba(102,252,241,.12);
+}
+
+/* Adjust placeholder text color */
+.inventory-search-row .search-wrapper input::placeholder,
+.lead-search-row .search-wrapper input::placeholder {
+  color: var(--muted);
+}
+
+/* =============================== 10) Inventory: Notes + Submit row =============================== */
+.inventory-notes-submit-row {
+  display: flex;                    /* Use flex to align items */
+  justify-content: center;          /* Center the button */
+  width: 100%;                      /* Make sure it takes up the full width */
+}
+
+/* =============================== 10) Inventory: Notes + Submit row =============================== */
+.inventory-submit-btn {
+  background: #66fcf1;  /* Same as Add Repair Lead button, adjust if necessary */
+  color: #001517;
+  border: none;
+  padding: var(--space-2) var(--space-3);  /* Add padding for button size */
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+/* Hover effect for the button */
+.inventory-submit-btn:hover {
+  background: #45a29e;  /* Hover color, same as the Add Repair Lead button */
+}
+
+/* Optional: If the button needs specific alignment or positioning */
+.inventory-submit-btn {
+  display: inline-block;
+  margin-top: var(--space-3);  /* Optional: Adjust margin */
+  width: 100%;  /* Optional: If you want the button to stretch full width */
+}
+
+/* =============================== 11) Repair Leads: Form + Table =============================== */
+.lead-submit-btn {
+  background: #66fcf1;
+  color: #001517;
+  border: none;
+  padding: var(--space-2) var(--space-3);  /* Adjust padding */
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+/* Button hover effect */
+.lead-submit-btn:hover {
+  background: #45a29e;  /* Change to your desired hover color */
+}
+
+.lead-notes-field {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.lead-notes-row,
+.inventory-used-row {
+  margin-bottom: var(--space-2);
+}
+
+.inventory-used-row select {
+  width: 100%;
+  min-height: 120px;
+}
+
+.attach-submit-row {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+  align-items: flex-end;
+}
+
+.attach-submit-row > label,
+.attach-submit-row > button {
+  flex: 1 1 0;
+  margin: 0;
+}
+
+.attach-submit-row > label input[type="file"] {
+  margin-bottom: 0;
+}
+
+.attach-submit-row > button.lead-submit-btn {
+  min-height: unset !important;
+  height: auto !important;
+  padding: 10px 18px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+/* Repair Leads table */
+.repair-leads-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.repair-leads-table-wrap table {
+  table-layout: auto !important;
+  width: auto;
+  min-width: 100%;
+}
+
+.repair-leads-table-wrap th,
+.repair-leads-table-wrap td {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.repair-leads-table-wrap th.actions,
+.repair-leads-table-wrap td.actions {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.repair-leads-table-wrap th.status-col,
+.repair-leads-table-wrap td.status-col {
+  white-space: nowrap !important;
+  width: auto !important;
+  min-width: max-content !important;
+}
+
+.repair-leads-table-wrap td.status-col {
+  display: table-cell !important;
+}
+
+.repair-leads-table-wrap td.status-col select {
+  display: inline-block !important;
+  width: auto !important;
+  min-width: max-content !important;
+  white-space: nowrap !important;
+}
+
+/* Leads table expansion + sticky actions */
+.leads-table-wrap {
+  overflow-x: auto;
+  width: 100%;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+.leads-table {
+  table-layout: auto;
+  width: max-content;
+  min-width: 1680px;
+}
+
+.leads-table th,
+.leads-table td {
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+  padding: 8px 12px;
+}
+
+#leadsBody td {
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.leads-table th:last-child,
+.leads-table td:last-child {
+  position: sticky;
+  right: 0;
+  background: var(--card-bg);
+  z-index: 2;
+}
+
+.leads-table td:last-child {
+  border-bottom: 1px solid #3d4957;
+}
+
+.leads-table td.action-stack {
+  display: flex !important;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: stretch;
+  min-width: 110px;
+}
+
+.leads-table td.action-stack button {
+  min-height: 28px;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1.2;
+  width: 100%;
+  margin: 0;
+}
+
+/* =============================== 11.5) Inventory table — match Leads behavior =============================== */
+.inventory-table {
+  table-layout: auto !important;
+  width: max-content !important;
+  min-width: 100% !important;
+}
+
+.inventory-table th,
+.inventory-table td {
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* =============================== 11.6) Inventory action icons — horizontal, even, transparent =============================== */
+.inv-actions-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.inv-icon-btn {
+  width: 40px;
+  min-width: 40px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, .14) !important;
+  box-shadow: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.inv-icon-btn .btn-ico {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.inv-icon-btn .btn-txt {
+  display: none !important;
+}
+
+.inv-icon-btn:hover {
+  background: rgba(102,252,241,.08) !important;
+  border-color: rgba(102,252,241,.35) !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.inv-icon-btn.active {
+  background: rgba(102,252,241,.10) !important;
+}
+
+.inv-icon-btn.active .btn-ico {
+  transform: scale(1.14);
+  filter: drop-shadow(0 0 10px rgba(102,252,241,0.75)) drop-shadow(0 0 18px rgba(255,78,196,0.35));
+}
+
+.inv-icon-btn.active .btn-txt {
+  color: rgba(102,252,241,0.95) !important;
+  text-shadow: 0 0 10px rgba(102,252,241,0.35);
+}
+
+/* =============================== 12) Header Branding (NOT sticky) =============================== */
+.app-header {
+  position: relative !important;
+  top: auto !important;
+  align-items: center;
+  background: rgba(0, 0, 0, .18);
+  border: 1px solid rgba(255, 255, 255, .06);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+}
+
+.brand-block {
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.app-logo {
+  display: block;
+  margin: 0 auto;
+  width: 250px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .22));
+}
+
+.app-title {
+  text-align: center;
+  margin-top: 5px;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+@media (min-width: 900px) {
+  .app-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .app-header .brand-block {
+    width: auto;
+    justify-items: start;
+    place-items: start;
+    text-align: left;
+  }
+
+  .app-header .row.wrap {
+    width: auto;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  #networkStatus {
+    grid-column: 1 / -1;
+  }
+}
+
+#networkStatus {
+  margin: 0;
+  width: 100%;
+}
+
+.address-link {
+  color: #9eeeff;
+  text-decoration: underline;
+}
+
+/* =========================================
+   Header Buttons — 2 x 2 Grid Layout
+   (single block; no duplicates)
+   ========================================= */
+.app-header .row.wrap {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.app-header .row.wrap button {
+  min-height: unset !important;
+  height: auto !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  border-radius: 12px !important;
+}
+
+/* =============================== 13) Scanner =============================== */
+#scannerPanel {
+  margin-top: var(--space-1);
+  padding: var(--space-2);
+  border: 1px dashed #4d5d71;
+}
+
+#scannerVideo {
+  width: 100%;
+  max-height: 224px;
+  background: #020617;
+  border-radius: var(--radius);
+  margin-bottom: var(--space-2);
+}
+
+/* =============================== 14) Toast + Modal + Skeleton =============================== */
+.toast {
+  position: fixed;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  background: #66fcf1;
+  color: #001517;
+  padding: var(--space-1) var(--space-2);
+  border-radius: 12px;
+  font-weight: 700;
+  z-index: 1000;
+  box-shadow: 0 8px 20px rgba(0,0,0,.24);
+  transform: translateY(12px);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  border-left: 4px solid #22c55e;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-success {
+  border-left-color: #22c55e;
+}
+
+.toast-warning {
+  border-left-color: #eab308;
+}
+
+.toast-error {
+  border-left-color: #ef4444;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 1200;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+}
+
+.modal-panel {
+  width: min(92vw, 460px);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  transform: scale(0.96);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+
+.modal-overlay.open .modal-panel {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.skeleton-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-card::before,
+.skeleton-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  animation: shimmer 1.1s infinite;
+}
+
+.skeleton-row {
+  position: relative;
+  height: 40px;
+  margin-bottom: var(--space-1);
+  border-radius: 12px;
+  background: #2a3240;
+  overflow: hidden;
+}
+
+.empty-state-row td {
+  text-align: center;
+}
+
+.empty-state {
+  padding: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+  place-items: center;
+}
+
+.empty-icon {
+  font-size: 24px;
+}
+
+.empty-title {
+  font-weight: 600;
+}
+
+/* =============================== 15) Animations =============================== */
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* =============================== 16) Responsive =============================== */
+@media (max-width: 900px) {
+  .inventory-notes-submit-row {
+    grid-template-columns: 1fr;
+  }
+
+  .leads-table-wrap {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+
+  .leads-table {
+    min-width: 1280px;
+  }
+
+  .leads-table td.action-stack {
+    min-width: 96px;
+  }
+
+  .leads-table td.action-stack button {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+}
+
+@media (max-width: 700px) {
+  /* tighter padding + safe areas */
+  main {
+    padding: 14px;
+    padding-left: calc(14px + var(--safe-left));
+    padding-right: calc(14px + var(--safe-right));
+    padding-bottom: calc(18px + var(--safe-bottom) + 90px);
+  }
+
+  .span-2 {
+    grid-column: span 1;
+  }
+
+  .form-grid > * {
+    flex: 1 1 100%;
+  }
+
+  table {
+    min-width: 992px;
+  }
+
+  #deviceChart {
+    grid-template-columns: 1fr;
+  }
+
+  /* make cards feel more native */
+  .card {
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* headings slightly tighter on mobile */
+  h1 {
+    font-size: 30px;
+    padding: 10px 14px;
+    border-radius: 14px;
+  }
+
+  h2 {
+    font-size: 20px;
+    padding: 10px 14px;
+    border-radius: 14px;
+  }
+
+  h3, h4 {
+    border-radius: 14px;
+  }
+
+  input, select, textarea {
+    border-radius: 14px;
+    padding: 12px 14px;
+  }
+
+  button {
+    border-radius: 14px;
+    padding: 12px 14px;
+  }
+
+  /* Repair leads attach-submit stack */
+  .attach-submit-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Mobile logo sizing (single source of truth) */
+  .app-header .app-logo {
+    width: auto !important;
+    height: auto !important;
+    max-width: 90% !important;
+    max-height: 70px !important;
+  }
+
+  /* Toast lift above home bar */
+  .toast {
+    bottom: calc(14px + var(--safe-bottom));
+    right: 14px;
+    left: 14px;
+    width: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  table th, table td {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  button.tiny {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (hover: none) {
+  button:hover {
+    transform: none;
+    box-shadow: none;
+    filter: none;
+  }
+}
+
+/* =========================================================
+   BOTTOM BAR — NEON TECH (5 buttons, no wrap)
+   Paste at VERY BOTTOM of styles.css
+========================================================= */
+.bottom-bar {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .bottom-bar {
+    display: grid !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    box-sizing: border-box !important;
+    padding-top: 0px !important;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+    background: radial-gradient(700px 120px at 50% 0%, rgba(102,252,241,0.12), transparent 60%),
+                linear-gradient(180deg, rgba(10,14,20,0.92), rgba(6,9,14,0.96)) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    border-top: 1px solid rgba(102,252,241,0.22) !important;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.55),
+                0 -2px 0 rgba(102,252,241,0.12),
+                inset 0 1px 0 rgba(255,255,255,0.05) !important;
+    z-index: 2000 !important;
+    overflow: hidden !important;
+  }
+
+  .bottom-bar .bb-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 80px !important;
+    padding: 12px 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    white-space: nowrap !important;
+    transition: background .25s ease, transform .25s ease !important;
+  }
+
+  .bottom-bar .bb-ico {
+    font-size: 24px !important;
+    line-height: 1 !important;
+    display: block !important;
+    transition: transform .25s ease, filter .25s ease !important;
+  }
+
+  .bottom-bar .bb-txt {
+    font-size: 11px !important;
+    letter-spacing: 0px !important;
+    font-weight: 650 !important;
+    text-transform: uppercase !important;
+    color: rgba(255,255,255,0.86) !important;
+    transition: color .25s ease !important;
+  }
+
+  /* separators */
+  .bottom-bar .bb-btn + .bb-btn {
+    border-left: 1px solid rgba(255,255,255,0.10) !important;
+  }
+
+  /* hover = soft neon wash */
+  .bottom-bar .bb-btn:hover {
+    background: rgba(102,252,241,0.07) !important;
+  }
+
+  /* active = neon ring + glow */
+  .bottom-bar .bb-btn.active {
+    background: rgba(102,252,241,0.10) !important;
+  }
+
+  .bottom-bar .bb-btn.active .bb-ico {
+    transform: scale(1.14);
+    filter: drop-shadow(0 0 10px rgba(102,252,241,0.75)) drop-shadow(0 0 18px rgba(255,78,196,0.35));
+  }
+
+  .bottom-bar .bb-btn.active .bb-txt {
+    color: rgba(102,252,241,0.95) !important;
+    text-shadow: 0 0 10px rgba(102,252,241,0.35);
+  }
+
+  /* =========================================
+     Neon Scan Line (top edge)
+   ========================================= */
+  .bottom-bar::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 0;
+    height: 2px;
+    border-radius: 999px;
+
+    /* base glow line */
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(102,252,241,0.0) 10%,
+      rgba(102,252,241,0.55) 35%,
+      rgba(255,78,196,0.45) 55%,
+      rgba(102,252,241,0.55) 75%,
+      rgba(102,252,241,0.0) 90%,
+      transparent 100%);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 8px rgba(102,252,241,0.55)) drop-shadow(0 0 14px rgba(255,78,196,0.25));
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* scanning “pulse” that travels across */
+  .bottom-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 2px;
+    width: 80px;
+    border-radius: 999px;
+
+    background: linear-gradient(90deg,
+      transparent,
+      rgba(255,255,255,0.85),
+      rgba(102,252,241,0.85),
+      rgba(255,78,196,0.6),
+      transparent);
+    filter: blur(0.2px) drop-shadow(0 0 10px rgba(102,252,241,0.85));
+    opacity: 0.95;
+    left: -90px;
+    animation: bbScan 5.0s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  @keyframes bbScan {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 180px)); }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .bottom-bar::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
+}
+/* Dashboard and analytics card spacing/layout normalization */
+.charts > div,
+.analytics-grid > div {
+  margin-bottom: 10px !important;
+}
+
+@media (max-width: 900px) {
+  .charts,
+  .analytics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .charts > div,
+  .analytics-grid > div {
+    width: 100% !important;
+    margin-bottom: 20px !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .charts,
+  .analytics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .charts > div,
+  .analytics-grid > div {
+    margin-bottom: 10px !important;
+  }
+}
+/* =============================== 9) Filter Row =============================== */
+.filter-row {
+  display: flex;               /* Use Flexbox for equal distribution */
+  gap: var(--space-2);         /* Add some space between the elements */
+  align-items: center;         /* Vertically align items */
+  width: 100%;                 /* Make the row full width */
+}
+
+/* Make both filters stretch evenly */
+.filter-row > label {
+  flex: 1 1 0;                 /* Make each label take equal space */
+  display: flex;
+  flex-direction: column;      /* Stack label text and input vertically */
+  gap: var(--space-1);          /* Space between label and input */
+}
+
+/* Ensure the input fields also stretch evenly */
+.filter-row select {
+  width: 100%;                 /* Make the select input fill the container */
+  padding: var(--space-1) var(--space-2); /* Add some padding inside */
+  border-radius: var(--radius);
+  background: #0f141a;
+  color: var(--text-color);
+  border: 1px solid #3d4957;
+}
+
+/* Optional: Focus state */
+.filter-row select:focus {
+  outline: none;
+  border-color: rgba(102,252,241,.55);
+  box-shadow: 0 0 0 3px rgba(102,252,241,.12);
+}
+
+/* Styling for the Repair Type Dropdown (same as Device Filter) */
+#repairType {
+  width: 100%;  /* Ensure it fills the container */
+  padding: var(--space-1) var(--space-1);  /* Adjust padding */
+  border: 1px solid #3d4957;  /* Border style */
+  background: #0f141a;  /* Dark background */
+  color: var(--text-color);  /* Text color */
+  font-size: 16px;  /* Font size for consistency */
+  margin-bottom: var(--space-2);  /* Margin for spacing */
+}
+
+/* Focus state for the Repair Type dropdown */
+#repairType:focus {
+  outline: none;
+  border-color: rgba(102,252,241, .55);
+  box-shadow: 0 0 0 3px rgba(102,252,241, .12);
+}
+
+/* Placeholder text color */
+#repairType::placeholder {
+  color: var(--muted);
+}
+
+/* Styling for new input fields in the settings section */
+#settingsSection input,
+#settingsSection select {
+  width: 100%;                  /* Ensure it fills the container */
+  padding: var(--space-1) var(--space-2);  /* Consistent padding */
+  border: 1px solid #3d4957;    /* Border color */
+  border-radius: var(--radius); /* Rounded corners */
+  background: #0f141a;          /* Background color */
+  color: var(--text-color);     /* Text color */
+  font-size: 14px;              /* Font size for consistency */
+  margin-bottom: var(--space-2);/* Bottom margin for spacing */
+}
+
+/* Button styling */
+#settingsSection button {
+  padding: var(--space-1) var(--space-3);
+  background: #66fcf1;
+  color: #001517;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+#settingsSection button:hover {
+  background: #45a29e;
+}
+
+/* =============================== 1. Settings & Utilities Section =============================== */
+
+/* Flexbox grid for rows */
+/* Adjust the gap between the fields and buttons by reducing the vertical margin */
+.form-grid-row {
+  display: flex;
+  gap: var(--space-2);  /* Horizontal space remains the same */
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;  /* Allow the items to wrap for responsiveness */
+}
+
+/* Remove or reduce the bottom margin of each input field (for Custom Devices, Repair Types, and Brands) */
+.form-grid-row label {
+  flex: 1 1 30%;  /* Ensure fields and buttons are evenly spaced */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  text-align: center;
+  margin-bottom: var(--space-1);  /* Reduced margin below the fields */
+}
+
+/* Button Styling */
+.form-grid-row button {
+  flex: 1 1 30%;
+  padding: var(--space-1) var(--space-3);
+  background: #66fcf1;
+  color: #001517;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+  margin-top: 0;  /* Reduced the vertical margin between buttons and fields */
+}
+
+/* Button hover effect */
+.form-grid-row button:hover {
+  background: #45a29e;
+}
+
+/* Line separator */
+.separator {
+  margin-top: var(--space-2);
+  border-top: 1px solid #3d4957;
+  margin-bottom: var(--space-3);
+}
+
+#settingsSection input:focus,
+#settingsSection select:focus {
+  outline: none;
+  border-color: rgba(102,252,241, .55);
+  box-shadow: 0 0 0 3px rgba(102,252,241, .12);
+}
+
+#settingsSection input::placeholder,
+#settingsSection select::placeholder {
+  color: var(--muted);
+}
+
+/* Ensure the labels have consistent styling */
+#settingsSection label {
+  color: var(--muted);
+  text-align: center;
+}
+
+.lead-id {
+  font-family: monospace;
+  font-weight: 600;
+  color: #00c8ff;
+  letter-spacing: 1px;
+}
+
+.copy-lead-id {
+  cursor: pointer;
+  font-family: monospace;
+  font-weight: 600;
+  color: #00c8ff;
+}
+
+.copy-lead-id:hover {
+  color: #00ffff;
+  text-decoration: underline;
+}
+
+.lead-cancelled {
+  opacity: 0.6;
+  text-decoration: line-through;
+  background: rgba(255, 0, 0, 0.05);
+}
+
+/* ------------------------------ */
+/* Sticky Table Headers */
+/* ------------------------------ */
+
+table thead th {
+  position: sticky;
+  top: 0;
+
+  background: #0f141a;
+  color: var(--text-color);
+
+  z-index: 2;
+  border-bottom: 1px solid #3d4957;
+}
+
+/* =========================================================
+   PER-ITEM HISTORY — TIMELINE UI
+   ---------------------------------------------------------
+   Timeline-style history cards for inventory item activity.
+   Used by: showItemHistory.js
+========================================================= */
+#itemHistoryList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+  position: relative;
+}
+
+.item-history-card {
+  position: relative;
+  margin-left: 18px;
+  padding: 14px 16px 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+/* Timeline line */
+.item-history-card::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: -14px;
+  bottom: -14px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Timeline dot */
+.item-history-card::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #9ca3af;
+  border: 2px solid #0f141a;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
+}
+
+.item-history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+/* Color states */
+.item-history-card.is-added {
+  border-left-color: #22c55e;
+}
+.item-history-card.is-added::after {
+  background: #22c55e;
+}
+
+.item-history-card.is-used {
+  border-left-color: #eab308;
+}
+.item-history-card.is-used::after {
+  background: #eab308;
+}
+
+.item-history-card.is-adjusted,
+.item-history-card.is-updated {
+  border-left-color: #38bdf8;
+}
+.item-history-card.is-adjusted::after,
+.item-history-card.is-updated::after {
+  background: #38bdf8;
+}
+
+.item-history-card.is-deleted {
+  border-left-color: #ef4444;
+}
+.item-history-card.is-deleted::after {
+  background: #ef4444;
+}
+
+.item-history-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.item-history-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--heading);
+}
+
+.item-history-card__date {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.item-history-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.item-history-card__meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.item-history-empty {
+  list-style: none;
+  margin-left: 18px;
+  padding: 14px 16px 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  position: relative;
+}
+
+.item-history-empty::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.item-history-empty::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #6b7280;
+  border: 2px solid #0f141a;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .item-history-card,
+  .item-history-empty {
+    margin-left: 14px;
+    padding: 12px 14px 12px 16px;
+  }
+
+  .item-history-card::before,
+  .item-history-empty::before {
+    left: -12px;
+  }
+
+  .item-history-card::after,
+  .item-history-empty::after {
+    left: -18px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .item-history-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .item-history-card__date {
+    white-space: normal;
+  }
+}
+
+/* Optional polish (recommended) */
+
+.item-history-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.item-history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+
+/* Make important numbers pop */
+.item-history-card__title strong {
+  color: var(--heading);
+}
+
+/* Subtle divider feel between entries */
+#itemHistoryList {
+  padding-top: 6px;
+}
+
+.item-history-card__badge {
+  gap: 6px;
+}
+
+/* Make strong values pop */
+.item-history-card__title strong {
+  color: var(--heading);
+  font-weight: 700;
+}
+
+.item-history-group {
+  list-style: none;
+  margin: 6px 0 2px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--heading);
+  opacity: 0.9;
+}
+
+.item-history-card__title strong {
+  color: var(--heading);
+  font-weight: 700;
+}
+
+.item-history-card__toggle {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.item-history-card__toggle:hover {
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+.item-history-card__details {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.item-history-card__expandHint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--heading);
+  opacity: 0.8;
+}
+
+/* =========================================================
+   STOCK HISTORY / AUDIT LOG — TIMELINE UI
+   Used by: renderAuditLog.js
+========================================================= */
+#auditLog {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.audit-log-group {
+  list-style: none;
+  margin: 6px 0 2px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--heading);
+  opacity: 0.9;
+}
+
+.audit-log-card {
+  position: relative;
+  margin-left: 18px;
+  padding: 14px 16px 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.audit-log-card::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: -14px;
+  bottom: -14px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.audit-log-card::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #9ca3af;
+  border: 2px solid #0f141a;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
+}
+
+.audit-log-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.audit-log-card.is-added {
+  border-left-color: #22c55e;
+}
+.audit-log-card.is-added::after {
+  background: #22c55e;
+}
+
+.audit-log-card.is-used {
+  border-left-color: #eab308;
+}
+.audit-log-card.is-used::after {
+  background: #eab308;
+}
+
+.audit-log-card.is-adjusted,
+.audit-log-card.is-updated {
+  border-left-color: #38bdf8;
+}
+.audit-log-card.is-adjusted::after,
+.audit-log-card.is-updated::after {
+  background: #38bdf8;
+}
+
+.audit-log-card.is-deleted {
+  border-left-color: #ef4444;
+}
+.audit-log-card.is-deleted::after {
+  background: #ef4444;
+}
+
+.audit-log-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.audit-log-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--heading);
+}
+
+.audit-log-card__date {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.audit-log-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.audit-log-card__title strong {
+  color: var(--heading);
+  font-weight: 700;
+}
+
+.audit-log-card__meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.audit-log-card__details {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.audit-log-card__actions {
+  margin-top: 12px;
+}
+
+.audit-log-empty {
+  list-style: none;
+  margin-left: 18px;
+  padding: 14px 16px 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  position: relative;
+}
+
+.audit-log-empty::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.audit-log-empty::after {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #6b7280;
+  border: 2px solid #0f141a;
+}
+
+@media (max-width: 700px) {
+  .audit-log-card,
+  .audit-log-empty {
+    margin-left: 14px;
+    padding: 12px 14px 12px 16px;
+  }
+
+  .audit-log-card::before,
+  .audit-log-empty::before {
+    left: -12px;
+  }
+
+  .audit-log-card::after,
+  .audit-log-empty::after {
+    left: -18px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .audit-log-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .audit-log-card__date {
+    white-space: normal;
+  }
+}
+
+/* Expand / Collapse */
+.audit-log-card__details.hidden {
+  display: none;
+}
+
+.audit-log-card__expandHint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--primary);
+  opacity: 0.8;
+
+  cursor: pointer; /* 🔥 THIS is the missing piece */
+
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.audit-log-card__expandHint:hover {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+/* Open state */
+.audit-log-card.is-open {
+  background: rgba(255,255,255,0.065);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+}
+
+/* =========================================================
+   CUSTOMER HISTORY — CARD UI
+   Used by: renderCustomerHistory.js
+========================================================= */
+#customerHistory {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.customer-history-card {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid rgba(102, 252, 241, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.customer-history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.customer-history-card.is-open {
+  background: rgba(255, 255, 255, 0.065);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+.customer-history-card.is-high-value {
+  border-left-color: #facc15;
+  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.1);
+}
+
+.customer-history-card__toggle {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  text-align: left;
+  cursor: default;
+  box-shadow: none;
+}
+
+.customer-history-card__toggle:hover {
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+.customer-history-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.customer-history-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--heading);
+}
+
+.customer-history-card__count {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.customer-history-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.customer-history-contact {
+  margin-left: 8px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.customer-history-contact:hover {
+  color: var(--accent-2);
+}
+
+.customer-history-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 8px;
+}
+
+.customer-history-card .chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-height: unset;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.customer-history-card .chip.gold {
+  background: rgba(234, 179, 8, 0.14);
+  color: #facc15;
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+.customer-history-card__meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.customer-history-card__meta--stack {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.customer-history-meta-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.customer-history-meta-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.customer-history-meta-value {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.customer-history-card__expandHint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--primary);
+  opacity: 0.8;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.customer-history-card__expandHint:hover {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.customer-history-card__details {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 10px;
+}
+
+.customer-history-card__details.hidden {
+  display: none;
+}
+
+.customer-history-detail {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.customer-history-detail__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.customer-history-detail__device {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.customer-history-detail__date {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.customer-history-detail__meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.customer-contact-actions,
+.customer-history-extra-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.customer-contact-action,
+.customer-history-extra-actions .invoice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* 🔥 makes them equal width */
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none;
+  margin: 0;
+}
+
+.customer-contact-action:hover,
+.tiny-btn.invoice-btn:hover {
+  background: linear-gradient(90deg, var(--primary), var(--accent-2));
+  color: #001517;
+  transform: translateY(-1px);
+}
+
+.customer-contact-action--copy {
+  font-family: inherit;
+}
+
+.customer-history-card__actions {
+  margin-top: 12px;
+}
+
+.customer-history-empty {
+  list-style: none;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .customer-history-card__top,
+  .customer-history-detail__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .customer-history-card__count,
+  .customer-history-detail__date {
+    white-space: normal;
+  }
+
+  .customer-history-meta-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+.customer-contact-actions,
+.customer-history-extra-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+  .customer-contact-action,
+  .tiny-btn.invoice-btn {
+    width: 100% !important;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Payment columns */
+.payment-method-col,
+.payment-status-col {
+  min-width: 180px;
+  width: 180px;
+}
+
+.payment-method-col select,
+.payment-status-col select {
+  width: 100%;
+  min-width: 160px;
+  padding: 4px 32px 4px 10px;
+  font-size: 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+.payment-method-col select:focus,
+.payment-status-col select:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.payment-method-col select option,
+.payment-status-col select option {
+  padding: 8px;
+}
+
+/* Tablet + mobile */
+@media (max-width: 900px) {
+  .payment-method-col,
+  .payment-status-col {
+    min-width: 160px;
+    width: 160px;
+  }
+
+  .payment-method-col select,
+  .payment-status-col select {
+    min-width: 140px;
+    font-size: 13px;
+    padding: 4px 28px 4px 8px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 700px) {
+  .payment-method-col,
+  .payment-status-col {
+    min-width: 140px;
+    width: 140px;
+  }
+
+  .payment-method-col select,
+  .payment-status-col select {
+    min-width: 120px;
+    font-size: 12px;
+    padding: 4px 26px 4px 8px;
+  }
+}
+
+/* =========================================================
+   DELETED LEADS
+========================================================= */
+#deletedLeadsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.deleted-lead-card {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid rgba(255, 159, 67, 0.7);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.deleted-lead-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.deleted-lead-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.deleted-lead-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(255, 159, 67, 0.12);
+  color: #ffb366;
+  border: 1px solid rgba(255, 159, 67, 0.25);
+}
+
+.deleted-lead-card__date {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.deleted-lead-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.deleted-lead-card__meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.deleted-lead-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.deleted-lead-card__actions .restore-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(102, 252, 241, 0.25);
+  background: rgba(102, 252, 241, 0.1);
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none;
+  margin: 0;
+}
+
+.deleted-lead-card__actions .restore-btn:hover {
+  background: linear-gradient(90deg, var(--primary), var(--accent-2));
+  color: #001517;
+  transform: translateY(-1px);
+}
+
+.deleted-leads-empty {
+  list-style: none;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .deleted-lead-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .deleted-lead-card__date {
+    white-space: normal;
+  }
+
+  .deleted-lead-card__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .deleted-lead-card__actions .restore-btn {
+    width: 100% !important;
+  }
+}
+
+.lead-just-restored {
+  animation: restoredLeadPulse 2.5s ease;
+  box-shadow: inset 0 0 0 2px rgba(102, 252, 241, 0.55);
+}
+
+@keyframes restoredLeadPulse {
+  0% {
+    background: rgba(102, 252, 241, 0.28);
+  }
+  40% {
+    background: rgba(102, 252, 241, 0.16);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.lead-restored-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(102, 252, 241, 0.14);
+  color: var(--primary);
+  border: 1px solid rgba(102, 252, 241, 0.3);
+  vertical-align: middle;
+}
+
+.deleted-leads-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0 12px;
+}
+
+#undoDeleteLeadBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-color);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+#undoDeleteLeadBtn:hover {
+  background: linear-gradient(90deg, var(--primary), var(--accent-2));
+  color: #001517;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 700px) {
+  .deleted-leads-toolbar {
+    justify-content: stretch;
+  }
+
+  #undoDeleteLeadBtn {
+    width: 100%;
+  }
+}
+
+.inventory-search-hit {
+  background: rgba(102, 252, 241, 0.22);
+  color: var(--text-color);
+  padding: 0 3px;
+  border-radius: 4px;
+  font-weight: 700;
+}
