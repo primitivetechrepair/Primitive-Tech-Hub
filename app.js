@@ -268,7 +268,6 @@ async function hydrateInventoryFromCloud() {
     if (!Array.isArray(cloudInventory)) return;
 
     data.inventory = cloudInventory;
-    await persist();
   } catch (err) {
     console.error("hydrateInventoryFromCloud failed:", err);
   }
@@ -280,7 +279,6 @@ async function hydrateLeadsFromCloud() {
     if (!Array.isArray(cloudLeads)) return;
 
     data.leads = cloudLeads;
-    await persist();
   } catch (err) {
     console.error("hydrateLeadsFromCloud failed:", err);
   }
@@ -298,6 +296,9 @@ async function showApp() {
   await hydrateAppSettingsFromCloud();
   await hydrateInventoryFromCloud();
   await hydrateLeadsFromCloud();
+
+  await persist();
+  renderAllNow();
 
   if (!csvImportService) {
     csvImportService = createCsvImportService({
