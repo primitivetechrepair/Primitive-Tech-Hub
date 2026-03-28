@@ -147,30 +147,34 @@ function normalizeSettingsShape(settings = {}) {
   return next;
 }
 
-async function hydrateAppSettingsFromCloud() {
+async function hydrateLeadsFromCloud() {
   try {
-    const cloudSettings = await fetchAppSettingsFromCloud();
-    if (!cloudSettings) return;
+    const cloudLeads = await fetchLeadsFromCloud();
+    console.log("[DEBUG hydrateLeadsFromCloud] cloudLeads:", cloudLeads);
 
-    data.settings = normalizeSettingsShape({
-      ...data.settings,
-      categories:
-        Array.isArray(cloudSettings.categories) && cloudSettings.categories.length
-          ? cloudSettings.categories
-          : data.settings?.categories,
-      repairs:
-        Array.isArray(cloudSettings.repairs) && cloudSettings.repairs.length
-          ? cloudSettings.repairs
-          : data.settings?.repairs,
-      brands:
-        Array.isArray(cloudSettings.brands) && cloudSettings.brands.length
-          ? cloudSettings.brands
-          : data.settings?.brands,
-    });
+    if (!Array.isArray(cloudLeads)) return;
 
-    await persist();
+    const localLeads = Array.isArray(data.leads) ? data.leads : [];
+    console.log("[DEBUG hydrateLeadsFromCloud] localLeads before merge:", localLeads);
+
+    const deletedLeadIDs = new Set(
+      (cloudLeads || [])
+        .filter((lead) => lead.deletedAt)
+        .map((lead) => lead.leadID)
+    );
+
+    const activeCloudLeads = (cloudLeads || []).filter((lead) => !lead.deletedAt);
+
+    const mergedLeads = mergeByTimestamp(localLeads, activeCloudLeads, {
+      key: "leadID",
+      timeField: "lastUpdated",
+    }).filter((lead) => !deletedLeadIDs.has(lead.leadID));
+
+    data.leads = sortLeadsNewestFirst(mergedLeads);
+
+    console.log("[DEBUG hydrateLeadsFromCloud] data.leads after merge:", data.leads);
   } catch (err) {
-    console.error("hydrateAppSettingsFromCloud failed:", err);
+    console.error("hydrateLeadsFromCloud failed:", err);
   }
 }
 
