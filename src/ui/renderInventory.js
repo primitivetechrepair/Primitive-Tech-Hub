@@ -94,10 +94,7 @@ export function renderInventory(ctx) {
     <td>${highlightMatch(item.color || "-", q, esc)}</td>
 
     <td class="qty-cell">
-      <div class="qty-edit-wrap">
-        <input class="qty-input" type="number" min="0" inputmode="numeric" value="${item.quantity}" />
-        <button class="tiny saveQtyBtn" type="button">Save</button>
-      </div>
+      <button class="tiny qtyEditBtn" type="button">Qty: ${Number(item.quantity || 0)}</button>
     </td>
 
     <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
@@ -112,25 +109,31 @@ export function renderInventory(ctx) {
     <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
   `;
 
-    const qtyInput = tr.querySelector(".qty-input");
-    const saveQtyBtn = tr.querySelector(".saveQtyBtn");
+        const qtyEditBtn = tr.querySelector(".qtyEditBtn");
 
-    async function saveInlineQty() {
+    qtyEditBtn.addEventListener("click", async () => {
       if (!isUnlocked()) {
         toast("Locked: log in to edit quantity.", "error");
-        qtyInput.value = item.quantity;
         return;
       }
 
       const prevQty = Number(item.quantity || 0);
-      const newQty = Math.max(0, Number(qtyInput.value || 0));
+      const input = window.prompt(`Update quantity for ${item.itemName}:`, String(prevQty));
+      if (input === null) return;
+
+      const parsed = Number(input);
+      if (!Number.isFinite(parsed) || parsed < 0) {
+        toast("Please enter a valid quantity.", "error");
+        return;
+      }
+
+      const newQty = Math.max(0, Math.floor(parsed));
       const delta = newQty - prevQty;
 
       if (newQty === prevQty) return;
 
       const updatedItem = (data.inventory || []).find((i) => i.itemID === item.itemID);
       if (!updatedItem) {
-        qtyInput.value = prevQty;
         toast("Item not found after update.", "error");
         return;
       }
@@ -147,7 +150,7 @@ export function renderInventory(ctx) {
         userAction: "inline_edit",
       });
 
-      saveQtyBtn.disabled = true;
+      qtyEditBtn.disabled = true;
 
       try {
         await persist();
@@ -155,7 +158,7 @@ export function renderInventory(ctx) {
         try {
           await upsertInventoryItemToCloud(updatedItem);
         } catch (err) {
-          console.error("Inline inventory cloud sync failed:", err);
+          console.error("Inventory cloud sync failed:", err);
           toast("Quantity updated locally, but cloud sync failed.", "warning");
         }
 
@@ -163,21 +166,12 @@ export function renderInventory(ctx) {
         maybeNotifyLowStock();
         toast("Quantity updated.", "success");
       } catch (err) {
-        console.error("Inline inventory persist failed:", err);
+        console.error("Inventory persist failed:", err);
         updatedItem.quantity = prevQty;
-        qtyInput.value = prevQty;
+        item.quantity = prevQty;
         toast("Failed to update quantity.", "error");
       } finally {
-        saveQtyBtn.disabled = false;
-      }
-    }
-
-    saveQtyBtn.addEventListener("click", saveInlineQty);
-
-    qtyInput.addEventListener("keydown", async (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        await saveInlineQty();
+        qtyEditBtn.disabled = false;
       }
     });
 
