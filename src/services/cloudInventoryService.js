@@ -132,6 +132,39 @@ const payload = {
   return data;
 }
 
+export async function fetchLeadsFromCloud() {
+  const { data, error } = await supabase
+    .from("leads")
+    .select("*")
+    .order("last_updated", { ascending: false });
+
+  if (error) {
+    console.error("fetchLeadsFromCloud error:", error);
+    throw error;
+  }
+
+  return (data || []).map((row) => ({
+    leadID: row.lead_id,
+    customerName: row.customer_name || "",
+    contactNumber: row.contact_number || "",
+    email: row.email || "",
+    address: row.address || "",
+    device: row.device || "",
+    series: row.series || "",
+    repairType: row.repair_type || "",
+    status: row.status || "In Progress",
+    dateReported: row.date_reported || null,
+    notes: row.notes || "",
+    inventoryUsed: Array.isArray(row.inventory_used) ? row.inventory_used : [],
+    inventoryUsedQty:
+      row.inventory_used_qty && typeof row.inventory_used_qty === "object"
+        ? row.inventory_used_qty
+        : {},
+    files: Array.isArray(row.files) ? row.files : [],
+    lastUpdated: row.last_updated || null,
+  }));
+}
+
 export async function deleteLeadFromCloud(leadID) {
   const { error } = await supabase
     .from("leads")

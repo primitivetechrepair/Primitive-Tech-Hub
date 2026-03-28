@@ -57,6 +57,8 @@ import { showLockedUI, showUnlockedUI } from "./src/ui/appVisibility.js";
 import { createListManagerModal } from "./src/ui/listManagerModal.js";
 
 import {
+  fetchInventoryFromCloud,
+  fetchLeadsFromCloud,
   upsertLeadToCloud,
   fetchAppSettingsFromCloud,
   upsertAppSettingsToCloud,
@@ -260,6 +262,30 @@ if (!authController) {
 
 authController.initAuth();
 
+async function hydrateInventoryFromCloud() {
+  try {
+    const cloudInventory = await fetchInventoryFromCloud();
+    if (!Array.isArray(cloudInventory)) return;
+
+    data.inventory = cloudInventory;
+    await persist();
+  } catch (err) {
+    console.error("hydrateInventoryFromCloud failed:", err);
+  }
+}
+
+async function hydrateLeadsFromCloud() {
+  try {
+    const cloudLeads = await fetchLeadsFromCloud();
+    if (!Array.isArray(cloudLeads)) return;
+
+    data.leads = cloudLeads;
+    await persist();
+  } catch (err) {
+    console.error("hydrateLeadsFromCloud failed:", err);
+  }
+}
+
 async function showApp() {
   if (!isUnlocked()) {
     showLockedUI(el);
@@ -270,6 +296,8 @@ async function showApp() {
 
   data.settings = normalizeSettingsShape(data.settings);
   await hydrateAppSettingsFromCloud();
+  await hydrateInventoryFromCloud();
+  await hydrateLeadsFromCloud();
 
   if (!csvImportService) {
     csvImportService = createCsvImportService({
