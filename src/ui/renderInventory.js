@@ -31,6 +31,7 @@ export function renderInventory(ctx) {
     toast,
     inventoryService,
     addAudit,
+    persist,
     renderAll,
     maybeNotifyLowStock,
     showItemHistory,
@@ -111,10 +112,26 @@ export function renderInventory(ctx) {
         return;
       }
 
+      const prevQty = Number(item.quantity || 0);
+      const prevLastUpdated = item.lastUpdated || null;
       const newQty = Math.max(0, Number(e.target.value));
-      const delta = newQty - item.quantity;
+      const delta = newQty - prevQty;
 
-      inventoryService.updateItem(item.itemID, { quantity: newQty });
+      if (newQty === prevQty) {
+        e.target.value = prevQty;
+        return;
+      }
+
+      const updatedItem = inventoryService.updateItem(item.itemID, {
+        quantity: newQty,
+        lastUpdated: new Date().toISOString(),
+      });
+
+      if (!updatedItem) {
+        e.target.value = prevQty;
+        toast("Item not found.", "error");
+        return;
+      }
 
       addAudit("inventory_adjusted", {
         itemID: item.itemID,
@@ -123,8 +140,21 @@ export function renderInventory(ctx) {
         userAction: "inline_edit",
       });
 
-      renderAll();
-      maybeNotifyLowStock();
+      try {
+        await persist();
+        renderAll();
+        maybeNotifyLowStock();
+      } catch (err) {
+        console.error("Inventory quantity persist failed:", err);
+
+        inventoryService.updateItem(item.itemID, {
+          quantity: prevQty,
+          lastUpdated: prevLastUpdated,
+        });
+
+        e.target.value = prevQty;
+        toast("Failed to save quantity.", "error");
+      }
     });
 
     tr.querySelector(".historyBtn").onclick = () => {
