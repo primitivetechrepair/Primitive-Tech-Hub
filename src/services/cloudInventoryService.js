@@ -207,6 +207,20 @@ export async function upsertInventoryItemToCloud(item) {
   }
 }
 
+export async function deleteInventoryItemFromCloud(itemID) {
+  const { error } = await supabase
+    .from("inventory_items")
+    .delete()
+    .eq("item_id", itemID);
+
+  if (error) {
+    console.error("deleteInventoryItemFromCloud error:", error);
+    throw error;
+  }
+
+  return true;
+}
+
 export async function insertInventoryUsageToCloud({
   itemID,
   delta,
