@@ -31,6 +31,8 @@ export function renderInventory(ctx) {
     toast,
     inventoryService,
     addAudit,
+    persist,
+    upsertInventoryItemToCloud,
     renderAll,
     maybeNotifyLowStock,
     showItemHistory,
@@ -111,10 +113,21 @@ export function renderInventory(ctx) {
         return;
       }
 
+      const prevQty = Number(item.quantity || 0);
       const newQty = Math.max(0, Number(e.target.value));
-      const delta = newQty - item.quantity;
+      const delta = newQty - prevQty;
 
-      inventoryService.updateItem(item.itemID, { quantity: newQty });
+      inventoryService.updateItem(item.itemID, {
+        quantity: newQty,
+        lastUpdated: new Date().toISOString(),
+      });
+
+      const updatedItem = (data.inventory || []).find((i) => i.itemID === item.itemID);
+      if (!updatedItem) {
+        e.target.value = prevQty;
+        toast("Item not found after update.", "error");
+        return;
+      }
 
       addAudit("inventory_adjusted", {
         itemID: item.itemID,
@@ -123,8 +136,24 @@ export function renderInventory(ctx) {
         userAction: "inline_edit",
       });
 
-      renderAll();
-      maybeNotifyLowStock();
+      try {
+        await persist();
+
+        try {
+          await upsertInventoryItemToCloud(updatedItem);
+        } catch (err) {
+          console.error("Inline inventory cloud sync failed:", err);
+          toast("Quantity updated locally, but cloud sync failed.", "warning");
+        }
+
+        renderAll();
+        maybeNotifyLowStock();
+      } catch (err) {
+        console.error("Inline inventory persist failed:", err);
+        updatedItem.quantity = prevQty;
+        e.target.value = prevQty;
+        toast("Failed to update quantity.", "error");
+      }
     });
 
     tr.querySelector(".historyBtn").onclick = () => {

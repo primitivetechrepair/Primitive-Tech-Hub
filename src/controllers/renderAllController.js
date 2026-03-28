@@ -88,6 +88,8 @@ export function createRenderAllController({
       toast,
       inventoryService,
       addAudit,
+      persist,
+      upsertInventoryItemToCloud,
       renderAll,
       maybeNotifyLowStock,
       quickUseItem: inventoryController.quickUseItem,
