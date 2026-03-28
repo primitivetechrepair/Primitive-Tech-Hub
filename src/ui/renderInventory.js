@@ -94,7 +94,7 @@ export function renderInventory(ctx) {
       <td>${highlightMatch(item.color || "-", q, esc)}</td>
 
       <td>
-        <input class="qty-input" type="number" min="0" value="${Number(item.quantity || 0)}" />
+        <input class="qty-input" type="number" min="0" inputmode="numeric" value="${Number(item.quantity || 0)}" />
       </td>
 
       <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
@@ -109,53 +109,65 @@ export function renderInventory(ctx) {
       <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
     `;
 
-    tr.querySelector(".qty-input").addEventListener("change", async (e) => {
+    const qtyInput = tr.querySelector(".qty-input");
+
+    async function saveQtyFromInput() {
       if (!isUnlocked()) {
         toast("Locked: log in to edit quantity.", "error");
-        e.target.value = Number(item.quantity || 0);
+        qtyInput.value = Number(item.quantity || 0);
         return;
       }
 
       const prevQty = Number(item.quantity || 0);
-      const newQty = Math.max(0, Number(e.target.value || 0));
+      const newQty = Math.max(0, Number(qtyInput.value || 0));
       const delta = newQty - prevQty;
 
       if (newQty === prevQty) {
-        e.target.value = prevQty;
+        qtyInput.value = prevQty;
         return;
       }
-
-      const updatedItem = (data.inventory || []).find((i) => i.itemID === item.itemID);
-      if (!updatedItem) {
-        e.target.value = prevQty;
-        toast("Item not found.", "error");
-        return;
-      }
-
-      updatedItem.quantity = newQty;
-      updatedItem.lastUpdated = new Date().toISOString();
-
-      item.quantity = newQty;
-      item.lastUpdated = updatedItem.lastUpdated;
-
-      addAudit("inventory_adjusted", {
-        itemID: item.itemID,
-        delta,
-        qty: newQty,
-        userAction: "inline_edit",
-      });
 
       try {
+        inventoryService.updateItem(item.itemID, {
+          quantity: newQty,
+          lastUpdated: new Date().toISOString(),
+        });
+
+        const updatedItem = (data.inventory || []).find((i) => i.itemID === item.itemID);
+        if (updatedItem) {
+          item.quantity = Number(updatedItem.quantity || newQty);
+          item.lastUpdated = updatedItem.lastUpdated || new Date().toISOString();
+        } else {
+          item.quantity = newQty;
+          item.lastUpdated = new Date().toISOString();
+        }
+
+        addAudit("inventory_adjusted", {
+          itemID: item.itemID,
+          delta,
+          qty: newQty,
+          userAction: "inline_edit",
+        });
+
         await persist();
         renderAll();
         maybeNotifyLowStock();
         toast("Quantity updated.", "success");
       } catch (err) {
-        console.error("Inventory persist failed:", err);
-        updatedItem.quantity = prevQty;
+        console.error("Inventory quantity save failed:", err);
+        qtyInput.value = prevQty;
         item.quantity = prevQty;
-        e.target.value = prevQty;
         toast("Failed to update quantity.", "error");
+      }
+    }
+
+    qtyInput.addEventListener("change", saveQtyFromInput);
+    qtyInput.addEventListener("blur", saveQtyFromInput);
+
+    qtyInput.addEventListener("keydown", async (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        await saveQtyFromInput();
       }
     });
 
