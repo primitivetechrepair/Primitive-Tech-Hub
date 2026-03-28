@@ -160,7 +160,13 @@ tr.innerHTML = `
   </td>
   <td>${used || "-"}</td>
   <td>${files}</td>
-  <td>${esc(lead.dateReported || "-")}</td>
+  <td>${
+  lead.dateReported
+    ? String(lead.dateReported).split("-").length === 3
+      ? `${String(lead.dateReported).split("-")[1]}/${String(lead.dateReported).split("-")[2]}/${String(lead.dateReported).split("-")[0]}`
+      : fmtDateShort(lead.dateReported)
+    : "-"
+}</td>
   <td>
     ${fmtMoney(profit)}
     <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
