@@ -32,7 +32,6 @@ export function renderInventory(ctx) {
     inventoryService,
     addAudit,
     persist,
-    upsertInventoryItemToCloud,
     renderAll,
     maybeNotifyLowStock,
     showItemHistory,
@@ -41,7 +40,8 @@ export function renderInventory(ctx) {
   } = ctx;
 
   const q = el.inventorySearch.value.trim().toLowerCase();
-    const rows = data.inventory.filter((i) =>
+
+  const rows = (data.inventory || []).filter((i) =>
     [
       i.itemID,
       i.itemName,
@@ -80,66 +80,61 @@ export function renderInventory(ctx) {
     tr.classList.add(rule.className);
 
     tr.innerHTML = `
-    <td>
-      ${highlightMatch(item.itemName, q, esc)}
-      <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
-      <div class="row">
-        <button class="tiny historyBtn">History</button>
-      </div>
-    </td>
+      <td>
+        ${highlightMatch(item.itemName, q, esc)}
+        <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
+        <div class="row">
+          <button class="tiny historyBtn">History</button>
+        </div>
+      </td>
 
-    <td>${highlightMatch(item.category || "-", q, esc)}</td>
-    <td>${highlightMatch(item.brand || "-", q, esc)}</td>
-    <td>${highlightMatch(item.series || "Standard", q, esc)}</td>
-    <td>${highlightMatch(item.color || "-", q, esc)}</td>
+      <td>${highlightMatch(item.category || "-", q, esc)}</td>
+      <td>${highlightMatch(item.brand || "-", q, esc)}</td>
+      <td>${highlightMatch(item.series || "Standard", q, esc)}</td>
+      <td>${highlightMatch(item.color || "-", q, esc)}</td>
 
-    <td class="qty-cell">
-      <button class="tiny qtyEditBtn" type="button">Qty: ${Number(item.quantity || 0)}</button>
-    </td>
+      <td>
+        <input class="qty-input" type="number" min="0" value="${Number(item.quantity || 0)}" />
+      </td>
 
-    <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
-    <td>${highlightMatch(item.supplier || "-", q, esc)}</td>
-    <td>${fmtDate(item.lastUpdated)}</td>
+      <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
+      <td>${highlightMatch(item.supplier || "-", q, esc)}</td>
+      <td>${fmtDate(item.lastUpdated)}</td>
 
-    <td>
-      ${highlightMatch(item.notes || "-", q, esc)}
-      <div class="muted">${rule.status} (${rule.color})</div>
-    </td>
+      <td>
+        ${highlightMatch(item.notes || "-", q, esc)}
+        <div class="muted">${rule.status} (${rule.color})</div>
+      </td>
 
-    <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
-  `;
+      <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
+    `;
 
-        const qtyEditBtn = tr.querySelector(".qtyEditBtn");
-
-    qtyEditBtn.addEventListener("click", async () => {
+    tr.querySelector(".qty-input").addEventListener("change", async (e) => {
       if (!isUnlocked()) {
         toast("Locked: log in to edit quantity.", "error");
+        e.target.value = Number(item.quantity || 0);
         return;
       }
 
       const prevQty = Number(item.quantity || 0);
-      const input = window.prompt(`Update quantity for ${item.itemName}:`, String(prevQty));
-      if (input === null) return;
+      const newQty = Math.max(0, Number(e.target.value || 0));
+      const delta = newQty - prevQty;
 
-      const parsed = Number(input);
-      if (!Number.isFinite(parsed) || parsed < 0) {
-        toast("Please enter a valid quantity.", "error");
+      if (newQty === prevQty) {
+        e.target.value = prevQty;
         return;
       }
 
-      const newQty = Math.max(0, Math.floor(parsed));
-      const delta = newQty - prevQty;
-
-      if (newQty === prevQty) return;
-
       const updatedItem = (data.inventory || []).find((i) => i.itemID === item.itemID);
       if (!updatedItem) {
-        toast("Item not found after update.", "error");
+        e.target.value = prevQty;
+        toast("Item not found.", "error");
         return;
       }
 
       updatedItem.quantity = newQty;
       updatedItem.lastUpdated = new Date().toISOString();
+
       item.quantity = newQty;
       item.lastUpdated = updatedItem.lastUpdated;
 
@@ -150,18 +145,8 @@ export function renderInventory(ctx) {
         userAction: "inline_edit",
       });
 
-      qtyEditBtn.disabled = true;
-
       try {
         await persist();
-
-        try {
-          await upsertInventoryItemToCloud(updatedItem);
-        } catch (err) {
-          console.error("Inventory cloud sync failed:", err);
-          toast("Quantity updated locally, but cloud sync failed.", "warning");
-        }
-
         renderAll();
         maybeNotifyLowStock();
         toast("Quantity updated.", "success");
@@ -169,15 +154,12 @@ export function renderInventory(ctx) {
         console.error("Inventory persist failed:", err);
         updatedItem.quantity = prevQty;
         item.quantity = prevQty;
+        e.target.value = prevQty;
         toast("Failed to update quantity.", "error");
-      } finally {
-        qtyEditBtn.disabled = false;
       }
     });
 
     tr.querySelector(".historyBtn").onclick = () => {
-      console.log("USING FUNCTION:", showItemHistory);
-
       showItemHistory({
         el,
         data,
