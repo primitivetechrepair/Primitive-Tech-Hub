@@ -207,20 +207,6 @@ export async function upsertInventoryItemToCloud(item) {
   }
 }
 
-export async function deleteLeadFromCloud(leadID) {
-  const { error } = await supabase
-    .from("leads")
-    .delete()
-    .eq("lead_id", leadID);
-
-  if (error) {
-    console.error("deleteLeadFromCloud error:", error);
-    throw error;
-  }
-
-  return true;
-}
-
 export async function insertInventoryUsageToCloud({
   itemID,
   delta,
