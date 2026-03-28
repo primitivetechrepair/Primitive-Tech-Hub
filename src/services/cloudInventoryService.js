@@ -1,5 +1,132 @@
 import { supabase } from "./supabaseClient.js";
 
+const INVENTORY_SYNC_QUEUE_KEY = "primitiveTechHubInventorySyncQueue";
+
+function readInventorySyncQueue() {
+  try {
+    const raw = localStorage.getItem(INVENTORY_SYNC_QUEUE_KEY);
+    const parsed = JSON.parse(raw || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeInventorySyncQueue(queue) {
+  try {
+    localStorage.setItem(
+      INVENTORY_SYNC_QUEUE_KEY,
+      JSON.stringify(Array.isArray(queue) ? queue : [])
+    );
+  } catch (err) {
+    console.error("writeInventorySyncQueue error:", err);
+  }
+}
+
+export function enqueueInventorySync(item) {
+  try {
+    if (!item?.itemID) return;
+
+    const queue = readInventorySyncQueue();
+
+    const next = {
+      itemID: item.itemID,
+      itemName: item.itemName || "",
+      brand: item.brand || "",
+      series: item.series || "",
+      category: item.category || "",
+      costPerItem: Number(item.costPerItem || 0),
+      quantity: Number(item.quantity || 0),
+      threshold: Number(item.threshold || 0),
+      location: item.location || "",
+      notes: item.notes || "",
+      lastUpdated: item.lastUpdated || new Date().toISOString(),
+    };
+
+    const existingIndex = queue.findIndex((x) => x.itemID === next.itemID);
+
+    if (existingIndex >= 0) {
+      queue[existingIndex] = next;
+    } else {
+      queue.push(next);
+    }
+
+    writeInventorySyncQueue(queue);
+  } catch (err) {
+    console.error("enqueueInventorySync error:", err);
+  }
+}
+
+export function getInventorySyncQueue() {
+  return readInventorySyncQueue();
+}
+
+export function clearInventorySyncQueueItem(itemID) {
+  try {
+    const queue = readInventorySyncQueue().filter((x) => x.itemID !== itemID);
+    writeInventorySyncQueue(queue);
+  } catch (err) {
+    console.error("clearInventorySyncQueueItem error:", err);
+  }
+}
+
+export async function flushInventorySyncQueue() {
+  const queue = getInventorySyncQueue();
+
+  if (!queue.length) return;
+
+  for (const item of queue) {
+    try {
+      const { data: existing, error: fetchError } = await supabase
+        .from("inventory_items")
+        .select("updated_at")
+        .eq("item_id", item.itemID)
+        .maybeSingle();
+
+      if (fetchError) {
+        console.error("flushInventorySyncQueue fetch error:", fetchError);
+        continue;
+      }
+
+      const localTime = new Date(item.lastUpdated || 0).getTime();
+      const cloudTime = new Date(existing?.updated_at || 0).getTime();
+
+      if (cloudTime > localTime) {
+        console.warn("[QUEUE SKIP] Cloud is newer than queued item:", item.itemID);
+        clearInventorySyncQueueItem(item.itemID);
+        continue;
+      }
+
+      const payload = {
+        item_id: item.itemID,
+        item_name: item.itemName || "",
+        brand: item.brand || "",
+        series: item.series || "",
+        category: item.category || "",
+        cost_per_item: Number(item.costPerItem || 0),
+        quantity_on_hand: Number(item.quantity || 0),
+        threshold: Number(item.threshold || 0),
+        location: item.location || "",
+        notes: item.notes || "",
+        updated_at: item.lastUpdated || new Date().toISOString(),
+      };
+
+      const { error } = await supabase
+        .from("inventory_items")
+        .upsert(payload, { onConflict: "item_id" });
+
+      if (error) {
+        console.error("flushInventorySyncQueue upsert error:", error);
+        continue;
+      }
+
+      clearInventorySyncQueueItem(item.itemID);
+    } catch (err) {
+      console.error("flushInventorySyncQueue error:", err);
+    }
+  }
+}
+
 export async function fetchInventoryFromCloud() {
   const { data, error } = await supabase
     .from("inventory_items")
@@ -29,7 +156,6 @@ export async function fetchInventoryFromCloud() {
 
 export async function upsertInventoryItemToCloud(item) {
   try {
-    // 1. Get existing cloud row
     const { data: existing, error: fetchError } = await supabase
       .from("inventory_items")
       .select("updated_at")
@@ -43,13 +169,11 @@ export async function upsertInventoryItemToCloud(item) {
     const localTime = new Date(item.lastUpdated || 0).getTime();
     const cloudTime = new Date(existing?.updated_at || 0).getTime();
 
-    // 2. BLOCK older updates
     if (cloudTime > localTime) {
       console.warn("[SYNC BLOCKED] Cloud is newer than local:", item.itemID);
       return null;
     }
 
-    // 3. Proceed with safe upsert
     const payload = {
       item_id: item.itemID,
       item_name: item.itemName || "",
@@ -61,7 +185,7 @@ export async function upsertInventoryItemToCloud(item) {
       threshold: Number(item.threshold || 0),
       location: item.location || "",
       notes: item.notes || "",
-      updated_at: new Date().toISOString(),
+      updated_at: item.lastUpdated || new Date().toISOString(),
     };
 
     const { data, error } = await supabase
@@ -71,12 +195,14 @@ export async function upsertInventoryItemToCloud(item) {
 
     if (error) {
       console.error("upsertInventoryItemToCloud error:", error);
+      enqueueInventorySync(item);
       throw error;
     }
 
     return data;
   } catch (err) {
     console.error("Safe upsert failed:", err);
+    enqueueInventorySync(item);
     return null;
   }
 }

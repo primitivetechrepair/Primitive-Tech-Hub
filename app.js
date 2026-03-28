@@ -62,6 +62,7 @@ import {
   upsertLeadToCloud,
   fetchAppSettingsFromCloud,
   upsertAppSettingsToCloud,
+  flushInventorySyncQueue,
 } from "./src/services/cloudInventoryService.js";
 
 import { renderInvoiceHistory } from "./src/ui/renderInvoiceHistory.js";
@@ -99,6 +100,7 @@ let eventsWired = false;
 let leadPartsController = null;
 let sessionFacade = null;
 let listManagerModal = null;
+let inventorySyncOnlineWired = false;
 
 function isUnlocked() {
   return !!cryptoKey;
@@ -356,7 +358,22 @@ async function showApp() {
   await hydrateLeadsFromCloud();
 
   await persist();
-  renderAllNow();
+renderAllNow();
+
+setTimeout(() => {
+  flushInventorySyncQueue().catch((err) => {
+    console.error("flushInventorySyncQueue failed:", err);
+  });
+}, 800);
+
+if (!inventorySyncOnlineWired) {
+  window.addEventListener("online", () => {
+    flushInventorySyncQueue().catch((err) => {
+      console.error("flushInventorySyncQueue online retry failed:", err);
+    });
+  });
+  inventorySyncOnlineWired = true;
+}
 
   if (!csvImportService) {
     csvImportService = createCsvImportService({

@@ -1,3 +1,5 @@
+import { deleteLeadFromCloud } from "../services/cloudInventoryService.js";
+
 export function createDeleteActions({
   el,
   isUnlocked,
@@ -116,8 +118,19 @@ export function createDeleteActions({
       inventoryRestoredOnDelete: true,
     });
 
-    await persist();
-    renderAll();
+await persist();
+
+console.log("[DEBUG deleteLead] attempting cloud delete for:", leadID);
+
+try {
+  const result = await deleteLeadFromCloud(leadID);
+  console.log("[DEBUG deleteLead] cloud delete success:", leadID, result);
+} catch (err) {
+  console.error("[DEBUG deleteLead] cloud delete failed:", leadID, err);
+  toast(el, "Lead deleted locally, but cloud delete failed.", "warning");
+}
+
+renderAll();
 
     // Save last deleted lead for undo
     lastDeletedLead = {
