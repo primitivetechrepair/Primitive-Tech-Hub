@@ -2746,3 +2746,42 @@ table thead th {
   border-radius: 4px;
   font-weight: 700;
 }
+
+/* Mobile-safe quantity editor inside inventory table */
+.qty-cell {
+  min-width: 110px;
+}
+
+.qty-edit-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.qty-edit-wrap .qty-input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.qty-edit-wrap .saveQtyBtn {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Keep it compact but visible on small screens */
+@media (max-width: 768px) {
+  .qty-cell {
+    min-width: 120px;
+  }
+
+  .qty-edit-wrap {
+    gap: 5px;
+  }
+
+  .qty-edit-wrap .qty-input,
+  .qty-edit-wrap .saveQtyBtn {
+    font-size: 14px;
+  }
+}

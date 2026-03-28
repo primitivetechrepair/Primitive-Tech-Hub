@@ -94,6 +94,7 @@ export function renderInventory(ctx) {
     <td>${highlightMatch(item.color || "-", q, esc)}</td>
 
         <td>
+       <td class="qty-cell">
       <div class="qty-edit-wrap">
         <input class="qty-input" type="number" min="0" inputmode="numeric" value="${item.quantity}" />
         <button class="tiny saveQtyBtn" type="button">Save</button>
