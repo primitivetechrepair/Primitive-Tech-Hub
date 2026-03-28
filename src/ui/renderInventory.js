@@ -39,7 +39,7 @@ export function renderInventory(ctx) {
   } = ctx;
 
   const q = el.inventorySearch.value.trim().toLowerCase();
-    const rows = data.inventory.filter((i) =>
+  const rows = data.inventory.filter((i) =>
     [
       i.itemID,
       i.itemName,
@@ -77,7 +77,7 @@ export function renderInventory(ctx) {
     const tr = document.createElement("tr");
     tr.classList.add(rule.className);
 
-  tr.innerHTML = `
+    tr.innerHTML = `
     <td>
       ${highlightMatch(item.itemName, q, esc)}
       <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
