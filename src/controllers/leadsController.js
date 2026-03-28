@@ -173,9 +173,11 @@ const lead = {
     await persist();
 
 try {
-  await upsertLeadToCloud(lead);
+  console.log("[DEBUG addLead] attempting cloud upsert for:", lead.leadID, lead);
+  const result = await upsertLeadToCloud(lead);
+  console.log("[DEBUG addLead] cloud upsert success:", lead.leadID, result);
 } catch (err) {
-  console.error("Lead cloud sync failed:", err);
+  console.error("[DEBUG addLead] cloud upsert failed:", lead.leadID, err);
   toast("Lead saved locally, but cloud sync failed.", "warning");
 }
 

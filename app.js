@@ -340,14 +340,14 @@ async function hydrateLeadsFromCloud() {
     );
 
     const activeCloudLeads = (cloudLeads || []).filter((lead) => !lead.deletedAt);
-    const filteredLocalLeads = localLeads.filter((lead) => !deletedLeadIDs.has(lead.leadID));
 
-    data.leads = sortLeadsNewestFirst(
-      mergeByTimestamp(filteredLocalLeads, activeCloudLeads, {
-        key: "leadID",
-        timeField: "lastUpdated",
-      })
-    );
+    // Start from active cloud leads as source of truth for cross-device visibility
+    const mergedLeads = mergeByTimestamp(localLeads, activeCloudLeads, {
+      key: "leadID",
+      timeField: "lastUpdated",
+    }).filter((lead) => !deletedLeadIDs.has(lead.leadID));
+
+    data.leads = sortLeadsNewestFirst(mergedLeads);
   } catch (err) {
     console.error("hydrateLeadsFromCloud failed:", err);
   }
