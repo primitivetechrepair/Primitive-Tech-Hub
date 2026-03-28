@@ -210,7 +210,7 @@ export async function upsertInventoryItemToCloud(item) {
 export async function deleteLeadFromCloud(leadID) {
   const { error } = await supabase
     .from("leads")
-    .update({ deleted_at: new Date().toISOString() })
+    .delete()
     .eq("lead_id", leadID);
 
   if (error) {
@@ -314,7 +314,6 @@ export async function fetchLeadsFromCloud() {
         : {},
     files: Array.isArray(row.files) ? row.files : [],
     lastUpdated: row.last_updated || null,
-    deletedAt: row.deleted_at || null,
   }));
 }
 
