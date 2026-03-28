@@ -314,13 +314,17 @@ export async function fetchLeadsFromCloud() {
         : {},
     files: Array.isArray(row.files) ? row.files : [],
     lastUpdated: row.last_updated || null,
+    deletedAt: row.deleted_at || null,
   }));
 }
 
 export async function deleteLeadFromCloud(leadID) {
   const { error } = await supabase
     .from("leads")
-    .delete()
+    .update({
+      deleted_at: new Date().toISOString(),
+      last_updated: new Date().toISOString(),
+    })
     .eq("lead_id", leadID);
 
   if (error) {

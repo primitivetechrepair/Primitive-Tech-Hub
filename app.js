@@ -333,8 +333,17 @@ async function hydrateLeadsFromCloud() {
 
     const localLeads = Array.isArray(data.leads) ? data.leads : [];
 
+    const deletedLeadIDs = new Set(
+      (cloudLeads || [])
+        .filter((lead) => lead.deletedAt)
+        .map((lead) => lead.leadID)
+    );
+
+    const activeCloudLeads = (cloudLeads || []).filter((lead) => !lead.deletedAt);
+    const filteredLocalLeads = localLeads.filter((lead) => !deletedLeadIDs.has(lead.leadID));
+
     data.leads = sortLeadsNewestFirst(
-      mergeByTimestamp(localLeads, cloudLeads, {
+      mergeByTimestamp(filteredLocalLeads, activeCloudLeads, {
         key: "leadID",
         timeField: "lastUpdated",
       })
