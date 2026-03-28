@@ -20,6 +20,8 @@ export function renderLeads(ctx) {
     leadsService,
     queueCloudSync,
     upsertLeadToCloud,
+    persist,
+    addAudit,
     createAndSendInvoice,
     addPartToLead,
     removePartFromLead,
@@ -193,38 +195,139 @@ tr.innerHTML = `
   </td>
 `;
 
-    // Add event listeners for the payment method and status changes
-tr.querySelector(".paymentMethodSel").addEventListener("change", async (e) => {
-  const newPaymentMethod = e.target.value;
+    // Add event listeners for lead status, payment method, and payment status changes
+    tr.querySelector(".leadStatusSel").addEventListener("change", async (e) => {
+      const newStatus = e.target.value;
+      const prevStatus = lead.status;
 
-  // Update the lead object
-  lead.paymentMethod = newPaymentMethod;
+      if (!isUnlocked()) {
+        e.target.value = prevStatus;
+        toast(el, "Locked: log in to update lead status.", "error");
+        return;
+      }
 
-  try {
-    // Persist the updated lead to the cloud or local storage
-    await upsertLeadToCloud(lead);
-    queueCloudSync("lead_payment_method_update", { leadID: lead.leadID, paymentMethod: newPaymentMethod });
-  } catch (err) {
-    console.error("Payment method cloud sync failed:", err);
-    toast(el, "Payment method update failed.", "error");
-  }
-});
+      lead.status = newStatus;
+      lead.lastUpdated = new Date().toISOString();
 
-tr.querySelector(".paymentStatusSel").addEventListener("change", async (e) => {
-  const newPaymentStatus = e.target.value;
+      addAudit("lead_status_updated", {
+        leadID: lead.leadID,
+        from: prevStatus,
+        to: newStatus,
+        userAction: "status_change",
+      });
 
-  // Update the lead object
-  lead.paymentStatus = newPaymentStatus;
+      try {
+                console.log("[STATUS] before persist snapshot", JSON.parse(JSON.stringify(data.leads.find((l) => l.leadID === lead.leadID))));
+        await persist();
+        console.log("[STATUS] after persist snapshot", JSON.parse(JSON.stringify(data.leads.find((l) => l.leadID === lead.leadID))));
 
-  try {
-    // Persist the updated lead to the cloud or local storage
-    await upsertLeadToCloud(lead);
-    queueCloudSync("lead_payment_status_update", { leadID: lead.leadID, paymentStatus: newPaymentStatus });
-  } catch (err) {
-    console.error("Payment status cloud sync failed:", err);
-    toast(el, "Payment status update failed.", "error");
-  }
-});
+        queueCloudSync("lead_status_update", {
+          leadID: lead.leadID,
+          status: newStatus,
+        });
+
+        try {
+          await upsertLeadToCloud(lead);
+        } catch (err) {
+          console.error("Lead status cloud sync failed:", err);
+          toast(el, "Lead status saved locally, but cloud sync failed.", "warning");
+        }
+
+        renderAll();
+        toast(el, `Lead ${lead.leadID} updated to ${newStatus}.`, "success");
+      } catch (err) {
+        console.error("Lead status persist failed:", err);
+        lead.status = prevStatus;
+        e.target.value = prevStatus;
+        toast(el, "Failed to update lead status.", "error");
+      }
+    });
+
+    tr.querySelector(".paymentMethodSel").addEventListener("change", async (e) => {
+      const newPaymentMethod = e.target.value;
+      const prevPaymentMethod = lead.paymentMethod;
+
+      if (!isUnlocked()) {
+        e.target.value = prevPaymentMethod || "Cash";
+        toast(el, "Locked: log in to update payment method.", "error");
+        return;
+      }
+
+      lead.paymentMethod = newPaymentMethod;
+      lead.lastUpdated = new Date().toISOString();
+
+      addAudit("lead_payment_method_updated", {
+        leadID: lead.leadID,
+        paymentMethod: newPaymentMethod,
+        userAction: "payment_method_change",
+      });
+
+      try {
+        await persist();
+
+        queueCloudSync("lead_payment_method_update", {
+          leadID: lead.leadID,
+          paymentMethod: newPaymentMethod,
+        });
+
+        try {
+          await upsertLeadToCloud(lead);
+        } catch (err) {
+          console.error("Payment method cloud sync failed:", err);
+          toast(el, "Payment method saved locally, but cloud sync failed.", "warning");
+        }
+
+        renderAll();
+      } catch (err) {
+        console.error("Payment method persist failed:", err);
+        lead.paymentMethod = prevPaymentMethod;
+        e.target.value = prevPaymentMethod || "Cash";
+        toast(el, "Payment method update failed.", "error");
+      }
+    });
+
+    tr.querySelector(".paymentStatusSel").addEventListener("change", async (e) => {
+      const newPaymentStatus = e.target.value;
+      const prevPaymentStatus = lead.paymentStatus;
+
+      if (!isUnlocked()) {
+        e.target.value = prevPaymentStatus || "Unpaid";
+        toast(el, "Locked: log in to update payment status.", "error");
+        return;
+      }
+
+      lead.paymentStatus = newPaymentStatus;
+      lead.lastUpdated = new Date().toISOString();
+
+      addAudit("lead_payment_status_updated", {
+        leadID: lead.leadID,
+        paymentStatus: newPaymentStatus,
+        userAction: "payment_status_change",
+      });
+
+      try {
+        await persist();
+
+        queueCloudSync("lead_payment_status_update", {
+          leadID: lead.leadID,
+          paymentStatus: newPaymentStatus,
+        });
+
+        try {
+          await upsertLeadToCloud(lead);
+        } catch (err) {
+          console.error("Payment status cloud sync failed:", err);
+          toast(el, "Payment status saved locally, but cloud sync failed.", "warning");
+        }
+
+        renderAll();
+      } catch (err) {
+        console.error("Payment status persist failed:", err);
+        lead.paymentStatus = prevPaymentStatus;
+        e.target.value = prevPaymentStatus || "Unpaid";
+        toast(el, "Payment status update failed.", "error");
+      }
+    });
 
     tr.querySelector(".useForRepairBtn").onclick = () => addPartToLead(lead.leadID);
     tr.querySelector(".invoiceBtn").onclick = () => createAndSendInvoice(lead);

@@ -147,22 +147,26 @@ export async function deleteLeadFromCloud(leadID) {
 }
 
 export async function fetchAppSettingsFromCloud() {
+  console.log("[DEBUG] fetchAppSettingsFromCloud using maybeSingle");
+
   const { data, error } = await supabase
     .from("app_settings")
     .select("*")
     .eq("id", 1)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error("fetchAppSettingsFromCloud error:", error);
     throw error;
   }
 
+  if (!data) return null;
+
   return {
-    categories: Array.isArray(data?.categories) ? data.categories : [],
-    repairs: Array.isArray(data?.repairs) ? data.repairs : [],
-    brands: Array.isArray(data?.brands) ? data.brands : [],
-    updatedAt: data?.updated_at || null,
+    categories: Array.isArray(data.categories) ? data.categories : [],
+    repairs: Array.isArray(data.repairs) ? data.repairs : [],
+    brands: Array.isArray(data.brands) ? data.brands : [],
+    updatedAt: data.updated_at || null,
   };
 }
 

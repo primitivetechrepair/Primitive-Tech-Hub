@@ -116,6 +116,8 @@ export function createRenderAllController({
       leadsService,
       queueCloudSync,
       upsertLeadToCloud,
+      persist,
+      addAudit,
       createAndSendInvoice: invoiceService.createAndSendInvoice,
       addPartToLead,
       removePartFromLead,
