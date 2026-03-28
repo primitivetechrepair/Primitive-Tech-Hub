@@ -265,9 +265,12 @@ authController.initAuth();
 async function hydrateInventoryFromCloud() {
   try {
     const cloudInventory = await fetchInventoryFromCloud();
+    console.log("[HYDRATE] inventory rows from cloud:", Array.isArray(cloudInventory) ? cloudInventory.length : "not-array");
+
     if (!Array.isArray(cloudInventory)) return;
 
     data.inventory = cloudInventory;
+    console.log("[HYDRATE] data.inventory after assign:", Array.isArray(data.inventory) ? data.inventory.length : "not-array");
   } catch (err) {
     console.error("hydrateInventoryFromCloud failed:", err);
   }
@@ -276,9 +279,12 @@ async function hydrateInventoryFromCloud() {
 async function hydrateLeadsFromCloud() {
   try {
     const cloudLeads = await fetchLeadsFromCloud();
+    console.log("[HYDRATE] leads rows from cloud:", Array.isArray(cloudLeads) ? cloudLeads.length : "not-array");
+
     if (!Array.isArray(cloudLeads)) return;
 
     data.leads = cloudLeads;
+    console.log("[HYDRATE] data.leads after assign:", Array.isArray(data.leads) ? data.leads.length : "not-array");
   } catch (err) {
     console.error("hydrateLeadsFromCloud failed:", err);
   }
@@ -297,7 +303,18 @@ async function showApp() {
   await hydrateInventoryFromCloud();
   await hydrateLeadsFromCloud();
 
+  console.log("[SHOWAPP] before persist", {
+    inventory: Array.isArray(data.inventory) ? data.inventory.length : "not-array",
+    leads: Array.isArray(data.leads) ? data.leads.length : "not-array",
+  });
+
   await persist();
+
+  console.log("[SHOWAPP] after persist", {
+    inventory: Array.isArray(data.inventory) ? data.inventory.length : "not-array",
+    leads: Array.isArray(data.leads) ? data.leads.length : "not-array",
+  });
+
   renderAllNow();
 
   if (!csvImportService) {
