@@ -128,17 +128,17 @@ export function renderInventory(ctx) {
 
       if (newQty === prevQty) return;
 
-      inventoryService.updateItem(item.itemID, {
-        quantity: newQty,
-        lastUpdated: new Date().toISOString(),
-      });
-
       const updatedItem = (data.inventory || []).find((i) => i.itemID === item.itemID);
       if (!updatedItem) {
         qtyInput.value = prevQty;
         toast("Item not found after update.", "error");
         return;
       }
+
+      updatedItem.quantity = newQty;
+      updatedItem.lastUpdated = new Date().toISOString();
+      item.quantity = newQty;
+      item.lastUpdated = updatedItem.lastUpdated;
 
       addAudit("inventory_adjusted", {
         itemID: item.itemID,
@@ -173,8 +173,6 @@ export function renderInventory(ctx) {
     }
 
     saveQtyBtn.addEventListener("click", saveInlineQty);
-
-    qtyInput.addEventListener("change", saveInlineQty);
 
     qtyInput.addEventListener("keydown", async (e) => {
       if (e.key === "Enter") {
