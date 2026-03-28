@@ -98,26 +98,26 @@ export async function insertInventoryUsageToCloud({
 }
 
 export async function upsertLeadToCloud(lead) {
-  const payload = {
-    lead_id: lead.leadID,
-    customer_name: lead.customerName || "",
-    contact_number: lead.contactNumber || "",
-    email: lead.email || "",
-    address: lead.address || "",
-    device: lead.device || "",
-    series: lead.series || "",
-    repair_type: lead.repairType || "",
-    status: lead.status || "In Progress",
-    date_reported: lead.dateReported || null,
-    notes: lead.notes || "",
-    inventory_used: Array.isArray(lead.inventoryUsed) ? lead.inventoryUsed : [],
-    inventory_used_qty:
-      lead.inventoryUsedQty && typeof lead.inventoryUsedQty === "object"
-        ? lead.inventoryUsedQty
-        : {},
-    files: Array.isArray(lead.files) ? lead.files : [],
-    last_updated: new Date().toISOString(),
-  };
+const payload = {
+  lead_id: lead.leadID,
+  customer_name: lead.customerName || "",
+  contact_number: lead.contactNumber || "",
+  email: lead.email || "",
+  address: lead.address || "",
+  device: lead.device || "",
+  series: lead.series || "",
+  repair_type: lead.repairType || "",
+  status: lead.status || "In Progress",
+  date_reported: lead.dateReported || null,
+  notes: lead.notes || "",
+  inventory_used: Array.isArray(lead.inventoryUsed) ? lead.inventoryUsed : [],
+  inventory_used_qty:
+    lead.inventoryUsedQty && typeof lead.inventoryUsedQty === "object"
+      ? lead.inventoryUsedQty
+      : {},
+  files: Array.isArray(lead.files) ? lead.files : [],
+  last_updated: lead.lastUpdated || new Date().toISOString(), // ✅ FIX
+};
 
   const { data, error } = await supabase
     .from("leads")
