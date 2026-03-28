@@ -79,7 +79,7 @@ export function renderInventory(ctx) {
     const tr = document.createElement("tr");
     tr.classList.add(rule.className);
 
-  tr.innerHTML = `
+    tr.innerHTML = `
     <td>
       ${highlightMatch(item.itemName, q, esc)}
       <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
@@ -93,13 +93,13 @@ export function renderInventory(ctx) {
     <td>${highlightMatch(item.series || "Standard", q, esc)}</td>
     <td>${highlightMatch(item.color || "-", q, esc)}</td>
 
-        <td>
-          <td class="qty-cell">
+    <td class="qty-cell">
       <div class="qty-edit-wrap">
         <input class="qty-input" type="number" min="0" inputmode="numeric" value="${item.quantity}" />
         <button class="tiny saveQtyBtn" type="button">Save</button>
       </div>
     </td>
+
     <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
     <td>${highlightMatch(item.supplier || "-", q, esc)}</td>
     <td>${fmtDate(item.lastUpdated)}</td>
