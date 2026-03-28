@@ -262,15 +262,56 @@ if (!authController) {
 
 authController.initAuth();
 
+function mergeByTimestamp(localRows, cloudRows, { key, timeField }) {
+  const map = new Map();
+
+  const safeLocal = Array.isArray(localRows) ? localRows : [];
+  const safeCloud = Array.isArray(cloudRows) ? cloudRows : [];
+
+  for (const row of safeLocal) {
+    if (!row || !row[key]) continue;
+    map.set(row[key], row);
+  }
+
+  for (const cloudRow of safeCloud) {
+    if (!cloudRow || !cloudRow[key]) continue;
+
+    const localRow = map.get(cloudRow[key]);
+    if (!localRow) {
+      map.set(cloudRow[key], cloudRow);
+      continue;
+    }
+
+    const localTime = new Date(localRow[timeField] || 0).getTime();
+    const cloudTime = new Date(cloudRow[timeField] || 0).getTime();
+
+    if (cloudTime >= localTime) {
+      map.set(cloudRow[key], cloudRow);
+    }
+  }
+
+  return Array.from(map.values());
+}
+
+function sortLeadsNewestFirst(leads) {
+  return [...(Array.isArray(leads) ? leads : [])].sort((a, b) => {
+    const aTime = new Date(a?.lastUpdated || a?.dateReported || 0).getTime();
+    const bTime = new Date(b?.lastUpdated || b?.dateReported || 0).getTime();
+    return bTime - aTime;
+  });
+}
+
 async function hydrateInventoryFromCloud() {
   try {
     const cloudInventory = await fetchInventoryFromCloud();
-    console.log("[HYDRATE] inventory rows from cloud:", Array.isArray(cloudInventory) ? cloudInventory.length : "not-array");
-
     if (!Array.isArray(cloudInventory)) return;
 
-    data.inventory = cloudInventory;
-    console.log("[HYDRATE] data.inventory after assign:", Array.isArray(data.inventory) ? data.inventory.length : "not-array");
+    const localInventory = Array.isArray(data.inventory) ? data.inventory : [];
+
+    data.inventory = mergeByTimestamp(localInventory, cloudInventory, {
+      key: "itemID",
+      timeField: "updatedAt",
+    });
   } catch (err) {
     console.error("hydrateInventoryFromCloud failed:", err);
   }
@@ -279,12 +320,16 @@ async function hydrateInventoryFromCloud() {
 async function hydrateLeadsFromCloud() {
   try {
     const cloudLeads = await fetchLeadsFromCloud();
-    console.log("[HYDRATE] leads rows from cloud:", Array.isArray(cloudLeads) ? cloudLeads.length : "not-array");
-
     if (!Array.isArray(cloudLeads)) return;
 
-    data.leads = cloudLeads;
-    console.log("[HYDRATE] data.leads after assign:", Array.isArray(data.leads) ? data.leads.length : "not-array");
+    const localLeads = Array.isArray(data.leads) ? data.leads : [];
+
+    data.leads = sortLeadsNewestFirst(
+      mergeByTimestamp(localLeads, cloudLeads, {
+        key: "leadID",
+        timeField: "lastUpdated",
+      })
+    );
   } catch (err) {
     console.error("hydrateLeadsFromCloud failed:", err);
   }
@@ -303,18 +348,7 @@ async function showApp() {
   await hydrateInventoryFromCloud();
   await hydrateLeadsFromCloud();
 
-  console.log("[SHOWAPP] before persist", {
-    inventory: Array.isArray(data.inventory) ? data.inventory.length : "not-array",
-    leads: Array.isArray(data.leads) ? data.leads.length : "not-array",
-  });
-
   await persist();
-
-  console.log("[SHOWAPP] after persist", {
-    inventory: Array.isArray(data.inventory) ? data.inventory.length : "not-array",
-    leads: Array.isArray(data.leads) ? data.leads.length : "not-array",
-  });
-
   renderAllNow();
 
   if (!csvImportService) {
