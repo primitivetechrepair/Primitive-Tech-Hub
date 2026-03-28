@@ -103,9 +103,11 @@ export function createInventoryService({ getData, setData, persist, addAudit }) 
       setData(data);
       await persist(); // ✅ CRITICAL FIX
 
-      upsertInventoryItemToCloud(item).catch((err) => {
-        console.error("Cloud sync failed in updateItem:", err);
-      });
+setTimeout(() => {
+  upsertInventoryItemToCloud(item).catch((err) => {
+    console.error("Cloud sync failed in updateItem:", err);
+  });
+}, 300);
 
       return item;
     },

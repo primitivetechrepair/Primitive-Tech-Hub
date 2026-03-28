@@ -28,31 +28,57 @@ export async function fetchInventoryFromCloud() {
 }
 
 export async function upsertInventoryItemToCloud(item) {
-  const payload = {
-    item_id: item.itemID,
-    item_name: item.itemName || "",
-    brand: item.brand || "",
-    series: item.series || "",
-    category: item.category || "",
-    cost_per_item: Number(item.costPerItem || 0),
-    quantity_on_hand: Number(item.quantity || 0),
-    threshold: Number(item.threshold || 0),
-    location: item.location || "",
-    notes: item.notes || "",
-    updated_at: new Date().toISOString(),
-  };
+  try {
+    // 1. Get existing cloud row
+    const { data: existing, error: fetchError } = await supabase
+      .from("inventory_items")
+      .select("updated_at")
+      .eq("item_id", item.itemID)
+      .maybeSingle();
 
-  const { data, error } = await supabase
-    .from("inventory_items")
-    .upsert(payload, { onConflict: "item_id" })
-    .select();
+    if (fetchError) {
+      console.error("fetch before upsert failed:", fetchError);
+    }
 
-  if (error) {
-    console.error("upsertInventoryItemToCloud error:", error);
-    throw error;
+    const localTime = new Date(item.lastUpdated || 0).getTime();
+    const cloudTime = new Date(existing?.updated_at || 0).getTime();
+
+    // 2. BLOCK older updates
+    if (cloudTime > localTime) {
+      console.warn("[SYNC BLOCKED] Cloud is newer than local:", item.itemID);
+      return null;
+    }
+
+    // 3. Proceed with safe upsert
+    const payload = {
+      item_id: item.itemID,
+      item_name: item.itemName || "",
+      brand: item.brand || "",
+      series: item.series || "",
+      category: item.category || "",
+      cost_per_item: Number(item.costPerItem || 0),
+      quantity_on_hand: Number(item.quantity || 0),
+      threshold: Number(item.threshold || 0),
+      location: item.location || "",
+      notes: item.notes || "",
+      updated_at: new Date().toISOString(),
+    };
+
+    const { data, error } = await supabase
+      .from("inventory_items")
+      .upsert(payload, { onConflict: "item_id" })
+      .select();
+
+    if (error) {
+      console.error("upsertInventoryItemToCloud error:", error);
+      throw error;
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Safe upsert failed:", err);
+    return null;
   }
-
-  return data;
 }
 
 export async function deleteInventoryItemFromCloud(itemID) {

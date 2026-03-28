@@ -308,10 +308,17 @@ async function hydrateInventoryFromCloud() {
 
     const localInventory = Array.isArray(data.inventory) ? data.inventory : [];
 
-    data.inventory = mergeByTimestamp(localInventory, cloudInventory, {
-      key: "itemID",
-      timeField: "updatedAt",
-    });
+data.inventory = mergeByTimestamp(localInventory, cloudInventory, {
+  key: "itemID",
+  timeField: "updatedAt",
+}).map((item) => ({
+  ...item,
+  quantity: Number(item.quantity || 0),
+  costPerItem: Number(item.costPerItem || 0),
+  threshold: Number(item.threshold || data.settings.defaultThreshold),
+  lastUpdated: item.lastUpdated || new Date().toISOString(),
+  usageEvents: Array.isArray(item.usageEvents) ? item.usageEvents : [],
+}));
   } catch (err) {
     console.error("hydrateInventoryFromCloud failed:", err);
   }
