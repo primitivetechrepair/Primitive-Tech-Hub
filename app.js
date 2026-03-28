@@ -239,25 +239,25 @@ if (!sessionFacade) {
 }
 
 if (!authController) {
-  authController = createAuthController({
-    el,
-    authStore,
-    authKey: AUTH_KEY,
-    sessionKey: SESSION_KEY,
-    pinKey: PIN_KEY,
-    sha256,
-    deriveKey,
-    defaultData,
-    loadEncrypted,
-    setData,
-    setCryptoKey: (k) => {
-      cryptoKey = k;
-    },
-    showApp,
-    renderAll: renderAllNow,
-    toast,
-    setMsg,
-  });
+authController = createAuthController({
+  el,
+  authStore,
+  authKey: AUTH_KEY,
+  sessionKey: SESSION_KEY,
+  pinKey: PIN_KEY,
+  sha256,
+  deriveKey,
+  defaultData,
+  loadEncrypted,
+  setData,
+  setCryptoKey: (k) => {
+    cryptoKey = k;
+  },
+  showApp,
+  renderAll: renderAllNow,
+  toast,
+  setMsg: (msg, type) => setMsg(el.msg, msg, type),
+});
 }
 
 authController.initAuth();
