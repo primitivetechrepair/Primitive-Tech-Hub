@@ -20,23 +20,24 @@ function highlightMatch(value, query, esc) {
 }
 
 export function renderInventory(ctx) {
-  const {
-    el,
-    data,
-    inventoryStatusByColorRule,
-    esc,
-    fmtDate,
-    addListItem,
-    isUnlocked,
-    toast,
-    inventoryService,
-    addAudit,
-    renderAll,
-    maybeNotifyLowStock,
-    showItemHistory,
-    deleteInventoryItem,
-    addSwipeQuickUse,
-  } = ctx;
+const {
+  el,
+  data,
+  inventoryStatusByColorRule,
+  esc,
+  fmtDate,
+  addListItem,
+  isUnlocked,
+  toast,
+  inventoryService,
+  addAudit,
+  persist, // ✅ ADD THIS LINE
+  renderAll,
+  maybeNotifyLowStock,
+  showItemHistory,
+  deleteInventoryItem,
+  addSwipeQuickUse,
+} = ctx;
 
   const q = el.inventorySearch.value.trim().toLowerCase();
     const rows = data.inventory.filter((i) =>
@@ -114,17 +115,19 @@ export function renderInventory(ctx) {
       const newQty = Math.max(0, Number(e.target.value));
       const delta = newQty - item.quantity;
 
-      inventoryService.updateItem(item.itemID, { quantity: newQty });
+inventoryService.updateItem(item.itemID, { quantity: newQty });
 
-      addAudit("inventory_adjusted", {
-        itemID: item.itemID,
-        delta,
-        qty: newQty,
-        userAction: "inline_edit",
-      });
+addAudit("inventory_adjusted", {
+  itemID: item.itemID,
+  delta,
+  qty: newQty,
+  userAction: "inline_edit",
+});
 
-      renderAll();
-      maybeNotifyLowStock();
+await persist(); // ✅ CRITICAL FIX
+
+renderAll();
+maybeNotifyLowStock();
     });
 
     tr.querySelector(".historyBtn").onclick = () => {

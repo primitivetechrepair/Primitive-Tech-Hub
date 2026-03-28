@@ -196,26 +196,26 @@ async function saveAppSettingsToCloud() {
 const inventoryService = createInventoryService({
   getData,
   setData,
-  persist,
+  persist: (...args) => persist(...args),
   addAudit,
 });
 
 const leadsService = createLeadsService({
   getData,
   setData,
-  persist,
+  persist: (...args) => persist(...args),
 });
 
 const auditService = createAuditService({
   getData,
   setData,
-  persist,
+  persist: (...args) => persist(...args),
 });
 
 const syncService = createSyncService({
   getData,
   setData,
-  persist,
+  persist: (...args) => persist(...args),
 });
 
 const el = mapEls();
