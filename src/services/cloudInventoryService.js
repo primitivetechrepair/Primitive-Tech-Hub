@@ -207,14 +207,14 @@ export async function upsertInventoryItemToCloud(item) {
   }
 }
 
-export async function deleteInventoryItemFromCloud(itemID) {
+export async function deleteLeadFromCloud(leadID) {
   const { error } = await supabase
-    .from("inventory_items")
-    .delete()
-    .eq("item_id", itemID);
+    .from("leads")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("lead_id", leadID);
 
   if (error) {
-    console.error("deleteInventoryItemFromCloud error:", error);
+    console.error("deleteLeadFromCloud error:", error);
     throw error;
   }
 
@@ -314,6 +314,7 @@ export async function fetchLeadsFromCloud() {
         : {},
     files: Array.isArray(row.files) ? row.files : [],
     lastUpdated: row.last_updated || null,
+    deletedAt: row.deleted_at || null,
   }));
 }
 

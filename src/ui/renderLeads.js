@@ -160,7 +160,7 @@ tr.innerHTML = `
   </td>
   <td>${used || "-"}</td>
   <td>${files}</td>
-  <td>${fmtDateShort(lead.dateReported)}</td>
+  <td>${esc(lead.dateReported || "-")}</td>
   <td>
     ${fmtMoney(profit)}
     <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
