@@ -27,6 +27,7 @@ export function createRenderAllController({
   leadsController,
   auditService,
   upsertLeadToCloud,
+  upsertInventoryItemToCloud,
 
   // actions
   deleteActions,
