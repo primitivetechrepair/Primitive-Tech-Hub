@@ -25,13 +25,13 @@ const {
   data,
   inventoryStatusByColorRule,
   esc,
-  fmtDate,
+  fmtDateShort,
   addListItem,
   isUnlocked,
   toast,
   inventoryService,
   addAudit,
-  persist, // ✅ ADD THIS LINE
+  persist,
   renderAll,
   maybeNotifyLowStock,
   showItemHistory,
@@ -95,7 +95,7 @@ const {
     <td><input class="qty-input" type="number" min="0" value="${item.quantity}" /></td>
     <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
     <td>${highlightMatch(item.supplier || "-", q, esc)}</td>
-    <td>${fmtDate(item.lastUpdated)}</td>
+    <td>${fmtDateShort(item.lastUpdated)}</td>
 
     <td>
       ${highlightMatch(item.notes || "-", q, esc)}

@@ -83,7 +83,7 @@ export function createRenderAllController({
       data,
       inventoryStatusByColorRule,
       esc,
-      fmtDate,
+      fmtDateShort,
       addListItem,
       isUnlocked,
       toast,
