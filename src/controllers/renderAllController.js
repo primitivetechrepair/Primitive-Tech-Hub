@@ -90,6 +90,7 @@ export function createRenderAllController({
       inventoryService,
       addAudit,
       persist,
+      upsertInventoryItemToCloud,
       renderAll,
       maybeNotifyLowStock,
       quickUseItem: inventoryController.quickUseItem,

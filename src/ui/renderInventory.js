@@ -31,7 +31,6 @@ export function renderInventory(ctx) {
     toast,
     inventoryService,
     addAudit,
-    persist,
     renderAll,
     maybeNotifyLowStock,
     showItemHistory,
@@ -40,7 +39,7 @@ export function renderInventory(ctx) {
   } = ctx;
 
   const q = el.inventorySearch.value.trim().toLowerCase();
-  const rows = data.inventory.filter((i) =>
+    const rows = data.inventory.filter((i) =>
     [
       i.itemID,
       i.itemName,
@@ -78,7 +77,7 @@ export function renderInventory(ctx) {
     const tr = document.createElement("tr");
     tr.classList.add(rule.className);
 
-    tr.innerHTML = `
+  tr.innerHTML = `
     <td>
       ${highlightMatch(item.itemName, q, esc)}
       <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
@@ -112,26 +111,10 @@ export function renderInventory(ctx) {
         return;
       }
 
-      const prevQty = Number(item.quantity || 0);
-      const prevLastUpdated = item.lastUpdated || null;
       const newQty = Math.max(0, Number(e.target.value));
-      const delta = newQty - prevQty;
+      const delta = newQty - item.quantity;
 
-      if (newQty === prevQty) {
-        e.target.value = prevQty;
-        return;
-      }
-
-      const updatedItem = inventoryService.updateItem(item.itemID, {
-        quantity: newQty,
-        lastUpdated: new Date().toISOString(),
-      });
-
-      if (!updatedItem) {
-        e.target.value = prevQty;
-        toast("Item not found.", "error");
-        return;
-      }
+      inventoryService.updateItem(item.itemID, { quantity: newQty });
 
       addAudit("inventory_adjusted", {
         itemID: item.itemID,
@@ -140,21 +123,8 @@ export function renderInventory(ctx) {
         userAction: "inline_edit",
       });
 
-      try {
-        await persist();
-        renderAll();
-        maybeNotifyLowStock();
-      } catch (err) {
-        console.error("Inventory quantity persist failed:", err);
-
-        inventoryService.updateItem(item.itemID, {
-          quantity: prevQty,
-          lastUpdated: prevLastUpdated,
-        });
-
-        e.target.value = prevQty;
-        toast("Failed to save quantity.", "error");
-      }
+      renderAll();
+      maybeNotifyLowStock();
     });
 
     tr.querySelector(".historyBtn").onclick = () => {
