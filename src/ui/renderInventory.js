@@ -55,13 +55,13 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
 
   const fixedTabs = [
     "All",
-    "Screens",
-    "Batteries",
-    "Charge Ports",
-    "Cameras",
+    "Screen",
+    "Battery",
+    "Charge Port",
+    "Camera",
     "Back Glass",
-    "Accessories",
-    "Tools",
+    "Accessory",
+    "Tool",
     "Other",
   ];
 
