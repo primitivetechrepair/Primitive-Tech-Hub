@@ -88,6 +88,10 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
     el._inventoryActiveSort = "updated_desc";
   }
 
+  if (!el._inventoryCollapsedGroups) {
+    el._inventoryCollapsedGroups = {};
+  }
+
   const fixedTabs = [
     "All",
     "Screen",
@@ -223,6 +227,99 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
   return toolbar;
 }
 
+function buildInventoryRow(item, ctx, q) {
+  const {
+    el,
+    data,
+    inventoryStatusByColorRule,
+    esc,
+    fmtDateShort,
+    addListItem,
+    isUnlocked,
+    toast,
+    inventoryService,
+    addAudit,
+    persist,
+    renderAll,
+    maybeNotifyLowStock,
+    showItemHistory,
+    deleteInventoryItem,
+    addSwipeQuickUse,
+  } = ctx;
+
+  const rule = inventoryStatusByColorRule(item.quantity);
+  const tr = document.createElement("tr");
+  tr.classList.add(rule.className);
+
+  tr.innerHTML = `
+    <td>
+      ${highlightMatch(item.itemName, q, esc)}
+      <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
+      <div class="row">
+        <button class="tiny historyBtn">History</button>
+      </div>
+    </td>
+
+    <td>${highlightMatch(item.category || "-", q, esc)}</td>
+    <td>${highlightMatch(item.partType || "Other", q, esc)}</td>
+    <td>${highlightMatch(item.brand || "-", q, esc)}</td>
+    <td>${highlightMatch(item.series || "Standard", q, esc)}</td>
+    <td>${highlightMatch(item.color || "-", q, esc)}</td>
+
+    <td><input class="qty-input" type="number" min="0" value="${item.quantity}" /></td>
+    <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
+    <td>${highlightMatch(item.supplier || "-", q, esc)}</td>
+    <td>${fmtDateShort(item.lastUpdated)}</td>
+
+    <td>
+      ${highlightMatch(item.notes || "-", q, esc)}
+      <div class="muted">${rule.status} (${rule.color})</div>
+    </td>
+
+    <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
+  `;
+
+  tr.querySelector(".qty-input").addEventListener("change", async (e) => {
+    if (!isUnlocked()) {
+      toast("Locked: log in to edit quantity.", "error");
+      e.target.value = item.quantity;
+      return;
+    }
+
+    const newQty = Math.max(0, Number(e.target.value));
+    const delta = newQty - item.quantity;
+
+    inventoryService.updateItem(item.itemID, { quantity: newQty });
+
+    addAudit("inventory_adjusted", {
+      itemID: item.itemID,
+      delta,
+      qty: newQty,
+      userAction: "inline_edit",
+    });
+
+    await persist();
+    renderAll();
+    maybeNotifyLowStock();
+  });
+
+  tr.querySelector(".historyBtn").onclick = () => {
+    showItemHistory({
+      el,
+      data,
+      addListItem,
+      itemID: item.itemID,
+    });
+  };
+
+  tr.querySelector(".deleteInventoryBtn").onclick = () =>
+    deleteInventoryItem(item.itemID);
+
+  addSwipeQuickUse(tr, item.itemID);
+
+  return tr;
+}
+
 export function renderInventory(ctx) {
   const {
     el,
@@ -332,76 +429,75 @@ export function renderInventory(ctx) {
     return;
   }
 
-  rows.forEach((item) => {
-    const rule = inventoryStatusByColorRule(item.quantity);
-    const tr = document.createElement("tr");
-    tr.classList.add(rule.className);
+  const grouped = rows.reduce((acc, item) => {
+    const key = String(item.partType || "Other").trim() || "Other";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(item);
+    return acc;
+  }, {});
 
-    tr.innerHTML = `
-      <td>
-        ${highlightMatch(item.itemName, q, esc)}
-        <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
-        <div class="row">
-          <button class="tiny historyBtn">History</button>
-        </div>
+  const groupOrder = [
+    "Screen",
+    "Battery",
+    "Charge Port",
+    "Camera",
+    "Back Glass",
+    "Accessory",
+    "Tool",
+    "Other",
+  ];
+
+  const orderedGroups = [
+    ...groupOrder.filter((name) => grouped[name]?.length),
+    ...Object.keys(grouped)
+      .filter((name) => !groupOrder.includes(name))
+      .sort((a, b) => a.localeCompare(b)),
+  ];
+
+  orderedGroups.forEach((groupName) => {
+    const items = grouped[groupName] || [];
+    const isCollapsed = !!el._inventoryCollapsedGroups[groupName];
+
+    const lowCount = items.filter((item) => {
+      const qty = Number(item.quantity || 0);
+      const threshold = Number(item.threshold || 0);
+      return qty > 0 && qty <= threshold;
+    }).length;
+
+    const outCount = items.filter((item) => Number(item.quantity || 0) <= 0).length;
+
+    const headerTr = document.createElement("tr");
+    headerTr.className = "inventory-group-row";
+    headerTr.innerHTML = `
+      <td colspan="12">
+        <button
+          type="button"
+          class="inventory-group-toggle"
+          data-group="${esc(groupName)}"
+          aria-expanded="${isCollapsed ? "false" : "true"}"
+        >
+          <span class="inventory-group-caret">${isCollapsed ? "▶" : "▼"}</span>
+          <span class="inventory-group-title">${esc(groupName)}</span>
+          <span class="inventory-group-meta">
+            (${items.length})${lowCount ? ` • Low: ${lowCount}` : ""}${outCount ? ` • Out: ${outCount}` : ""}
+          </span>
+        </button>
       </td>
-
-      <td>${highlightMatch(item.category || "-", q, esc)}</td>
-      <td>${highlightMatch(item.partType || "Other", q, esc)}</td>
-      <td>${highlightMatch(item.brand || "-", q, esc)}</td>
-      <td>${highlightMatch(item.series || "Standard", q, esc)}</td>
-      <td>${highlightMatch(item.color || "-", q, esc)}</td>
-
-      <td><input class="qty-input" type="number" min="0" value="${item.quantity}" /></td>
-      <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
-      <td>${highlightMatch(item.supplier || "-", q, esc)}</td>
-      <td>${fmtDateShort(item.lastUpdated)}</td>
-
-      <td>
-        ${highlightMatch(item.notes || "-", q, esc)}
-        <div class="muted">${rule.status} (${rule.color})</div>
-      </td>
-
-      <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
     `;
 
-    tr.querySelector(".qty-input").addEventListener("change", async (e) => {
-      if (!isUnlocked()) {
-        toast("Locked: log in to edit quantity.", "error");
-        e.target.value = item.quantity;
-        return;
-      }
-
-      const newQty = Math.max(0, Number(e.target.value));
-      const delta = newQty - item.quantity;
-
-      inventoryService.updateItem(item.itemID, { quantity: newQty });
-
-      addAudit("inventory_adjusted", {
-        itemID: item.itemID,
-        delta,
-        qty: newQty,
-        userAction: "inline_edit",
-      });
-
-      await persist();
+    headerTr.querySelector(".inventory-group-toggle").onclick = () => {
+      el._inventoryCollapsedGroups[groupName] = !el._inventoryCollapsedGroups[groupName];
       renderAll();
-      maybeNotifyLowStock();
-    });
-
-    tr.querySelector(".historyBtn").onclick = () => {
-      showItemHistory({
-        el,
-        data,
-        addListItem,
-        itemID: item.itemID,
-      });
     };
 
-    tr.querySelector(".deleteInventoryBtn").onclick = () =>
-      deleteInventoryItem(item.itemID);
+    el.inventoryBody.appendChild(headerTr);
 
-    addSwipeQuickUse(tr, item.itemID);
-    el.inventoryBody.appendChild(tr);
+    if (isCollapsed) return;
+
+    items.forEach((item) => {
+      const tr = buildInventoryRow(item, ctx, q);
+      tr.dataset.group = groupName;
+      el.inventoryBody.appendChild(tr);
+    });
   });
 }

@@ -2785,3 +2785,37 @@ table thead th {
     font-size: 14px;
   }
 }
+
+.inventory-group-row td {
+  padding: 0;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.inventory-group-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.inventory-group-title {
+  font-weight: 700;
+}
+
+.inventory-group-meta {
+  opacity: 0.75;
+  font-size: 0.95em;
+}
+
+.inventory-group-caret {
+  width: 16px;
+  display: inline-flex;
+  justify-content: center;
+}
