@@ -38,6 +38,15 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
           <span>Brand</span>
           <select class="inventory-brand-filter"></select>
         </label>
+        <label class="inventory-stock-filter-wrap">
+          <span>Stock</span>
+          <select class="inventory-stock-filter">
+            <option value="all">All Stock</option>
+            <option value="in">In Stock</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+        </label>
       </div>
     `;
 
@@ -59,6 +68,10 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
 
   if (!el._inventoryActiveBrand) {
     el._inventoryActiveBrand = "all";
+  }
+
+  if (!el._inventoryActiveStock) {
+    el._inventoryActiveStock = "all";
   }
 
   const fixedTabs = [
@@ -173,6 +186,16 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
     };
   }
 
+  const stockSelect = toolbar.querySelector(".inventory-stock-filter");
+  if (stockSelect) {
+    stockSelect.value = el._inventoryActiveStock || "all";
+
+    stockSelect.onchange = (e) => {
+      el._inventoryActiveStock = e.target.value || "all";
+      renderAll();
+    };
+  }
+
   return toolbar;
 }
 
@@ -202,6 +225,7 @@ export function renderInventory(ctx) {
   const activeTab = el._inventoryActiveTab || "All";
   const activeDevice = el._inventoryActiveDevice || "all";
   const activeBrand = el._inventoryActiveBrand || "all";
+  const activeStock = el._inventoryActiveStock || "all";
 
   const rows = (Array.isArray(data.inventory) ? data.inventory : []).filter((i) => {
     const matchesSearch = [
@@ -231,7 +255,16 @@ export function renderInventory(ctx) {
       activeBrand === "all" ||
       String(i.brand || "").trim().toLowerCase() === activeBrand.toLowerCase();
 
-    return matchesSearch && matchesTab && matchesDevice && matchesBrand;
+    const qty = Number(i.quantity || 0);
+    const threshold = Number(i.threshold || 0);
+
+    const matchesStock =
+      activeStock === "all" ||
+      (activeStock === "out" && qty <= 0) ||
+      (activeStock === "low" && qty > 0 && qty <= threshold) ||
+      (activeStock === "in" && qty > threshold);
+
+    return matchesSearch && matchesTab && matchesDevice && matchesBrand && matchesStock;
   });
 
   el.inventoryBody.innerHTML = "";
@@ -243,7 +276,7 @@ export function renderInventory(ctx) {
           <div class="empty-state">
             <div class="empty-icon">📦</div>
             <div class="empty-title">No Inventory Found</div>
-            <div class="muted">Try another tab, device, brand, or search term.</div>
+            <div class="muted">Try another tab, device, brand, stock filter, or search term.</div>
           </div>
         </td>
       </tr>
