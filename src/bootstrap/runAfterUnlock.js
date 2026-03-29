@@ -27,7 +27,7 @@ export function runAfterUnlock(ctx) {
   initTheme({ el, appDataStore, themeKey });
 
   settingsUI.syncSettingsUI();
-  connectivityController.setupConnectivity();
+  // connectivityController.setupConnectivity();
 
   applyCustomDropdowns({ el, data, esc });
 
