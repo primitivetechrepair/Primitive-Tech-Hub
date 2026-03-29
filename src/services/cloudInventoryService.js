@@ -184,6 +184,7 @@ export async function upsertInventoryItemToCloud(item) {
       brand: item.brand || "",
       series: item.series || "",
       category: item.category || "",
+      part_type: item.partType || "",
       cost_per_item: Number(item.costPerItem || 0),
       quantity_on_hand: Number(item.quantity || 0),
       threshold: Number(item.threshold || 0),
