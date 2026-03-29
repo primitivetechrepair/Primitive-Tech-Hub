@@ -261,10 +261,6 @@ export async function upsertLeadToCloud(lead) {
     repair_type: lead.repairType || "",
     status: lead.status || "In Progress",
     date_reported: lead.dateReported || null,
-    repair_cost: Number(lead.repairCost || 0),
-    labor_amount: Number(lead.laborAmount || 0),
-    payment_method: lead.paymentMethod || "Cash",
-    payment_status: lead.paymentStatus || "Unpaid",
     notes: lead.notes || "",
     inventory_used: Array.isArray(lead.inventoryUsed) ? lead.inventoryUsed : [],
     inventory_used_qty:
@@ -310,10 +306,6 @@ export async function fetchLeadsFromCloud() {
     repairType: row.repair_type || "",
     status: row.status || "In Progress",
     dateReported: row.date_reported || null,
-    repairCost: Number(row.repair_cost || 0),
-    laborAmount: Number(row.labor_amount || 0),
-    paymentMethod: row.payment_method || "Cash",
-    paymentStatus: row.payment_status || "Unpaid",
     notes: row.notes || "",
     inventoryUsed: Array.isArray(row.inventory_used) ? row.inventory_used : [],
     inventoryUsedQty:
