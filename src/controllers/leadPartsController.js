@@ -75,13 +75,19 @@ async function removePartFromLead(leadID, itemID) {
   await persist();
   ctx.renderAll?.();
 
-try {
-  queueCloudSync("inventory_update", { itemID: item.itemID });
-  queueCloudSync("lead_update", { leadID: lead.leadID });
-} catch (err) {
-  console.error("Lead part cloud sync failed:", err);
-  toast(el, "Saved locally, but cloud sync failed.", "warning");
-}
+  try {
+    await upsertInventoryItemToCloud(item);
+    await insertInventoryUsageToCloud({
+      itemID: item.itemID,
+      delta: -1,
+      leadID,
+      notes: "Part removed from lead",
+    });
+    await upsertLeadToCloud(lead);
+  } catch (err) {
+    console.error("Lead part cloud sync failed:", err);
+    toast(el, "Saved locally, but cloud sync failed.", "warning");
+  }
 
   toast(el, "Part removed from lead and inventory restored.", "success");
 }
