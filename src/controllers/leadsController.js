@@ -106,7 +106,10 @@ async function addLead(e) {
         .filter(Boolean);
 
       const firstInitial = parts[0]?.[0]?.toUpperCase() || "*";
-      const lastInitial = parts.length > 1 ? (parts[parts.length - 1]?.[0]?.toUpperCase() || "*") : "*";
+      const lastInitial =
+        parts.length > 1
+          ? (parts[parts.length - 1]?.[0]?.toUpperCase() || "*")
+          : "*";
 
       const digits = String(phone || "").replace(/\D/g, "");
       const last6 = digits.slice(-6) || "******";
@@ -114,14 +117,19 @@ async function addLead(e) {
       return `${firstInitial}${lastInitial}-${last6}`;
     }
 
-    const baseLeadID = generateLeadID(customerName, contactNumber);
+    function generateLeadSuffix() {
+      const uuidPart =
+        globalThis.crypto?.randomUUID?.().split("-")[0]?.toUpperCase() ||
+        Math.random().toString(36).slice(2, 8).toUpperCase();
 
-    let leadID = baseLeadID;
-    let dupCount = 2;
+      return uuidPart;
+    }
+
+    const baseLeadID = generateLeadID(customerName, contactNumber);
+    let leadID = `${baseLeadID}-${generateLeadSuffix()}`;
 
     while ((data.leads || []).some((l) => l.leadID === leadID)) {
-      leadID = `${baseLeadID}-${dupCount}`;
-      dupCount += 1;
+      leadID = `${baseLeadID}-${generateLeadSuffix()}`;
     }
 
 const files = await Promise.all(
