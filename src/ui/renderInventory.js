@@ -251,56 +251,235 @@ function buildInventoryRow(item, ctx, q) {
   const tr = document.createElement("tr");
   tr.classList.add(rule.className);
 
+  const deviceOptions = [
+    ...new Set(
+      [
+        ...(Array.isArray(data?.settings?.categories) ? data.settings.categories : []),
+        ...(Array.isArray(data.inventory) ? data.inventory.map((i) => i.category) : []),
+      ]
+        .map((v) => String(v || "").trim())
+        .filter(Boolean)
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+
+  const brandOptions = [
+    ...new Set(
+      [
+        ...(Array.isArray(data?.settings?.brands) ? data.settings.brands : []),
+        ...(Array.isArray(data.inventory) ? data.inventory.map((i) => i.brand) : []),
+      ]
+        .map((v) => String(v || "").trim())
+        .filter(Boolean)
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+
+  const partTypeOptions = [
+    "Screen",
+    "Battery",
+    "Charge Port",
+    "Camera",
+    "Back Glass",
+    "Accessory",
+    "Tool",
+    "Other",
+  ];
+
   tr.innerHTML = `
     <td>
-      ${highlightMatch(item.itemName, q, esc)}
+      <input
+        class="inline-edit inline-itemName"
+        type="text"
+        value="${esc(item.itemName || "")}"
+      />
       <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
       <div class="row">
         <button class="tiny historyBtn">History</button>
       </div>
     </td>
 
-    <td>${highlightMatch(item.category || "-", q, esc)}</td>
-    <td>${highlightMatch(item.partType || "Other", q, esc)}</td>
-    <td>${highlightMatch(item.brand || "-", q, esc)}</td>
-    <td>${highlightMatch(item.series || "Standard", q, esc)}</td>
-    <td>${highlightMatch(item.color || "-", q, esc)}</td>
+    <td>
+      <select class="inline-edit inline-category">
+        ${deviceOptions
+          .map(
+            (option) =>
+              `<option value="${esc(option)}" ${
+                String(item.category || "") === option ? "selected" : ""
+              }>${esc(option)}</option>`
+          )
+          .join("")}
+      </select>
+    </td>
 
-    <td><input class="qty-input" type="number" min="0" value="${item.quantity}" /></td>
-    <td>$${Number(item.costPerItem || 0).toFixed(2)}</td>
-    <td>${highlightMatch(item.supplier || "-", q, esc)}</td>
+    <td>
+      <select class="inline-edit inline-partType">
+        ${partTypeOptions
+          .map(
+            (option) =>
+              `<option value="${esc(option)}" ${
+                String(item.partType || "Other") === option ? "selected" : ""
+              }>${esc(option)}</option>`
+          )
+          .join("")}
+      </select>
+    </td>
+
+    <td>
+      <select class="inline-edit inline-brand">
+        ${brandOptions
+          .map(
+            (option) =>
+              `<option value="${esc(option)}" ${
+                String(item.brand || "") === option ? "selected" : ""
+              }>${esc(option)}</option>`
+          )
+          .join("")}
+      </select>
+    </td>
+
+    <td>
+      <input
+        class="inline-edit inline-series"
+        type="text"
+        value="${esc(item.series || "Standard")}"
+      />
+    </td>
+
+    <td>
+      <input
+        class="inline-edit inline-color"
+        type="text"
+        value="${esc(item.color || "")}"
+      />
+    </td>
+
+    <td>
+      <input
+        class="inline-edit inline-quantity"
+        type="number"
+        min="0"
+        value="${Number(item.quantity || 0)}"
+      />
+    </td>
+
+    <td>
+      <input
+        class="inline-edit inline-cost"
+        type="number"
+        min="0"
+        step="0.01"
+        value="${Number(item.costPerItem || 0)}"
+      />
+    </td>
+
+    <td>
+      <input
+        class="inline-edit inline-supplier"
+        type="text"
+        value="${esc(item.supplier || "")}"
+      />
+    </td>
+
     <td>${fmtDateShort(item.lastUpdated)}</td>
 
     <td>
-      ${highlightMatch(item.notes || "-", q, esc)}
+      <input
+        class="inline-edit inline-notes"
+        type="text"
+        value="${esc(item.notes || "")}"
+      />
       <div class="muted">${rule.status} (${rule.color})</div>
     </td>
 
     <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
   `;
 
-  tr.querySelector(".qty-input").addEventListener("change", async (e) => {
+  async function savePatch(patch, auditMeta = {}) {
     if (!isUnlocked()) {
-      toast("Locked: log in to edit quantity.", "error");
-      e.target.value = item.quantity;
+      toast("Locked: log in to edit inventory.", "error");
+      renderAll();
       return;
     }
 
-    const newQty = Math.max(0, Number(e.target.value));
-    const delta = newQty - item.quantity;
-
-    inventoryService.updateItem(item.itemID, { quantity: newQty });
+    await inventoryService.updateItem(item.itemID, patch);
 
     addAudit("inventory_adjusted", {
       itemID: item.itemID,
-      delta,
-      qty: newQty,
       userAction: "inline_edit",
+      ...auditMeta,
     });
 
     await persist();
     renderAll();
     maybeNotifyLowStock();
+  }
+
+  tr.querySelector(".inline-itemName").addEventListener("blur", async (e) => {
+    const value = String(e.target.value || "").trim();
+    if (value === String(item.itemName || "").trim()) return;
+    if (!value) {
+      renderAll();
+      return;
+    }
+    await savePatch({ itemName: value }, { field: "itemName" });
+  });
+
+  tr.querySelector(".inline-category").addEventListener("change", async (e) => {
+    const value = String(e.target.value || "").trim();
+    if (value === String(item.category || "").trim()) return;
+    await savePatch({ category: value }, { field: "category" });
+  });
+
+  tr.querySelector(".inline-partType").addEventListener("change", async (e) => {
+    const value = String(e.target.value || "").trim() || "Other";
+    if (value === String(item.partType || "Other").trim()) return;
+    await savePatch({ partType: value }, { field: "partType" });
+  });
+
+  tr.querySelector(".inline-brand").addEventListener("change", async (e) => {
+    const value = String(e.target.value || "").trim();
+    if (value === String(item.brand || "").trim()) return;
+    await savePatch({ brand: value }, { field: "brand" });
+  });
+
+  tr.querySelector(".inline-series").addEventListener("blur", async (e) => {
+    const value = String(e.target.value || "").trim() || "Standard";
+    if (value === String(item.series || "Standard").trim()) return;
+    await savePatch({ series: value }, { field: "series" });
+  });
+
+  tr.querySelector(".inline-color").addEventListener("blur", async (e) => {
+    const value = String(e.target.value || "").trim();
+    if (value === String(item.color || "").trim()) return;
+    await savePatch({ color: value }, { field: "color" });
+  });
+
+  tr.querySelector(".inline-quantity").addEventListener("change", async (e) => {
+    const newQty = Math.max(0, Number(e.target.value));
+    const oldQty = Number(item.quantity || 0);
+    if (newQty === oldQty) return;
+
+    await savePatch(
+      { quantity: newQty },
+      { field: "quantity", delta: newQty - oldQty, qty: newQty }
+    );
+  });
+
+  tr.querySelector(".inline-cost").addEventListener("change", async (e) => {
+    const value = Math.max(0, Number(e.target.value || 0));
+    if (value === Number(item.costPerItem || 0)) return;
+    await savePatch({ costPerItem: value }, { field: "costPerItem" });
+  });
+
+  tr.querySelector(".inline-supplier").addEventListener("blur", async (e) => {
+    const value = String(e.target.value || "").trim();
+    if (value === String(item.supplier || "").trim()) return;
+    await savePatch({ supplier: value }, { field: "supplier" });
+  });
+
+  tr.querySelector(".inline-notes").addEventListener("blur", async (e) => {
+    const value = String(e.target.value || "").trim();
+    if (value === String(item.notes || "").trim()) return;
+    await savePatch({ notes: value }, { field: "notes" });
   });
 
   tr.querySelector(".historyBtn").onclick = () => {
