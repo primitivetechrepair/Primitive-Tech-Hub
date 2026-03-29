@@ -208,14 +208,21 @@ export async function upsertInventoryItemToCloud(item) {
 }
 
 export async function deleteInventoryItemFromCloud(itemID) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("inventory_items")
     .delete()
-    .eq("item_id", itemID);
+    .eq("item_id", itemID)
+    .select("item_id");
 
   if (error) {
     console.error("deleteInventoryItemFromCloud error:", error);
     throw error;
+  }
+
+  if (!Array.isArray(data) || !data.length) {
+    const err = new Error(`No cloud inventory row deleted for itemID: ${itemID}`);
+    console.error("deleteInventoryItemFromCloud no rows deleted:", itemID);
+    throw err;
   }
 
   return true;
