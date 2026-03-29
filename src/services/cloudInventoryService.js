@@ -150,7 +150,7 @@ export async function fetchInventoryFromCloud() {
     location: row.location || "",
     notes: row.notes || "",
     createdAt: row.created_at || null,
-    updatedAt: row.updated_at || null,
+    lastUpdated: row.updated_at || null,
     deletedAt: row.deleted_at || null,
   }));
 }

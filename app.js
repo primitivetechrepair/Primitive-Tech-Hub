@@ -322,7 +322,7 @@ async function hydrateInventoryFromCloud() {
 
     data.inventory = mergeByTimestamp(localInventory, activeCloudInventory, {
       key: "itemID",
-      timeField: "updatedAt",
+      timeField: "lastUpdated",
     })
       .filter((item) => !deletedItemIDs.has(item.itemID))
       .map((item) => ({
@@ -330,8 +330,7 @@ async function hydrateInventoryFromCloud() {
         quantity: Number(item.quantity || 0),
         costPerItem: Number(item.costPerItem || 0),
         threshold: Number(item.threshold || data.settings.defaultThreshold),
-        lastUpdated:
-          item.lastUpdated || item.updatedAt || new Date().toISOString(),
+        lastUpdated: item.lastUpdated || new Date().toISOString(),
         usageEvents: Array.isArray(item.usageEvents) ? item.usageEvents : [],
       }));
   } catch (err) {
