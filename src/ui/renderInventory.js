@@ -47,6 +47,16 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
             <option value="out">Out of Stock</option>
           </select>
         </label>
+        <label class="inventory-sort-filter-wrap">
+          <span>Sort</span>
+          <select class="inventory-sort-filter">
+            <option value="updated_desc">Recently Updated</option>
+            <option value="qty_asc">Quantity: Low to High</option>
+            <option value="qty_desc">Quantity: High to Low</option>
+            <option value="name_asc">Name: A–Z</option>
+            <option value="name_desc">Name: Z–A</option>
+          </select>
+        </label>
       </div>
     `;
 
@@ -72,6 +82,10 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
 
   if (!el._inventoryActiveStock) {
     el._inventoryActiveStock = "all";
+  }
+
+  if (!el._inventoryActiveSort) {
+    el._inventoryActiveSort = "updated_desc";
   }
 
   const fixedTabs = [
@@ -196,6 +210,16 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
     };
   }
 
+  const sortSelect = toolbar.querySelector(".inventory-sort-filter");
+  if (sortSelect) {
+    sortSelect.value = el._inventoryActiveSort || "updated_desc";
+
+    sortSelect.onchange = (e) => {
+      el._inventoryActiveSort = e.target.value || "updated_desc";
+      renderAll();
+    };
+  }
+
   return toolbar;
 }
 
@@ -226,8 +250,10 @@ export function renderInventory(ctx) {
   const activeDevice = el._inventoryActiveDevice || "all";
   const activeBrand = el._inventoryActiveBrand || "all";
   const activeStock = el._inventoryActiveStock || "all";
+  const activeSort = el._inventoryActiveSort || "updated_desc";
 
-  const rows = (Array.isArray(data.inventory) ? data.inventory : []).filter((i) => {
+  const rows = (Array.isArray(data.inventory) ? data.inventory : [])
+    .filter((i) => {
     const matchesSearch = [
       i.itemID,
       i.itemName,
@@ -265,7 +291,29 @@ export function renderInventory(ctx) {
       (activeStock === "in" && qty > threshold);
 
     return matchesSearch && matchesTab && matchesDevice && matchesBrand && matchesStock;
-  });
+  })
+    .sort((a, b) => {
+      switch (activeSort) {
+        case "qty_asc":
+          return Number(a.quantity || 0) - Number(b.quantity || 0);
+
+        case "qty_desc":
+          return Number(b.quantity || 0) - Number(a.quantity || 0);
+
+        case "name_asc":
+          return String(a.itemName || "").localeCompare(String(b.itemName || ""));
+
+        case "name_desc":
+          return String(b.itemName || "").localeCompare(String(a.itemName || ""));
+
+        case "updated_desc":
+        default: {
+          const aTime = new Date(a.lastUpdated || 0).getTime();
+          const bTime = new Date(b.lastUpdated || 0).getTime();
+          return bTime - aTime;
+        }
+      }
+    });
 
   el.inventoryBody.innerHTML = "";
 
@@ -276,7 +324,7 @@ export function renderInventory(ctx) {
           <div class="empty-state">
             <div class="empty-icon">📦</div>
             <div class="empty-title">No Inventory Found</div>
-            <div class="muted">Try another tab, device, brand, stock filter, or search term.</div>
+            <div class="muted">Try another tab, device, brand, stock filter, sort option, or search term.</div>
           </div>
         </td>
       </tr>
