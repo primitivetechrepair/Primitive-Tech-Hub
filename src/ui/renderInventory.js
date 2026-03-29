@@ -1,5 +1,7 @@
 // src/ui/renderInventory.js
 
+const INVENTORY_GROUPS_STATE_KEY = "primitiveTechHubInventoryGroupState";
+
 function highlightMatch(value, query, esc) {
   const text = String(value ?? "");
   const safeText = esc(text);
@@ -89,7 +91,15 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
   }
 
   if (!el._inventoryCollapsedGroups) {
-    el._inventoryCollapsedGroups = {};
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(INVENTORY_GROUPS_STATE_KEY) || "{}"
+      );
+      el._inventoryCollapsedGroups =
+        saved && typeof saved === "object" ? saved : {};
+    } catch {
+      el._inventoryCollapsedGroups = {};
+    }
   }
 
   const fixedTabs = [
@@ -666,6 +676,16 @@ export function renderInventory(ctx) {
 
     headerTr.querySelector(".inventory-group-toggle").onclick = () => {
       el._inventoryCollapsedGroups[groupName] = !el._inventoryCollapsedGroups[groupName];
+
+      try {
+        localStorage.setItem(
+          INVENTORY_GROUPS_STATE_KEY,
+          JSON.stringify(el._inventoryCollapsedGroups)
+        );
+      } catch (err) {
+        console.error("Failed to persist inventory group state:", err);
+      }
+
       renderAll();
     };
 
