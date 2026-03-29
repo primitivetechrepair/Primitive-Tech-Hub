@@ -2819,3 +2819,214 @@ table thead th {
   display: inline-flex;
   justify-content: center;
 }
+
+/* =========================================================
+   INVENTORY — MOBILE CARD VIEW + INLINE EDIT POLISH
+   Keep desktop table layout untouched
+========================================================= */
+.inline-edit {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-color);
+  box-shadow: none;
+}
+
+.inline-edit:focus {
+  border-color: rgba(102,252,241,.55);
+  box-shadow: 0 0 0 3px rgba(102,252,241,.12);
+}
+
+.inventory-table .historyBtn,
+.inventory-table .deleteInventoryBtn {
+  min-height: 34px;
+  padding: 8px 10px;
+  font-size: 12px;
+  border-radius: 12px;
+}
+
+@media (max-width: 700px) {
+  /* Let inventory become true mobile cards */
+  .inventory-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .inventory-table thead {
+    display: none;
+  }
+
+  .inventory-table,
+  .inventory-table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .inventory-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  /* Keep part-type group headers looking like section headers */
+  .inventory-table tr.inventory-group-row {
+    margin: 0 0 10px 0;
+  }
+
+  .inventory-table tr.inventory-group-row td {
+    display: block;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .inventory-group-toggle {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Each inventory row becomes a card */
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) {
+    display: block;
+    margin: 0 0 14px 0;
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row).stock-out {
+    background: rgba(255, 0, 0, 0.14);
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row).stock-low {
+    background: rgba(255, 213, 0, 0.12);
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row).stock-healthy {
+    background: rgba(0, 255, 25, 0.10);
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 10px;
+    align-items: start;
+    width: 100%;
+    padding: 8px 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    background: transparent !important;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td::before {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--heading);
+    opacity: 0.9;
+    content: "";
+    padding-top: 10px;
+  }
+
+  /* Column labels */
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1)::before { content: "Item"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(2)::before { content: "Device"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(3)::before { content: "Part Type"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(4)::before { content: "Brand"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(5)::before { content: "Series"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(6)::before { content: "Color"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(7)::before { content: "Quantity"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(8)::before { content: "Cost"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(9)::before { content: "Supplier"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(10)::before { content: "Updated"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(11)::before { content: "Notes"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(12)::before { content: "Actions"; }
+
+  /* Item cell: stronger visual hierarchy */
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) {
+    padding-top: 0;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1)::before {
+    padding-top: 12px;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .muted {
+    margin-top: 4px;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .row {
+    margin-top: 8px;
+  }
+
+  /* Inputs/selects feel better inside cards */
+  #inventoryBody .inline-edit,
+  #inventoryBody .qty-input {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  #inventoryBody td:nth-child(11) .inline-edit {
+    min-height: 42px;
+  }
+
+  /* Buttons stack cleanly on mobile cards */
+  #inventoryBody .historyBtn,
+  #inventoryBody .deleteInventoryBtn {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+
+  #inventoryBody td:nth-child(12) {
+    grid-template-columns: 1fr;
+  }
+
+  #inventoryBody td:nth-child(12)::before {
+    margin-bottom: 2px;
+  }
+
+  /* Make updated date and notes easier to scan */
+  #inventoryBody td:nth-child(10),
+  #inventoryBody td:nth-child(11) {
+    align-items: center;
+  }
+
+  /* Search/toolbar spacing stays comfortable above card list */
+  .inventory-toolbar {
+    margin-bottom: 12px;
+  }
+
+  .table-wrap:has(.inventory-table) {
+    max-height: none;
+    overflow: visible;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
