@@ -6,7 +6,8 @@ import {
 export function createInventoryController(ctx) {
   const {
     el,
-    data,
+    getData,
+    setData,
     isUnlocked,
     toast,
     nextInventoryId,
@@ -16,43 +17,44 @@ export function createInventoryController(ctx) {
     persist,
     renderAll,
     maybeNotifyLowStock,
-    inventoryService, // ✅ add this
+    inventoryService,
   } = ctx;
 
-async function quickUseItem(itemID, delta = 1) {
-  if (!isUnlocked()) {
-    toast("Locked: log in to use inventory.", "error");
-    return;
+  async function quickUseItem(itemID, delta = 1) {
+    if (!isUnlocked()) {
+      toast("Locked: log in to use inventory.", "error");
+      return;
+    }
+
+    const updatedItem = inventoryService.quickUse(itemID, delta);
+    if (!updatedItem) return;
+
+    const data = getData();
+    const localItem = (data.inventory || []).find((i) => i.itemID === itemID);
+    if (localItem) {
+      localItem.quantity = updatedItem.quantity;
+      localItem.lastUpdated = updatedItem.lastUpdated;
+      localItem.usageEvents = updatedItem.usageEvents || localItem.usageEvents || [];
+    }
+
+    addAudit("inventory_used", { itemID, delta, userAction: "quick_use" });
+    queueCloudSync("inventory_use", { itemID, delta });
+
+    renderAll();
+    maybeNotifyLowStock();
+
+    try {
+      await upsertInventoryItemToCloud(updatedItem);
+      await insertInventoryUsageToCloud({
+        itemID,
+        delta,
+        notes: "Quick use from Primitive Tech Hub",
+      });
+    } catch (err) {
+      console.error("Cloud inventory quantity/usage update failed:", err);
+      toast("Quantity updated locally, but cloud sync failed.", "warning");
+    }
   }
-
-  const updatedItem = inventoryService.quickUse(itemID, delta);
-  if (!updatedItem) return;
-
-  const localItem = (data.inventory || []).find((i) => i.itemID === itemID);
-  if (localItem) {
-    localItem.quantity = updatedItem.quantity;
-    localItem.lastUpdated = updatedItem.lastUpdated;
-    localItem.usageEvents = updatedItem.usageEvents || localItem.usageEvents || [];
-  }
-
-  addAudit("inventory_used", { itemID, delta, userAction: "quick_use" });
-  queueCloudSync("inventory_use", { itemID, delta });
-
-  renderAll();
-  maybeNotifyLowStock();
-
-  try {
-    await upsertInventoryItemToCloud(updatedItem);
-    await insertInventoryUsageToCloud({
-      itemID,
-      delta,
-      notes: "Quick use from Primitive Tech Hub",
-    });
-  } catch (err) {
-    console.error("Cloud inventory quantity/usage update failed:", err);
-    toast("Quantity updated locally, but cloud sync failed.", "warning");
-  }
-}
 
   async function addInventory(e) {
     e.preventDefault();
@@ -62,15 +64,16 @@ async function quickUseItem(itemID, delta = 1) {
       return;
     }
 
+    const data = getData();
+    data.inventory = Array.isArray(data.inventory) ? data.inventory : [];
+
     const itemID = nextInventoryId();
 
     const item = {
       itemID,
       itemName: safeVal("itemName"),
-
       category: safeVal("itemDevice"),
       brand: safeVal("itemBrand"),
-
       series: safeVal("itemSeries"),
       quantity: Number(safeVal("itemQuantity") || 0),
       costPerItem: Number(safeVal("itemCost") || 0),
@@ -88,6 +91,7 @@ async function quickUseItem(itemID, delta = 1) {
     if (!item.category) return toast("Device Type is required.", "error");
 
     data.inventory.unshift(item);
+    setData(data);
 
     addAudit("inventory_added", {
       itemID,

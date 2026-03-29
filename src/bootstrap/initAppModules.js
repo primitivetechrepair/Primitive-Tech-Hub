@@ -191,7 +191,8 @@ export function initAppModules(ctx) {
   if (!out.inventoryController) {
     out.inventoryController = createInventoryController({
       el,
-      data,
+      getData,
+      setData,
       isUnlocked,
       toast,
       nextInventoryId: out.inventoryIdService.nextInventoryId,
