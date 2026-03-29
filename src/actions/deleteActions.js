@@ -1,4 +1,7 @@
-import { deleteLeadFromCloud } from "../services/cloudInventoryService.js";
+import {
+  deleteLeadFromCloud,
+  upsertInventoryItemToCloud,
+} from "../services/cloudInventoryService.js";
 
 export function createDeleteActions({
   el,
@@ -69,6 +72,7 @@ export function createDeleteActions({
     const deletedAt = new Date().toISOString();
 
     // Restore inventory back into stock on delete
+    const changedItems = [];
     const qtyMap =
       lead.inventoryUsedQty && typeof lead.inventoryUsedQty === "object"
         ? lead.inventoryUsedQty
@@ -84,6 +88,7 @@ export function createDeleteActions({
 
         item.quantity = Math.max(0, Number(item.quantity || 0) + n);
         item.lastUpdated = new Date().toISOString();
+        changedItems.push({ ...item });
       }
     } else if (Array.isArray(lead.inventoryUsed)) {
       for (const itemID of lead.inventoryUsed) {
@@ -92,6 +97,7 @@ export function createDeleteActions({
 
         item.quantity = Math.max(0, Number(item.quantity || 0) + 1);
         item.lastUpdated = new Date().toISOString();
+        changedItems.push({ ...item });
       }
     }
 
@@ -118,19 +124,28 @@ export function createDeleteActions({
       inventoryRestoredOnDelete: true,
     });
 
-await persist();
+    await persist();
 
-console.log("[DEBUG deleteLead] attempting cloud delete for:", leadID);
+    for (const item of changedItems) {
+      try {
+        await upsertInventoryItemToCloud(item);
+      } catch (err) {
+        console.error("[DEBUG deleteLead] inventory restore cloud sync failed:", item.itemID, err);
+        toast(el, "Lead deleted locally, but inventory restore cloud sync failed.", "warning");
+      }
+    }
 
-try {
-  const result = await deleteLeadFromCloud(leadID);
-  console.log("[DEBUG deleteLead] cloud delete success:", leadID, result);
-} catch (err) {
-  console.error("[DEBUG deleteLead] cloud delete failed:", leadID, err);
-  toast(el, "Lead deleted locally, but cloud delete failed.", "warning");
-}
+    console.log("[DEBUG deleteLead] attempting cloud delete for:", leadID);
 
-renderAll();
+    try {
+      const result = await deleteLeadFromCloud(leadID);
+      console.log("[DEBUG deleteLead] cloud delete success:", leadID, result);
+    } catch (err) {
+      console.error("[DEBUG deleteLead] cloud delete failed:", leadID, err);
+      toast(el, "Lead deleted locally, but cloud delete failed.", "warning");
+    }
+
+    renderAll();
 
     // Save last deleted lead for undo
     lastDeletedLead = {
@@ -204,6 +219,9 @@ renderAll();
     }
 
     // Re-deduct inventory if it was restored during delete
+        // Re-deduct inventory if it was restored during delete
+    const changedItems = [];
+
     if (deletedLead.inventoryRestoredOnDelete) {
       const qtyMap =
         deletedLead.inventoryUsedQty && typeof deletedLead.inventoryUsedQty === "object"
@@ -220,6 +238,7 @@ renderAll();
 
           item.quantity = Math.max(0, Number(item.quantity || 0) - n);
           item.lastUpdated = new Date().toISOString();
+          changedItems.push({ ...item });
         }
       } else if (Array.isArray(deletedLead.inventoryUsed)) {
         for (const itemID of deletedLead.inventoryUsed) {
@@ -228,6 +247,7 @@ renderAll();
 
           item.quantity = Math.max(0, Number(item.quantity || 0) - 1);
           item.lastUpdated = new Date().toISOString();
+          changedItems.push({ ...item });
         }
       }
     }
@@ -262,6 +282,16 @@ renderAll();
     });
 
     await persist();
+
+    for (const item of changedItems) {
+      try {
+        await upsertInventoryItemToCloud(item);
+      } catch (err) {
+        console.error("[DEBUG restoreLead] inventory re-apply cloud sync failed:", item.itemID, err);
+        toast(el, "Lead restored locally, but inventory cloud sync failed.", "warning");
+      }
+    }
+
     renderAll();
 
     toast(
