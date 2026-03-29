@@ -1,13 +1,14 @@
 import {
   deleteLeadFromCloud,
+  deleteInventoryItemFromCloud,
   upsertInventoryItemToCloud,
 } from "../services/cloudInventoryService.js";
 
 export function createDeleteActions({
   el,
   isUnlocked,
-  toast,          // expects toast(el,msg,type)
-  showModal,      // showModal(el, opts)
+  toast, // expects toast(el,msg,type)
+  showModal, // showModal(el, opts)
   inventoryService,
   getData,
   setData,
@@ -37,6 +38,15 @@ export function createDeleteActions({
 
     addAudit("inventory_deleted", { itemID, userAction: "row_delete" });
     cloudSyncQueueService.queueCloudSync("inventory_delete", { itemID });
+
+    await persist();
+
+    try {
+      await deleteInventoryItemFromCloud(itemID);
+    } catch (err) {
+      console.error("[DEBUG deleteInventoryItem] cloud delete failed:", itemID, err);
+      toast(el, "Inventory deleted locally, but cloud delete failed.", "warning");
+    }
 
     renderAll();
     toast(el, "Inventory item deleted.", "warning");
@@ -219,7 +229,6 @@ export function createDeleteActions({
     }
 
     // Re-deduct inventory if it was restored during delete
-        // Re-deduct inventory if it was restored during delete
     const changedItems = [];
 
     if (deletedLead.inventoryRestoredOnDelete) {
@@ -252,11 +261,7 @@ export function createDeleteActions({
       }
     }
 
-    const {
-      deletedAt,
-      inventoryRestoredOnDelete,
-      ...restoredLead
-    } = deletedLead;
+    const { deletedAt, inventoryRestoredOnDelete, ...restoredLead } = deletedLead;
 
     data.leads.unshift({
       ...restoredLead,
