@@ -422,6 +422,8 @@ export function initAppModules(ctx) {
       inventoryStatusByColorRule,
 
       toast,
+      addAudit: ctx.addAudit,
+      persist,
     });
   }
 
