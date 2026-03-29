@@ -162,6 +162,7 @@ export function renderInventory(ctx) {
       i.itemID,
       i.itemName,
       i.category,
+      i.partType,
       i.brand,
       i.series,
       i.color,
@@ -174,7 +175,7 @@ export function renderInventory(ctx) {
 
     const matchesTab =
       activeTab === "All" ||
-      String(i.category || "").trim().toLowerCase() === activeTab.toLowerCase();
+      String(i.partType || "Other").trim().toLowerCase() === activeTab.toLowerCase();
 
     const matchesBrand =
       activeBrand === "all" ||
@@ -188,7 +189,7 @@ export function renderInventory(ctx) {
   if (!rows.length) {
     el.inventoryBody.innerHTML = `
       <tr class="empty-state-row">
-        <td colspan="11">
+        <td colspan="12">
           <div class="empty-state">
             <div class="empty-icon">📦</div>
             <div class="empty-title">No Inventory Found</div>
@@ -215,6 +216,7 @@ export function renderInventory(ctx) {
       </td>
 
       <td>${highlightMatch(item.category || "-", q, esc)}</td>
+      <td>${highlightMatch(item.partType || "Other", q, esc)}</td>
       <td>${highlightMatch(item.brand || "-", q, esc)}</td>
       <td>${highlightMatch(item.series || "Standard", q, esc)}</td>
       <td>${highlightMatch(item.color || "-", q, esc)}</td>
