@@ -30,6 +30,10 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
     toolbar.innerHTML = `
       <div class="inventory-tabs"></div>
       <div class="inventory-toolbar-controls">
+        <label class="inventory-device-filter-wrap">
+          <span>Device</span>
+          <select class="inventory-device-filter"></select>
+        </label>
         <label class="inventory-brand-filter-wrap">
           <span>Brand</span>
           <select class="inventory-brand-filter"></select>
@@ -47,6 +51,10 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
 
   if (!el._inventoryActiveTab) {
     el._inventoryActiveTab = "All";
+  }
+
+  if (!el._inventoryActiveDevice) {
+    el._inventoryActiveDevice = "all";
   }
 
   if (!el._inventoryActiveBrand) {
@@ -89,6 +97,43 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
         renderAll();
       };
     });
+  }
+
+    const deviceSelect = toolbar.querySelector(".inventory-device-filter");
+  if (deviceSelect) {
+    const devices = [
+      ...new Set(
+        (Array.isArray(data.inventory) ? data.inventory : [])
+          .map((i) => String(i.category || "").trim())
+          .filter(Boolean)
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+
+    deviceSelect.innerHTML =
+      `<option value="all">All Devices</option>` +
+      devices
+        .map(
+          (device) =>
+            `<option value="${esc(device)}" ${
+              el._inventoryActiveDevice === device ? "selected" : ""
+            }>${esc(device)}</option>`
+        )
+        .join("");
+
+    if (
+      el._inventoryActiveDevice !== "all" &&
+      !devices.includes(el._inventoryActiveDevice)
+    ) {
+      el._inventoryActiveDevice = "all";
+      deviceSelect.value = "all";
+    } else {
+      deviceSelect.value = el._inventoryActiveDevice || "all";
+    }
+
+    deviceSelect.onchange = (e) => {
+      el._inventoryActiveDevice = e.target.value || "all";
+      renderAll();
+    };
   }
 
   const brandSelect = toolbar.querySelector(".inventory-brand-filter");
@@ -155,6 +200,7 @@ export function renderInventory(ctx) {
 
   const q = el.inventorySearch.value.trim().toLowerCase();
   const activeTab = el._inventoryActiveTab || "All";
+  const activeDevice = el._inventoryActiveDevice || "all";
   const activeBrand = el._inventoryActiveBrand || "all";
 
   const rows = (Array.isArray(data.inventory) ? data.inventory : []).filter((i) => {
@@ -177,11 +223,15 @@ export function renderInventory(ctx) {
       activeTab === "All" ||
       String(i.partType || "Other").trim().toLowerCase() === activeTab.toLowerCase();
 
+    const matchesDevice =
+      activeDevice === "all" ||
+      String(i.category || "").trim().toLowerCase() === activeDevice.toLowerCase();
+
     const matchesBrand =
       activeBrand === "all" ||
       String(i.brand || "").trim().toLowerCase() === activeBrand.toLowerCase();
 
-    return matchesSearch && matchesTab && matchesBrand;
+    return matchesSearch && matchesTab && matchesDevice && matchesBrand;
   });
 
   el.inventoryBody.innerHTML = "";
@@ -193,7 +243,7 @@ export function renderInventory(ctx) {
           <div class="empty-state">
             <div class="empty-icon">📦</div>
             <div class="empty-title">No Inventory Found</div>
-            <div class="muted">Try another tab, brand, or search term.</div>
+            <div class="muted">Try another tab, device, brand, or search term.</div>
           </div>
         </td>
       </tr>
