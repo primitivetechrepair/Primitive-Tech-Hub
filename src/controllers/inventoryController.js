@@ -73,6 +73,7 @@ export function createInventoryController(ctx) {
       itemID,
       itemName: safeVal("itemName"),
       category: safeVal("itemDevice"),
+      partType: safeVal("itemPartType"),
       brand: safeVal("itemBrand"),
       series: safeVal("itemSeries"),
       quantity: Number(safeVal("itemQuantity") || 0),
@@ -89,6 +90,7 @@ export function createInventoryController(ctx) {
 
     if (!item.itemName) return toast("Item Name is required.", "error");
     if (!item.category) return toast("Device Type is required.", "error");
+    if (!item.partType) return toast("Part Type is required.", "error");
 
     data.inventory.unshift(item);
     setData(data);
