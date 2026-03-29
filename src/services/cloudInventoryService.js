@@ -131,6 +131,7 @@ export async function fetchInventoryFromCloud() {
   const { data, error } = await supabase
     .from("inventory_items")
     .select("*")
+    .is("deleted_at", null)
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -151,6 +152,7 @@ export async function fetchInventoryFromCloud() {
     notes: row.notes || "",
     createdAt: row.created_at || null,
     updatedAt: row.updated_at || null,
+    deletedAt: row.deleted_at || null,
   }));
 }
 
@@ -208,21 +210,17 @@ export async function upsertInventoryItemToCloud(item) {
 }
 
 export async function deleteInventoryItemFromCloud(itemID) {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("inventory_items")
-    .delete()
-    .eq("item_id", itemID)
-    .select("item_id");
+    .update({
+      deleted_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("item_id", itemID);
 
   if (error) {
     console.error("deleteInventoryItemFromCloud error:", error);
     throw error;
-  }
-
-  if (!Array.isArray(data) || !data.length) {
-    const err = new Error(`No cloud inventory row deleted for itemID: ${itemID}`);
-    console.error("deleteInventoryItemFromCloud no rows deleted:", itemID);
-    throw err;
   }
 
   return true;
