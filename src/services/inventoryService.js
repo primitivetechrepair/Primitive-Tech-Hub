@@ -16,6 +16,7 @@ export function createInventoryService({ getData, setData, persist, addAudit }) 
         brand: (input.brand || "").trim(),
         series: (input.series || "").trim(),
         category: (input.category || "Other").trim(),
+        partType: (input.partType || "Other").trim(),
         quantity: Number(input.quantity || 0),
         costPerItem: Number(input.costPerItem || 0),
         supplier: (input.supplier || "").trim(),
@@ -46,6 +47,7 @@ export function createInventoryService({ getData, setData, persist, addAudit }) 
       if (existing) {
         existing.itemName = o.ItemName || existing.itemName;
         existing.category = o.Device || o.Category || existing.category;
+        existing.partType = o.PartType || existing.partType || "Other";
         existing.series = o.Series || existing.series || "Standard";
         existing.quantity = Number(o.Quantity || existing.quantity);
         existing.costPerItem = Number(o.CostPerItem || existing.costPerItem);
@@ -65,6 +67,7 @@ export function createInventoryService({ getData, setData, persist, addAudit }) 
           itemID,
           itemName: o.ItemName || "",
           category: o.Device || o.Category || "Other",
+          partType: o.PartType || "Other",
           series: o.Series || "Standard",
           quantity: Number(o.Quantity || 0),
           costPerItem: Number(o.CostPerItem || 0),
