@@ -1,7 +1,4 @@
-import {
-  upsertInventoryItemToCloud,
-  deleteInventoryItemFromCloud,
-} from "./cloudInventoryService.js";
+import { upsertInventoryItemToCloud } from "./cloudInventoryService.js";
 
 export function createInventoryService({ getData, setData, persist, addAudit }) {
   return {
@@ -177,10 +174,6 @@ setTimeout(() => {
 
       setData(data);
       persist();
-
-      deleteInventoryItemFromCloud(itemID).catch((err) => {
-        console.error("Cloud delete failed in removeItem:", err);
-      });
 
       return true;
     },
