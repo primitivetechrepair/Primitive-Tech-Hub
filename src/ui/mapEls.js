@@ -5,7 +5,7 @@ export function mapEls() {
 
     // Inventory
     'inventoryForm', 'inventoryBody', 'inventorySearch',
-    'itemName', 'itemDevice', 'itemBrand',
+    'itemName', 'itemDevice', 'itemPartType', 'itemBrand',
     'itemSeries', 'itemQuantity', 'itemCost',
     'itemSupplier', 'itemColor', 'itemNotes',
     'itemHistoryTitle',
