@@ -77,16 +77,27 @@ async function removePartFromLead(leadID, itemID) {
 
   try {
     await upsertInventoryItemToCloud(item);
+  } catch (err) {
+    console.error("Inventory restore cloud sync failed:", err);
+    toast(el, "Inventory restored locally, but inventory cloud sync failed.", "warning");
+  }
+
+  try {
     await insertInventoryUsageToCloud({
       itemID: item.itemID,
       delta: -1,
       leadID,
       notes: "Part removed from lead",
     });
+  } catch (err) {
+    console.error("Inventory usage log sync failed:", err);
+  }
+
+  try {
     await upsertLeadToCloud(lead);
   } catch (err) {
-    console.error("Lead part cloud sync failed:", err);
-    toast(el, "Saved locally, but cloud sync failed.", "warning");
+    console.error("Lead update cloud sync failed:", err);
+    toast(el, "Lead updated locally, but lead cloud sync failed.", "warning");
   }
 
   toast(el, "Part removed from lead and inventory restored.", "success");
