@@ -100,12 +100,12 @@ export function renderLeads(ctx) {
           <div class="lead-part">
             <span>${esc(name)} ${qty > 1 ? `(${qty})` : ""}</span>
             <button 
-  class="tiny removePartBtn premium-remove-btn" 
-  data-item="${esc(id)}" 
-  title="Remove part"
->
-  <span class="icon">🗑️</span>
-</button>
+              class="tiny removePartBtn premium-remove-btn" 
+              data-item="${esc(id)}" 
+              title="Remove part"
+            >
+              <span class="icon">🗑️</span>
+            </button>
           </div>
         `;
       })
@@ -128,109 +128,125 @@ export function renderLeads(ctx) {
       lead.address || ""
     )}`;
 
-const tr = document.createElement("tr");
+    const tr = document.createElement("tr");
 
-if (lead.justRestored) {
-  tr.classList.add("lead-just-restored");
-}
+    if (lead.justRestored) {
+      tr.classList.add("lead-just-restored");
+    }
 
-tr.innerHTML = `
-  <td class="lead-id copy-lead-id" title="Click to copy">
-    <div class="lead-id-cell-wrap">
-      <div class="lead-id-text">
-        ${esc(lead.leadID)}
-        ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
-      </div>
-      <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
-    </div>
-  </td>
+    tr.innerHTML = `
+      <td class="lead-id copy-lead-id" title="Click to copy">
+        <div class="lead-id-cell-wrap">
+          <div class="lead-id-text">
+            ${esc(lead.leadID)}
+            ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
+          </div>
+          <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
+        </div>
+      </td>
 
-  <td>${esc(lead.customerName || "-")}</td>
+      <td>${esc(lead.customerName || "-")}</td>
 
-  <td>
-    <div class="lead-contact-cell">
-      <div class="lead-contact-text">${esc(lead.contactNumber || "-")}</div>
-      <div class="lead-contact-actions">
-        <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
-        <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
-      </div>
-    </div>
-  </td>
+      <td>
+        <div class="lead-contact-cell">
+          <div class="lead-contact-text">${esc(lead.contactNumber || "-")}</div>
+          <div class="lead-contact-actions">
+            <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
+            <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
+          </div>
+        </div>
+      </td>
 
-  <td>${esc(lead.email || "-")}</td>
+      <td>${esc(lead.email || "-")}</td>
 
-  <td>
-    <a class="address-link" href="${mapAddress}" target="_blank" rel="noopener">
-      ${esc(lead.address || "-")}
-    </a>
-  </td>
+      <td>
+        <a class="address-link" href="${mapAddress}" target="_blank" rel="noopener">
+          ${esc(lead.address || "-")}
+        </a>
+      </td>
 
-  <td>${esc(lead.device)}</td>
-  <td>${esc(lead.series || "-")}</td>
-  <td>${esc(lead.repairType || "-")}</td>
+      <td>${esc(lead.device)}</td>
+      <td>${esc(lead.series || "-")}</td>
+      <td>${esc(lead.repairType || "-")}</td>
 
-  <td class="status-col">
-    <select class="leadStatusSel">
-      ${STATUS_ORDER.map(
-        (s) =>
-          `<option value="${esc(s)}" ${lead.status === s ? "selected" : ""}>${esc(s)}</option>`
-      ).join("")}
-    </select>
-  </td>
+      <td class="status-col">
+        <select class="leadStatusSel">
+          ${STATUS_ORDER.map(
+            (s) =>
+              `<option value="${esc(s)}" ${lead.status === s ? "selected" : ""}>${esc(s)}</option>`
+          ).join("")}
+        </select>
+      </td>
 
-  <td>${fmtMoney(charged)}</td>
-  <td>${fmtMoney(labor)}</td>
+      <td>
+        <input 
+          type="number" 
+          class="repairCostInput" 
+          value="${Number(lead.repairCost ?? lead.chargedAmount ?? 0)}" 
+          min="0" 
+          step="0.01"
+        />
+      </td>
 
-  <td>
-    ${esc(lead.notes || "-")}
-    <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
-  </td>
+      <td>
+        <input 
+          type="number" 
+          class="laborAmountInput" 
+          value="${Number(lead.laborAmount || 0)}" 
+          min="0" 
+          step="0.01"
+        />
+      </td>
 
-  <td>
-    <div class="lead-parts-cell">
-      <div class="lead-parts-list">${used || "-"}</div>
-      <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩</button>
-    </div>
-  </td>
+      <td>
+        ${esc(lead.notes || "-")}
+        <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
+      </td>
 
-  <td>${files}</td>
+      <td>
+        <div class="lead-parts-cell">
+          <div class="lead-parts-list">${used || "-"}</div>
+          <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩</button>
+        </div>
+      </td>
 
-  <td>${
-    lead.dateReported
-      ? String(lead.dateReported).split("-").length === 3
-        ? `${String(lead.dateReported).split("-")[1]}/${String(lead.dateReported).split("-")[2]}/${String(lead.dateReported).split("-")[0]}`
-        : fmtDateShort(lead.dateReported)
-      : "-"
-  }</td>
+      <td>${files}</td>
 
-  <td>
-    ${fmtMoney(profit)}
-    <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
-  </td>
+      <td>${
+        lead.dateReported
+          ? String(lead.dateReported).split("-").length === 3
+            ? `${String(lead.dateReported).split("-")[1]}/${String(lead.dateReported).split("-")[2]}/${String(lead.dateReported).split("-")[0]}`
+            : fmtDateShort(lead.dateReported)
+          : "-"
+      }</td>
 
-  <td class="payment-method-col">
-    <select class="paymentMethodSel">
-      <option value="Cash" ${lead.paymentMethod === "Cash" ? "selected" : ""}>Cash</option>
-      <option value="Zelle Transfer" ${lead.paymentMethod === "Zelle Transfer" ? "selected" : ""}>Zelle Transfer</option>
-      <option value="CashApp" ${lead.paymentMethod === "CashApp" ? "selected" : ""}>CashApp</option>
-    </select>
-  </td>
+      <td>
+        ${fmtMoney(profit)}
+        <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
+      </td>
 
-  <td class="payment-status-col">
-    <select class="paymentStatusSel">
-      <option value="Unpaid" ${lead.paymentStatus === "Unpaid" ? "selected" : ""}>Unpaid</option>
-      <option value="Partially Paid" ${lead.paymentStatus === "Partially Paid" ? "selected" : ""}>Partially Paid</option>
-      <option value="Paid" ${lead.paymentStatus === "Paid" ? "selected" : ""}>Paid</option>
-    </select>
-  </td>
+      <td class="payment-method-col">
+        <select class="paymentMethodSel">
+          <option value="Cash" ${lead.paymentMethod === "Cash" ? "selected" : ""}>Cash</option>
+          <option value="Zelle Transfer" ${lead.paymentMethod === "Zelle Transfer" ? "selected" : ""}>Zelle Transfer</option>
+          <option value="CashApp" ${lead.paymentMethod === "CashApp" ? "selected" : ""}>CashApp</option>
+        </select>
+      </td>
 
-  <td class="action-stack actions leads-actions-col">
-    <button class="tiny lead-action-btn invoiceBtn" title="Invoice">🧾</button>
-    <button class="tiny lead-action-btn delete-btn deleteLeadBtn" title="Delete">🗑️</button>
-  </td>
-`;
+      <td class="payment-status-col">
+        <select class="paymentStatusSel">
+          <option value="Unpaid" ${lead.paymentStatus === "Unpaid" ? "selected" : ""}>Unpaid</option>
+          <option value="Partially Paid" ${lead.paymentStatus === "Partially Paid" ? "selected" : ""}>Partially Paid</option>
+          <option value="Paid" ${lead.paymentStatus === "Paid" ? "selected" : ""}>Paid</option>
+        </select>
+      </td>
 
-    // Add event listeners for lead status, payment method, and payment status changes
+      <td class="action-stack actions leads-actions-col">
+        <button class="tiny lead-action-btn invoiceBtn" title="Invoice">🧾</button>
+        <button class="tiny lead-action-btn delete-btn deleteLeadBtn" title="Delete">🗑️</button>
+      </td>
+    `;
+
     tr.querySelector(".leadStatusSel").addEventListener("change", async (e) => {
       const newStatus = e.target.value;
       const prevStatus = lead.status;
@@ -252,9 +268,7 @@ tr.innerHTML = `
       });
 
       try {
-                console.log("[STATUS] before persist snapshot", JSON.parse(JSON.stringify(data.leads.find((l) => l.leadID === lead.leadID))));
         await persist();
-        console.log("[STATUS] after persist snapshot", JSON.parse(JSON.stringify(data.leads.find((l) => l.leadID === lead.leadID))));
 
         queueCloudSync("lead_status_update", {
           leadID: lead.leadID,
@@ -275,6 +289,92 @@ tr.innerHTML = `
         lead.status = prevStatus;
         e.target.value = prevStatus;
         toast(el, "Failed to update lead status.", "error");
+      }
+    });
+
+    tr.querySelector(".repairCostInput").addEventListener("change", async (e) => {
+      const newValue = Number(e.target.value || 0);
+      const prevValue = Number(lead.repairCost ?? lead.chargedAmount ?? 0);
+
+      if (!isUnlocked()) {
+        e.target.value = prevValue;
+        toast(el, "Locked: log in to update repair cost.", "error");
+        return;
+      }
+
+      lead.repairCost = newValue;
+      lead.lastUpdated = new Date().toISOString();
+
+      addAudit("lead_repair_cost_updated", {
+        leadID: lead.leadID,
+        repairCost: newValue,
+        userAction: "repair_cost_change",
+      });
+
+      try {
+        await persist();
+
+        queueCloudSync("lead_repair_cost_update", {
+          leadID: lead.leadID,
+          repairCost: newValue,
+        });
+
+        try {
+          await upsertLeadToCloud(lead);
+        } catch (err) {
+          console.error("Repair cost cloud sync failed:", err);
+          toast(el, "Repair cost saved locally, but cloud sync failed.", "warning");
+        }
+
+        renderAll();
+      } catch (err) {
+        console.error("Repair cost persist failed:", err);
+        lead.repairCost = prevValue;
+        e.target.value = prevValue;
+        toast(el, "Repair cost update failed.", "error");
+      }
+    });
+
+    tr.querySelector(".laborAmountInput").addEventListener("change", async (e) => {
+      const newValue = Number(e.target.value || 0);
+      const prevValue = Number(lead.laborAmount || 0);
+
+      if (!isUnlocked()) {
+        e.target.value = prevValue;
+        toast(el, "Locked: log in to update labor.", "error");
+        return;
+      }
+
+      lead.laborAmount = newValue;
+      lead.lastUpdated = new Date().toISOString();
+
+      addAudit("lead_labor_updated", {
+        leadID: lead.leadID,
+        laborAmount: newValue,
+        userAction: "labor_amount_change",
+      });
+
+      try {
+        await persist();
+
+        queueCloudSync("lead_labor_amount_update", {
+          leadID: lead.leadID,
+          laborAmount: newValue,
+        });
+
+        try {
+          await upsertLeadToCloud(lead);
+        } catch (err) {
+          console.error("Labor cloud sync failed:", err);
+          toast(el, "Labor saved locally, but cloud sync failed.", "warning");
+        }
+
+        renderAll();
+      } catch (err) {
+        console.error("Labor persist failed:", err);
+        lead.laborAmount = prevValue;
+        e.target.value = prevValue;
+        toast(el, "Labor update failed.", "error");
       }
     });
 
@@ -368,7 +468,9 @@ tr.innerHTML = `
     tr.querySelector(".invoiceBtn").onclick = () => createAndSendInvoice(lead);
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
 
-    tr.querySelector(".copyCustomerBtn").onclick = async () => {
+    tr.querySelector(".copyCustomerBtn").onclick = async (e) => {
+      e.stopPropagation();
+
       const customerInfo = [
         `Lead ID: ${lead.leadID || "-"}`,
         `Name: ${lead.customerName || "-"}`,
@@ -445,15 +547,15 @@ tr.innerHTML = `
 
     el.leadsBody.appendChild(tr);
 
-if (lead.justRestored) {
-  requestAnimationFrame(() => {
-    tr.scrollIntoView({ behavior: "smooth", block: "center" });
-  });
+    if (lead.justRestored) {
+      requestAnimationFrame(() => {
+        tr.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
 
-  setTimeout(() => {
-    lead.justRestored = false;
-    tr.classList.remove("lead-just-restored");
-  }, 2500);
-}
+      setTimeout(() => {
+        lead.justRestored = false;
+        tr.classList.remove("lead-just-restored");
+      }, 2500);
+    }
   });
 }
