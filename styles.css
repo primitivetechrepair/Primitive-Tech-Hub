@@ -3665,63 +3665,20 @@ table thead th {
 }
 
 @media (max-width: 700px) {
-  /* Kill desktop sticky-column behavior on mobile cards */
-  .leads-table th:last-child,
-  .leads-table td:last-child {
-    position: static !important;
-    right: auto !important;
-    z-index: auto !important;
-  }
-
-  /* Reset desktop table sizing rules */
-  .leads-table {
-    width: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  /* Make wrappers expand naturally */
-  .repair-leads-table-wrap,
-  .leads-table-wrap,
-  .table-wrap {
-    overflow: visible !important;
-    max-height: none !important;
-    height: auto !important;
-  }
-
-  /* Ensure the leads section content below the table gets normal spacing */
-  #leadsSection .repair-leads-table-wrap,
-  #leadsSection .leads-table-wrap {
-    margin-bottom: 18px;
-  }
-
-  /* Make sure cards fully participate in normal document flow */
-  #leadsBody,
-  #leadsBody tr,
-  #leadsBody td {
-    position: relative;
-  }
-
-  /* Prevent stray overlap */
-  #leadsBody td.actions,
-  #leadsBody td.action-stack,
-  #leadsBody td.leads-actions-col {
-    overflow: visible;
-  }
-
-  /* Actions cell becomes a simple block */
+  /* Actions cell: title row + button row */
   #leadsBody tr:not(.empty-state-row) td:nth-child(19) {
     display: block !important;
     width: 100% !important;
-    padding: 8px 0;
-    border-right: 0;
-    border-bottom: 0;
+    padding: 8px 0 !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
     background: transparent !important;
   }
 
   #leadsBody tr:not(.empty-state-row) td:nth-child(19)::before {
     content: "Actions";
-    display: block;
+    display: block !important;
+    width: 100%;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -3732,7 +3689,7 @@ table thead th {
     margin-bottom: 8px;
   }
 
-  /* 6 buttons directly below title, evenly spaced */
+  /* Button row sits BELOW the title */
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
@@ -3754,13 +3711,6 @@ table thead th {
     padding: 0 !important;
     justify-content: center;
     font-size: 15px !important;
-  }
-
-  /* Customer history / deleted leads should sit above any stray overlap */
-  #customerHistory,
-  #deletedLeadsList {
-    position: relative;
-    z-index: 1;
   }
 }
 }
