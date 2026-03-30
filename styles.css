@@ -3664,37 +3664,6 @@ table thead th {
   width: 100% !important;
 }
 
-/* =========================================================
-   MOBILE LEADS ACTIONS — CLEAN 2 PER ROW
-========================================================= */
-
-/* Keep label + content layout */
-#leadsBody tr:not(.empty-state-row) td:nth-child(19) {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: 10px;
-  align-items: start;
-}
-
-/* Turn the actions cell itself into the button grid */
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 8px;
-  width: 100%;
-}
-
-/* Buttons evenly spaced */
-#leadsBody tr:not(.empty-state-row) td:nth-child(19) button {
-  width: 100% !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  justify-content: center;
-}
-}
-
 @media (max-width: 700px) {
   /* Kill desktop sticky-column behavior on mobile cards */
   .leads-table th:last-child,
@@ -3733,11 +3702,32 @@ table thead th {
     position: relative;
   }
 
-  /* Prevent action area from pushing out of the card */
+  /* Prevent stray overlap */
   #leadsBody td.actions,
   #leadsBody td.action-stack,
   #leadsBody td.leads-actions-col {
     overflow: visible;
+  }
+
+  /* MOBILE LEADS ACTIONS — clean 2 per row */
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    align-items: stretch;
+  }
+
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack button,
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions button,
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col button {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    justify-content: center;
   }
 
   /* Customer history / deleted leads should sit above any stray overlap */
@@ -3746,4 +3736,5 @@ table thead th {
     position: relative;
     z-index: 1;
   }
+}
 }
