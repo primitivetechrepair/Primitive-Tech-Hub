@@ -2971,6 +2971,32 @@ table thead th {
     padding-top: 12px;
   }
 
+  /* CRITICAL FIX: make Item Name input visible on mobile */
+  #inventoryBody td:nth-child(1) .inline-itemName,
+  #inventoryBody td:nth-child(1) .inline-edit.inline-itemName {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--text-color) !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+    opacity: 1 !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+  }
+
+  #inventoryBody td:nth-child(1) .inline-itemName::placeholder,
+  #inventoryBody td:nth-child(1) .inline-edit.inline-itemName::placeholder {
+    color: rgba(255,255,255,0.45);
+    -webkit-text-fill-color: rgba(255,255,255,0.45);
+  }
+
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .muted {
     margin-top: 4px;
   }
@@ -2990,6 +3016,13 @@ table thead th {
     font-size: 14px;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* Keep item name from being re-overridden by generic inline-edit rules */
+  #inventoryBody td:nth-child(1) .inline-edit.inline-itemName {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
   }
 
   #inventoryBody td:nth-child(11) .inline-edit {
@@ -3018,38 +3051,12 @@ table thead th {
     align-items: center;
   }
 
-  /* Mobile inventory card: make Item Name input visible */
-@media (max-width: 700px) {
-  #inventoryBody td:nth-child(1) .inline-itemName {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    outline: none !important;
-    box-shadow: none !important;
-    color: var(--text-color) !important;
-    -webkit-text-fill-color: var(--text-color) !important;
-    opacity: 1 !important;
-    font-size: 15px !important;
-    font-weight: 700 !important;
-    line-height: 1.25 !important;
+  .inventory-toolbar {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 12px;
   }
-
-  #inventoryBody td:nth-child(1) .inline-itemName::placeholder {
-    color: rgba(255,255,255,0.45);
-    -webkit-text-fill-color: rgba(255,255,255,0.45);
-  }
-}
-
-.inventory-toolbar {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 12px;
-}
 
   .table-wrap:has(.inventory-table) {
     max-height: none;
