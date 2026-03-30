@@ -3717,4 +3717,41 @@ table thead th {
   justify-content: center;
   font-size: 15px !important;
 }
+
+.lead-id-cell-wrap,
+.lead-contact-cell,
+.lead-parts-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lead-contact-actions,
+.lead-parts-cell,
+.lead-id-cell-wrap {
+  flex-wrap: wrap;
+}
+
+.lead-contact-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.lead-parts-list,
+.lead-contact-text,
+.lead-id-text {
+  min-width: 0;
+}
+
+.leads-actions-col {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.leads-actions-col button {
+  flex: 1 1 0;
+}
+
 }

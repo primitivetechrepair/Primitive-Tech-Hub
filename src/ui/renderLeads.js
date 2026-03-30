@@ -136,20 +136,39 @@ if (lead.justRestored) {
 
 tr.innerHTML = `
   <td class="lead-id copy-lead-id" title="Click to copy">
-    ${esc(lead.leadID)}
-    ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
+    <div class="lead-id-cell-wrap">
+      <div class="lead-id-text">
+        ${esc(lead.leadID)}
+        ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
+      </div>
+      <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
+    </div>
   </td>
+
   <td>${esc(lead.customerName || "-")}</td>
-  <td>${esc(lead.contactNumber || "-")}</td>
+
+  <td>
+    <div class="lead-contact-cell">
+      <div class="lead-contact-text">${esc(lead.contactNumber || "-")}</div>
+      <div class="lead-contact-actions">
+        <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
+        <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
+      </div>
+    </div>
+  </td>
+
   <td>${esc(lead.email || "-")}</td>
+
   <td>
     <a class="address-link" href="${mapAddress}" target="_blank" rel="noopener">
       ${esc(lead.address || "-")}
     </a>
   </td>
+
   <td>${esc(lead.device)}</td>
   <td>${esc(lead.series || "-")}</td>
   <td>${esc(lead.repairType || "-")}</td>
+
   <td class="status-col">
     <select class="leadStatusSel">
       ${STATUS_ORDER.map(
@@ -158,14 +177,24 @@ tr.innerHTML = `
       ).join("")}
     </select>
   </td>
+
   <td>${fmtMoney(charged)}</td>
   <td>${fmtMoney(labor)}</td>
+
   <td>
     ${esc(lead.notes || "-")}
     <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
   </td>
-  <td>${used || "-"}</td>
+
+  <td>
+    <div class="lead-parts-cell">
+      <div class="lead-parts-list">${used || "-"}</div>
+      <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩</button>
+    </div>
+  </td>
+
   <td>${files}</td>
+
   <td>${
     lead.dateReported
       ? String(lead.dateReported).split("-").length === 3
@@ -173,6 +202,7 @@ tr.innerHTML = `
         : fmtDateShort(lead.dateReported)
       : "-"
   }</td>
+
   <td>
     ${fmtMoney(profit)}
     <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
@@ -195,10 +225,6 @@ tr.innerHTML = `
   </td>
 
   <td class="action-stack actions leads-actions-col">
-    <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
-    <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
-    <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
-    <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩</button>
     <button class="tiny lead-action-btn invoiceBtn" title="Invoice">🧾</button>
     <button class="tiny lead-action-btn delete-btn deleteLeadBtn" title="Delete">🗑️</button>
   </td>
