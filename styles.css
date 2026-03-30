@@ -3665,58 +3665,33 @@ table thead th {
 }
 
 /* =========================================================
-   FIXED ACTION BUTTON GRID (2 PER ROW, EVEN)
+   MOBILE LEADS ACTIONS — CLEAN 2 PER ROW
 ========================================================= */
 
-/* Ensure label + content layout stays correct */
-#leadsBody td:nth-child(19),
-#leadsBody td.actions,
-#leadsBody td.action-stack,
-#leadsBody td.leads-actions-col {
+/* Keep label + content layout */
+#leadsBody tr:not(.empty-state-row) td:nth-child(19) {
   display: grid;
   grid-template-columns: 96px 1fr;
   gap: 10px;
+  align-items: start;
 }
 
-/* Button container */
-#leadsBody td:nth-child(19) .action-stack,
-#leadsBody td:nth-child(19) .leads-actions-col,
-#leadsBody td.actions .action-stack,
-#leadsBody td.actions.leads-actions-col,
-#leadsBody td.action-stack,
-#leadsBody td.leads-actions-col {
+/* Turn the actions cell itself into the button grid */
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
   display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 8px;
   width: 100%;
-  min-width: 0;
-  align-items: stretch;
 }
 
-/* Buttons evenly sized */
-#leadsBody td:nth-child(19) button,
-#leadsBody td.actions button,
-#leadsBody td.action-stack button,
-#leadsBody td.leads-actions-col button {
+/* Buttons evenly spaced */
+#leadsBody tr:not(.empty-state-row) td:nth-child(19) button {
   width: 100% !important;
   min-width: 0 !important;
   margin: 0 !important;
   justify-content: center;
-}
-
-/* Empty state */
-#leadsBody tr.empty-state-row td {
-  display: block;
-  border: 0;
-  padding: 0;
-}
-
-/* Table wrap spacing */
-.repair-leads-table-wrap,
-.leads-table-wrap {
-  overflow: visible;
-  padding-left: 0;
-  padding-right: 0;
 }
 }
 
