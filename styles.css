@@ -3272,6 +3272,93 @@ table thead th {
 }
 
 /* =========================================================
+   LEADS TABLE — PREMIUM DESKTOP STYLE
+========================================================= */
+@media (min-width: 701px) {
+  .leads-table {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
+    width: max-content;
+    min-width: 1680px;
+  }
+
+  .leads-table thead th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+  }
+
+  .leads-table tbody tr {
+    background: rgba(255,255,255,0.03);
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .leads-table tbody tr:hover {
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  }
+
+  .leads-table td {
+    padding: 12px;
+    border: none;
+    vertical-align: middle;
+    background: transparent;
+  }
+
+  .leads-table tbody tr td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+
+  .leads-table tbody tr td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  /* Keep sticky action column visually matched */
+  .leads-table th:last-child,
+  .leads-table td:last-child {
+    background: rgba(255,255,255,0.03);
+  }
+
+  .leads-table tbody tr:hover td:last-child {
+    background: rgba(255,255,255,0.06);
+  }
+
+  /* Inputs/selects inside leads table */
+  .leads-table input,
+  .leads-table select,
+  .leads-table textarea {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 6px 8px;
+    color: var(--text-color);
+    margin: 0;
+  }
+
+  .leads-table .muted {
+    opacity: 0.65;
+    font-size: 11px;
+  }
+
+  .leads-table td.action-stack {
+    gap: 8px;
+  }
+
+  .leads-table td.action-stack button {
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
    LEADS TABLE — PREMIUM DESKTOP HEADER / STATUS / ACTIONS
 ========================================================= */
 @media (min-width: 701px) {
