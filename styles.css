@@ -3589,25 +3589,26 @@ table thead th {
     padding-top: 10px;
   }
 
-  /* Column labels based on current renderLeads order */
-  #leadsBody tr:not(.empty-state-row) td:nth-child(1)::before { content: "Lead"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(2)::before { content: "Contact"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(3)::before { content: "Email"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(4)::before { content: "Address"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(5)::before { content: "Device"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(6)::before { content: "Series"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(7)::before { content: "Repair"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(8)::before { content: "Status"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(9)::before { content: "Repair Cost"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(10)::before { content: "Labor"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(11)::before { content: "Notes"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(12)::before { content: "Inventory Used"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(13)::before { content: "Files"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(14)::before { content: "Date"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(15)::before { content: "Profit"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(16)::before { content: "Payment Method"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(17)::before { content: "Payment Status"; }
-  #leadsBody tr:not(.empty-state-row) td:nth-child(18)::before { content: "Actions"; }
+  /* Column labels based on current renderLeads.js order */
+  #leadsBody tr:not(.empty-state-row) td:nth-child(1)::before { content: "Lead ID"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(2)::before { content: "Name"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(3)::before { content: "Contact"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(4)::before { content: "Email"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(5)::before { content: "Address"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(6)::before { content: "Device"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(7)::before { content: "Series"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(8)::before { content: "Repair"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(9)::before { content: "Status"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(10)::before { content: "Repair Cost"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(11)::before { content: "Labor"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(12)::before { content: "Notes"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(13)::before { content: "Inventory Used"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(14)::before { content: "Files"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(15)::before { content: "Date"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(16)::before { content: "Profit"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(17)::before { content: "Payment Method"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(18)::before { content: "Payment Status"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19)::before { content: "Actions"; }
 
   /* Lead header cell gets stronger visual hierarchy */
   #leadsBody tr:not(.empty-state-row) td:nth-child(1) {
