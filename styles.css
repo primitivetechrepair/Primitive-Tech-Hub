@@ -2949,7 +2949,7 @@ table thead th {
   }
 
   /* Column labels */
-  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1)::before { content: "Item"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1)::before { content: "Item Name"; }
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(2)::before { content: "Device"; }
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(3)::before { content: "Part Type"; }
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(4)::before { content: "Brand"; }
@@ -2970,6 +2970,59 @@ table thead th {
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1)::before {
     padding-top: 12px;
   }
+
+/* First inventory cell: keep text readable and prevent compression */
+#inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inv-item-header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+#inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inv-item-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+#inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inline-itemName,
+#inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inline-edit.inline-itemName {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  color: var(--text-color);
+  -webkit-text-fill-color: var(--text-color);
+  opacity: 1;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inv-item-id {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-top: 4px;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+#inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .historyBtn {
+  width: 100%;
+  align-self: stretch;
+}
 
   /* CRITICAL FIX: make Item Name input visible on mobile */
   #inventoryBody td:nth-child(1) .inline-itemName,
