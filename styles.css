@@ -3248,3 +3248,25 @@ table thead th {
     font-size: 11px;
   }
 }
+
+.inv-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.inv-item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.inv-item-id {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.historyBtn {
+  flex-shrink: 0;
+}

@@ -296,16 +296,24 @@ function buildInventoryRow(item, ctx, q) {
 
   tr.innerHTML = `
     <td>
+  <div class="inv-item-header">
+
+    <div class="inv-item-text">
       <input
         class="inline-edit inline-itemName"
         type="text"
         value="${esc(item.itemName || "")}"
       />
-      <div class="muted">${highlightMatch(item.itemID, q, esc)}</div>
-      <div class="row">
-        <button class="tiny historyBtn">History</button>
+
+      <div class="muted inv-item-id">
+        ${highlightMatch(item.itemID, q, esc)}
       </div>
-    </td>
+    </div>
+
+    <button class="tiny historyBtn">History</button>
+
+  </div>
+</td>
 
     <td>
       <select class="inline-edit inline-category">
