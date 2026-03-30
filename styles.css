@@ -3709,7 +3709,7 @@ table thead th {
     overflow: visible;
   }
 
-  /* Special case: Actions cell should not use the normal label/content split */
+  /* Actions cell becomes a simple block with title on top */
   #leadsBody tr:not(.empty-state-row) td:nth-child(19) {
     display: block !important;
     width: 100% !important;
@@ -3732,24 +3732,29 @@ table thead th {
     margin-bottom: 8px;
   }
 
-  /* Actions grid: 2 per row, even spacing */
+  /* One horizontal row of 6 buttons */
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
     display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(44px, 1fr) !important;
     gap: 8px !important;
     width: 100% !important;
     min-width: 0 !important;
     align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 2px;
   }
 
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack button,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions button,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col button {
     width: 100% !important;
-    min-width: 0 !important;
+    min-width: 44px !important;
+    min-height: 40px !important;
     margin: 0 !important;
+    padding: 0 !important;
     justify-content: center;
   }
 
