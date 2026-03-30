@@ -129,11 +129,18 @@ if (lead.justRestored) {
 }
 
 tr.innerHTML = `
-  <td class="lead-id copy-lead-id" title="Click to copy">
-  ${esc(lead.leadID)}
-  ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
-</td>
-  <td>${esc(lead.customerName)}</td>
+  <td class="lead-id-cell">
+    <div class="lead-row-header">
+      <div class="lead-row-header__text">
+        <div class="lead-row-header__name">${esc(lead.customerName)}</div>
+        <div class="lead-row-header__meta">
+          <span class="lead-id copy-lead-id" title="Click to copy">${esc(lead.leadID)}</span>
+          ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
+        </div>
+      </div>
+    </div>
+  </td>
+  <td>${esc(lead.contactNumber || "-")}</td>
   <td>${esc(lead.contactNumber || "-")}</td>
   <td>${esc(lead.email || "-")}</td>
   <td>
@@ -191,13 +198,13 @@ tr.innerHTML = `
   </td>
   
   <!-- Actions column -->
-  <td class="action-stack actions">
-    <button class="tiny copyCustomerBtn">Copy Info</button>
-    <button class="tiny callCustomerBtn">Call</button>
-    <button class="tiny textCustomerBtn">Text</button>
-    <button class="tiny part-btn useForRepairBtn">Add Part</button>
-    <button class="tiny invoiceBtn">Invoice</button>
-    <button class="tiny delete-btn deleteLeadBtn">Delete</button>
+  <td class="action-stack actions leads-actions-col">
+    <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
+    <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
+    <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
+    <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩</button>
+    <button class="tiny lead-action-btn invoiceBtn" title="Invoice">🧾</button>
+    <button class="tiny lead-action-btn delete-btn deleteLeadBtn" title="Delete">🗑️</button>
   </td>
 `;
 
