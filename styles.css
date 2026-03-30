@@ -3033,28 +3033,30 @@ table thead th {
   }
 }
 /* =========================================================
-   PREMIUM INVENTORY TABS
+   PREMIUM INVENTORY TABS (FIXED)
 ========================================================= */
+
+/* MOBILE FIRST → ALWAYS 3 PER ROW */
 .inventory-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
   margin-bottom: 12px;
 }
 
 .inv-tab {
-  width: auto;
+  width: 100%;
   min-width: 0;
-  min-height: 38px;
+  min-height: 40px;
   margin: 0 !important;
-  padding: 8px 14px !important;
+  padding: 8px 10px !important;
 
   border: 1px solid rgba(255,255,255,0.08) !important;
   border-radius: 999px !important;
   background: rgba(255,255,255,0.03) !important;
   color: #ccc !important;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.2;
   text-align: center;
@@ -3063,14 +3065,20 @@ table thead th {
   backdrop-filter: blur(6px);
   transition: all 0.2s ease;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Hover */
 .inv-tab:hover {
   background: rgba(255,255,255,0.08) !important;
   color: #fff !important;
   transform: translateY(-1px);
 }
 
+/* Active */
 .inv-tab.active {
   background: linear-gradient(135deg, #00e5ff, #00bcd4) !important;
   color: #000 !important;
@@ -3081,22 +3089,21 @@ table thead th {
   transform: translateY(-1px);
 }
 
+/* Click feedback */
 .inv-tab:active {
   transform: scale(0.96);
 }
 
-/* Desktop uniform tabs */
+/* DESKTOP ONLY */
 @media (min-width: 701px) {
   .inventory-tabs {
-    display: grid;
     grid-template-columns: repeat(5, 1fr); /* adjust if needed */
     gap: 10px;
   }
 
   .inventory-tabs .inv-tab {
-    width: 100%;
     min-height: 42px;
-    padding: 10px;
+    padding: 10px !important;
     font-size: 13px;
   }
 }
