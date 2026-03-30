@@ -3282,6 +3282,7 @@ table thead th {
     min-width: 1680px;
   }
 
+  /* Header */
   .leads-table thead th {
     text-align: left;
     font-size: 12px;
@@ -3292,6 +3293,7 @@ table thead th {
     background: transparent;
   }
 
+  /* Floating rows */
   .leads-table tbody tr {
     background: rgba(255,255,255,0.03);
     transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -3356,12 +3358,7 @@ table thead th {
     padding: 6px 10px;
     font-size: 12px;
   }
-}
 
-/* =========================================================
-   LEADS TABLE — PREMIUM DESKTOP HEADER / STATUS / ACTIONS
-========================================================= */
-@media (min-width: 701px) {
   /* Premium row header */
   .lead-id-cell {
     min-width: 220px;
@@ -3393,6 +3390,7 @@ table thead th {
     gap: 8px;
     margin-top: 4px;
     min-width: 0;
+    flex-wrap: wrap;
   }
 
   .lead-row-header__meta .lead-id {
