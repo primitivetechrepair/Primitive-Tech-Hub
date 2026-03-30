@@ -3018,6 +3018,32 @@ table thead th {
     align-items: center;
   }
 
+  /* Mobile inventory card: make Item Name input visible */
+@media (max-width: 700px) {
+  #inventoryBody td:nth-child(1) .inline-itemName {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--text-color) !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+    opacity: 1 !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+  }
+
+  #inventoryBody td:nth-child(1) .inline-itemName::placeholder {
+    color: rgba(255,255,255,0.45);
+    -webkit-text-fill-color: rgba(255,255,255,0.45);
+  }
+}
+
 .inventory-toolbar {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.06);
