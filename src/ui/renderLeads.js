@@ -99,7 +99,13 @@ export function renderLeads(ctx) {
         return `
           <div class="lead-part">
             <span>${esc(name)} ${qty > 1 ? `(${qty})` : ""}</span>
-            <button class="tiny removePartBtn" data-item="${esc(id)}" title="Remove part">✕</button>
+            <button 
+  class="tiny removePartBtn premium-remove-btn" 
+  data-item="${esc(id)}" 
+  title="Remove part"
+>
+  <span class="icon">🗑️</span>
+</button>
           </div>
         `;
       })
