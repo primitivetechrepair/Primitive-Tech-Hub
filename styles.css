@@ -3664,16 +3664,6 @@ table thead th {
   width: 100% !important;
 }
 
-#leadsBody .payment-method-col,
-#leadsBody .payment-status-col,
-#leadsBody .status-col {
-  min-width: 0 !important;
-  width: 100% !important;
-}
-
-/* =========================================================
-   LEADS MOBILE — INLINE ACTIONS IN THEIR OWN COLUMNS
-========================================================= */
 /* =========================================================
    LEADS MOBILE — INLINE ACTIONS IN THEIR OWN COLUMNS
 ========================================================= */
