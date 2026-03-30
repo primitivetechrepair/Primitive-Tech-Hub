@@ -3664,53 +3664,57 @@ table thead th {
   width: 100% !important;
 }
 
-@media (max-width: 700px) {
-  /* Actions cell: title row + button row */
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19) {
-    display: block !important;
-    width: 100% !important;
-    padding: 8px 0 !important;
-    border-right: 0 !important;
-    border-bottom: 0 !important;
-    background: transparent !important;
-  }
+#leadsBody .payment-method-col,
+#leadsBody .payment-status-col,
+#leadsBody .status-col {
+  min-width: 0 !important;
+  width: 100% !important;
+}
 
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19)::before {
-    content: "Actions";
-    display: block !important;
-    width: 100%;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--heading);
-    opacity: 0.9;
-    padding-top: 10px;
-    margin-bottom: 8px;
-  }
+/* Actions cell: title on its own row, 6 buttons below */
+#leadsBody tr:not(.empty-state-row) td:nth-child(19) {
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+}
 
-  /* Button row sits BELOW the title */
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
-    display: grid !important;
-    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-    gap: 6px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    align-items: stretch;
-  }
+#leadsBody tr:not(.empty-state-row) td:nth-child(19)::before {
+  content: "Actions";
+  display: block !important;
+  width: 100%;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--heading);
+  opacity: 0.9;
+  padding-top: 10px;
+  margin-bottom: 8px;
+}
 
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack button,
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions button,
-  #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col button {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 38px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    justify-content: center;
-    font-size: 15px !important;
-  }
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  align-items: stretch;
+}
+
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack button,
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).actions button,
+#leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col button {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 38px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  justify-content: center;
+  font-size: 15px !important;
 }
 }
