@@ -3512,4 +3512,192 @@ table thead th {
   justify-content: center;
   font-size: 14px;
   line-height: 1;
+  transform: scale(1.1);
+}
+/* =========================================================
+   LEADS TABLE — MOBILE CARD VIEW
+   Keep desktop table untouched
+========================================================= */
+@media (max-width: 700px) {
+  .leads-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .leads-table thead {
+    display: none;
+  }
+
+  .leads-table,
+  .leads-table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .leads-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  #leadsBody tr:not(.empty-state-row) {
+    display: block;
+    margin: 0 0 14px 0;
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  }
+
+  #leadsBody tr.lead-just-restored {
+    box-shadow:
+      inset 0 0 0 2px rgba(102, 252, 241, 0.55),
+      0 8px 20px rgba(0,0,0,0.18);
+  }
+
+  #leadsBody tr:not(.empty-state-row) td {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 10px;
+    align-items: start;
+    width: 100%;
+    padding: 8px 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    background: transparent !important;
+  }
+
+  #leadsBody tr:not(.empty-state-row) td:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  #leadsBody tr:not(.empty-state-row) td::before {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--heading);
+    opacity: 0.9;
+    content: "";
+    padding-top: 10px;
+  }
+
+  /* Column labels based on current renderLeads order */
+  #leadsBody tr:not(.empty-state-row) td:nth-child(1)::before { content: "Lead"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(2)::before { content: "Contact"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(3)::before { content: "Email"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(4)::before { content: "Address"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(5)::before { content: "Device"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(6)::before { content: "Series"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(7)::before { content: "Repair"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(8)::before { content: "Status"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(9)::before { content: "Repair Cost"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(10)::before { content: "Labor"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(11)::before { content: "Notes"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(12)::before { content: "Inventory Used"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(13)::before { content: "Files"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(14)::before { content: "Date"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(15)::before { content: "Profit"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(16)::before { content: "Payment Method"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(17)::before { content: "Payment Status"; }
+  #leadsBody tr:not(.empty-state-row) td:nth-child(18)::before { content: "Actions"; }
+
+  /* Lead header cell gets stronger visual hierarchy */
+  #leadsBody tr:not(.empty-state-row) td:nth-child(1) {
+    padding-top: 0;
+  }
+
+  #leadsBody tr:not(.empty-state-row) td:nth-child(1)::before {
+    padding-top: 12px;
+  }
+
+  /* Inputs/selects in cards */
+  #leadsBody input,
+  #leadsBody select,
+  #leadsBody textarea {
+    width: 100%;
+    min-width: 0 !important;
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    box-sizing: border-box;
+  }
+
+  /* Links and files wrap nicely */
+  #leadsBody a {
+    word-break: break-word;
+  }
+
+  /* Inventory used chips / remove buttons wrap better */
+  #leadsBody td:nth-child(12) .lead-part {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 8px;
+  }
+
+  #leadsBody td:nth-child(12) .lead-part:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Payment selects full width */
+  #leadsBody .payment-method-col,
+  #leadsBody .payment-status-col,
+  #leadsBody .status-col {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Actions stack cleanly in the card */
+  #leadsBody td.actions,
+  #leadsBody td.action-stack,
+  #leadsBody td.leads-actions-col {
+    grid-template-columns: 1fr;
+  }
+
+  #leadsBody .action-stack,
+  #leadsBody .leads-actions-col {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  #leadsBody .action-stack button,
+  #leadsBody .leads-actions-col button {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Empty state */
+  #leadsBody tr.empty-state-row td {
+    display: block;
+    border: 0;
+    padding: 0;
+  }
+
+  /* Table wrap should not feel trapped */
+  .repair-leads-table-wrap,
+  .leads-table-wrap {
+    overflow: visible;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
