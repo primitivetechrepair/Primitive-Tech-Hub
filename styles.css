@@ -3701,3 +3701,56 @@ table thead th {
     padding-right: 0;
   }
 }
+
+@media (max-width: 700px) {
+  /* Kill desktop sticky-column behavior on mobile cards */
+  .leads-table th:last-child,
+  .leads-table td:last-child {
+    position: static !important;
+    right: auto !important;
+    z-index: auto !important;
+  }
+
+  /* Reset desktop table sizing rules */
+  .leads-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Make wrappers expand naturally */
+  .repair-leads-table-wrap,
+  .leads-table-wrap,
+  .table-wrap {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  /* Ensure the leads section content below the table gets normal spacing */
+  #leadsSection .repair-leads-table-wrap,
+  #leadsSection .leads-table-wrap {
+    margin-bottom: 18px;
+  }
+
+  /* Make sure cards fully participate in normal document flow */
+  #leadsBody,
+  #leadsBody tr,
+  #leadsBody td {
+    position: relative;
+  }
+
+  /* Prevent action area from pushing out of the card */
+  #leadsBody td.actions,
+  #leadsBody td.action-stack,
+  #leadsBody td.leads-actions-col {
+    overflow: visible;
+  }
+
+  /* Customer history / deleted leads should sit above any stray overlap */
+  #customerHistory,
+  #deletedLeadsList {
+    position: relative;
+    z-index: 1;
+  }
+}
