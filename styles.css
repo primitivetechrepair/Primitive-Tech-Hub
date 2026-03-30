@@ -3709,7 +3709,30 @@ table thead th {
     overflow: visible;
   }
 
-  /* MOBILE LEADS ACTIONS — clean 2 per row */
+  /* Special case: Actions cell should not use the normal label/content split */
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19) {
+    display: block !important;
+    width: 100% !important;
+    padding: 8px 0;
+    border-right: 0;
+    border-bottom: 0;
+    background: transparent !important;
+  }
+
+  #leadsBody tr:not(.empty-state-row) td:nth-child(19)::before {
+    content: "Actions";
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--heading);
+    opacity: 0.9;
+    padding-top: 10px;
+    margin-bottom: 8px;
+  }
+
+  /* Actions grid: 2 per row, even spacing */
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
   #leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
