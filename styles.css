@@ -3172,3 +3172,79 @@ table thead th {
     padding: 10px 12px;
   }
 }
+
+/* =========================================================
+   INVENTORY TABLE — PREMIUM DESKTOP STYLE
+========================================================= */
+
+@media (min-width: 701px) {
+
+  .inventory-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* space between rows */
+  }
+
+  /* Header */
+  .inventory-table thead th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 8px 12px;
+    border: none;
+  }
+
+  /* Rows */
+  .inventory-table tbody tr {
+    background: rgba(255,255,255,0.03);
+    transition: all 0.2s ease;
+  }
+
+  /* Rounded row container */
+  .inventory-table tbody tr td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+
+  .inventory-table tbody tr td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  /* Cells */
+  .inventory-table td {
+    padding: 12px;
+    border: none;
+    vertical-align: middle;
+  }
+
+  /* Hover effect (premium feel) */
+  .inventory-table tbody tr:hover {
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  }
+
+  /* Inputs inside table */
+  .inventory-table input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 6px 8px;
+    color: #fff;
+  }
+
+  /* Buttons inside table */
+  .inventory-table button {
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* Subtle muted text */
+  .inventory-table .muted {
+    opacity: 0.6;
+    font-size: 11px;
+  }
+}
