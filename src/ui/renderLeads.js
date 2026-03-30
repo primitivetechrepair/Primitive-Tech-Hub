@@ -135,18 +135,11 @@ if (lead.justRestored) {
 }
 
 tr.innerHTML = `
-  <td class="lead-id-cell">
-    <div class="lead-row-header">
-      <div class="lead-row-header__text">
-        <div class="lead-row-header__name">${esc(lead.customerName)}</div>
-        <div class="lead-row-header__meta">
-          <span class="lead-id copy-lead-id" title="Click to copy">${esc(lead.leadID)}</span>
-          ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
-        </div>
-      </div>
-    </div>
+  <td class="lead-id copy-lead-id" title="Click to copy">
+    ${esc(lead.leadID)}
+    ${lead.justRestored ? `<span class="lead-restored-badge">RESTORED</span>` : ""}
   </td>
-  <td>${esc(lead.contactNumber || "-")}</td>
+  <td>${esc(lead.customerName || "-")}</td>
   <td>${esc(lead.contactNumber || "-")}</td>
   <td>${esc(lead.email || "-")}</td>
   <td>
@@ -174,18 +167,17 @@ tr.innerHTML = `
   <td>${used || "-"}</td>
   <td>${files}</td>
   <td>${
-  lead.dateReported
-    ? String(lead.dateReported).split("-").length === 3
-      ? `${String(lead.dateReported).split("-")[1]}/${String(lead.dateReported).split("-")[2]}/${String(lead.dateReported).split("-")[0]}`
-      : fmtDateShort(lead.dateReported)
-    : "-"
-}</td>
+    lead.dateReported
+      ? String(lead.dateReported).split("-").length === 3
+        ? `${String(lead.dateReported).split("-")[1]}/${String(lead.dateReported).split("-")[2]}/${String(lead.dateReported).split("-")[0]}`
+        : fmtDateShort(lead.dateReported)
+      : "-"
+  }</td>
   <td>
     ${fmtMoney(profit)}
     <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
   </td>
-  
-  <!-- Payment Method Dropdown -->
+
   <td class="payment-method-col">
     <select class="paymentMethodSel">
       <option value="Cash" ${lead.paymentMethod === "Cash" ? "selected" : ""}>Cash</option>
@@ -193,8 +185,7 @@ tr.innerHTML = `
       <option value="CashApp" ${lead.paymentMethod === "CashApp" ? "selected" : ""}>CashApp</option>
     </select>
   </td>
-  
-  <!-- Payment Status Dropdown -->
+
   <td class="payment-status-col">
     <select class="paymentStatusSel">
       <option value="Unpaid" ${lead.paymentStatus === "Unpaid" ? "selected" : ""}>Unpaid</option>
@@ -202,8 +193,7 @@ tr.innerHTML = `
       <option value="Paid" ${lead.paymentStatus === "Paid" ? "selected" : ""}>Paid</option>
     </select>
   </td>
-  
-  <!-- Actions column -->
+
   <td class="action-stack actions leads-actions-col">
     <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
     <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
