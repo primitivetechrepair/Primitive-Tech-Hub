@@ -3022,7 +3022,6 @@ table thead th {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 16px;
-  margin-bottom: 16px; /* adjust if needed */
   padding: 12px;
 }
 
@@ -3035,72 +3034,24 @@ table thead th {
 }
 
 /* =========================================================
-   INVENTORY TOOLBAR CONTROLS — EVEN MOBILE LAYOUT
+   INVENTORY SECTION — PREMIUM TABS + EVEN FILTER SPACING
 ========================================================= */
 
-.inventory-toolbar-controls {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  align-items: end;
-}
-
-.inventory-toolbar-controls > label {
-  margin: 0;
-}
-
-.inventory-toolbar-controls > label span {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.inventory-toolbar-controls select {
-  width: 100%;
-  margin: 0;
-}
-
-.inventory-toolbar-controls {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); /* desktop stays 4 */
-  gap: 12px; /* slightly more premium spacing */
-  align-items: end;
-}
-
-.inventory-toolbar-controls > label {
-  margin: 0;
-  width: 100%;
-  min-width: 0;
-}
-
-.inventory-toolbar-controls > label span {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.inventory-toolbar-controls select {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: 12px;
+/* Toolbar container spacing */
+.inventory-toolbar {
+  margin-bottom: 16px;
 }
 
 /* =========================================================
-   PREMIUM INVENTORY TABS (FIXED)
+   PREMIUM INVENTORY TABS (MOBILE FIRST)
 ========================================================= */
 
-/* MOBILE FIRST → ALWAYS 3 PER ROW */
+/* Mobile → always 3 per row */
 .inventory-tabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .inv-tab {
@@ -3130,14 +3081,12 @@ table thead th {
   justify-content: center;
 }
 
-/* Hover */
 .inv-tab:hover {
   background: rgba(255,255,255,0.08) !important;
   color: #fff !important;
   transform: translateY(-1px);
 }
 
-/* Active */
 .inv-tab.active {
   background: linear-gradient(135deg, #00e5ff, #00bcd4) !important;
   color: #000 !important;
@@ -3148,15 +3097,51 @@ table thead th {
   transform: translateY(-1px);
 }
 
-/* Click feedback */
 .inv-tab:active {
   transform: scale(0.96);
 }
 
-/* DESKTOP ONLY */
+/* =========================================================
+   INVENTORY TOOLBAR CONTROLS — EVEN SPACING
+========================================================= */
+
+.inventory-toolbar-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.inventory-toolbar-controls > label {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.inventory-toolbar-controls > label span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.inventory-toolbar-controls select {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+/* =========================================================
+   DESKTOP ONLY
+========================================================= */
 @media (min-width: 701px) {
   .inventory-tabs {
-    grid-template-columns: repeat(5, 1fr); /* adjust if needed */
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
   }
 
@@ -3164,5 +3149,26 @@ table thead th {
     min-height: 42px;
     padding: 10px !important;
     font-size: 13px;
+  }
+}
+
+/* =========================================================
+   MOBILE ONLY
+========================================================= */
+@media (max-width: 700px) {
+  .inventory-toolbar-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding-top: 8px;
+  }
+
+  .inventory-toolbar-controls > label span {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+
+  .inventory-toolbar-controls select {
+    font-size: 13px;
+    padding: 10px 12px;
   }
 }
