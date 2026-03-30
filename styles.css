@@ -3671,87 +3671,125 @@ table thead th {
   width: 100% !important;
 }
 
-/* Actions cell: title on its own row, 6 buttons below */
-#leadsBody tr:not(.empty-state-row) td:nth-child(19) {
-  display: block !important;
-  width: 100% !important;
-  padding: 8px 0 !important;
-  border-right: 0 !important;
-  border-bottom: 0 !important;
-  background: transparent !important;
-}
+/* =========================================================
+   LEADS MOBILE — INLINE ACTIONS IN THEIR OWN COLUMNS
+========================================================= */
+@media (max-width: 700px) {
+  /* Lead ID cell: info left, copy button right */
+  #leadsBody td:nth-child(1) .lead-id-cell-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
 
-#leadsBody tr:not(.empty-state-row) td:nth-child(19)::before {
-  content: "Actions";
-  display: block !important;
-  width: 100%;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--heading);
-  opacity: 0.9;
-  padding-top: 10px;
-  margin-bottom: 8px;
-}
+  #leadsBody td:nth-child(1) .lead-id-text {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
 
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack,
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).actions,
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col {
-  display: grid !important;
-  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-  gap: 6px !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  align-items: stretch;
-}
+  /* Contact cell: phone left, call/text right */
+  #leadsBody td:nth-child(3) .lead-contact-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
 
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).action-stack button,
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).actions button,
-#leadsBody tr:not(.empty-state-row) td:nth-child(19).leads-actions-col button {
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 38px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  justify-content: center;
-  font-size: 15px !important;
-}
+  #leadsBody td:nth-child(3) .lead-contact-text {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
 
-.lead-id-cell-wrap,
-.lead-contact-cell,
-.lead-parts-cell {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
+  #leadsBody td:nth-child(3) .lead-contact-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+  }
 
-.lead-contact-actions,
-.lead-parts-cell,
-.lead-id-cell-wrap {
-  flex-wrap: wrap;
-}
+  /* Inventory Used cell: parts left, add-part button right */
+  #leadsBody td:nth-child(13) .lead-parts-cell {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
 
-.lead-contact-actions {
-  display: flex;
-  gap: 6px;
-}
+  #leadsBody td:nth-child(13) .lead-parts-list {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
 
-.lead-parts-list,
-.lead-contact-text,
-.lead-id-text {
-  min-width: 0;
-}
+  /* Actions cell: invoice + delete on the right, side by side */
+  #leadsBody td:nth-child(19) {
+    display: grid !important;
+    grid-template-columns: 96px 1fr !important;
+    gap: 10px !important;
+    align-items: start;
+    width: 100%;
+    padding: 8px 0 !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+    background: transparent !important;
+  }
 
-.leads-actions-col {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-}
+  #leadsBody td:nth-child(19)::before {
+    content: "Actions";
+    display: block !important;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--heading);
+    opacity: 0.9;
+    padding-top: 10px;
+    margin-bottom: 0;
+  }
 
-.leads-actions-col button {
-  flex: 1 1 0;
-}
+  #leadsBody td:nth-child(19).action-stack,
+  #leadsBody td:nth-child(19).actions,
+  #leadsBody td:nth-child(19).leads-actions-col {
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap !important;
+    min-width: 0;
+  }
 
+  /* Shared small premium action buttons */
+  #leadsBody .lead-action-btn {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 34px !important;
+    border-radius: 10px !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+
+  /* Specifically keep these right-aligned and horizontal */
+  #leadsBody td:nth-child(1) .lead-action-btn,
+  #leadsBody td:nth-child(3) .lead-action-btn,
+  #leadsBody td:nth-child(13) .lead-action-btn,
+  #leadsBody td:nth-child(19) .lead-action-btn {
+    flex-shrink: 0;
+  }
+}
 }
