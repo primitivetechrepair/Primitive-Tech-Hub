@@ -3018,10 +3018,12 @@ table thead th {
     align-items: center;
   }
 
-  /* Search/toolbar spacing stays comfortable above card list */
-  .inventory-toolbar {
-    margin-bottom: 12px;
-  }
+.inventory-toolbar {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 12px;
+}
 
   .table-wrap:has(.inventory-table) {
     max-height: none;
@@ -3031,16 +3033,56 @@ table thead th {
   }
 }
 /* =========================================================
-   INVENTORY TABS — MOBILE CHIP GRID
+   PREMIUM INVENTORY TABS
 ========================================================= */
 .inventory-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .inv-tab {
   width: auto;
+  min-width: 0;
+  min-height: 38px;
+  margin: 0 !important;
+  padding: 8px 14px !important;
+
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.03) !important;
+  color: #ccc !important;
+
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+
+  box-shadow: none !important;
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.inv-tab:hover {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.inv-tab.active {
+  background: linear-gradient(135deg, #00e5ff, #00bcd4) !important;
+  color: #000 !important;
+  border-color: transparent !important;
+  box-shadow:
+    0 0 0 1px rgba(0,229,255,0.4),
+    0 6px 16px rgba(0,229,255,0.25) !important;
+  transform: translateY(-1px);
+}
+
+.inv-tab:active {
+  transform: scale(0.96);
 }
 
 @media (max-width: 700px) {
@@ -3052,14 +3094,9 @@ table thead th {
 
   .inventory-tabs .inv-tab {
     width: 100%;
-    min-width: 0;
     min-height: 40px;
     padding: 8px 10px !important;
-    margin: 0 !important;
     font-size: 12px;
-    line-height: 1.2;
-    border-radius: 12px;
     white-space: normal;
-    text-align: center;
   }
 }
