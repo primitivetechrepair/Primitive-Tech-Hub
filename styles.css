@@ -3061,31 +3061,33 @@ table thead th {
   margin: 0;
 }
 
-/* Mobile: 2 x 2 even grid */
-@media (max-width: 700px) {
-  .inventory-toolbar-controls {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
+.inventory-toolbar-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* desktop stays 4 */
+  gap: 12px; /* slightly more premium spacing */
+  align-items: end;
+}
 
-  .inventory-toolbar-controls > label {
-    width: 100%;
-    min-width: 0;
-  }
+.inventory-toolbar-controls > label {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+}
 
-  .inventory-toolbar-controls > label span {
-    font-size: 11px;
-    margin-bottom: 5px;
-  }
+.inventory-toolbar-controls > label span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
 
-  .inventory-toolbar-controls select {
-    width: 100%;
-    min-width: 0;
-    margin: 0;
-    padding: 10px 12px;
-    font-size: 13px;
-    border-radius: 12px;
-  }
+.inventory-toolbar-controls select {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
 }
 
 /* =========================================================
