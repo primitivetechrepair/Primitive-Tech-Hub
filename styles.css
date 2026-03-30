@@ -3754,16 +3754,33 @@ table thead th {
     margin-bottom: 0;
   }
 
-  #leadsBody td:nth-child(19).action-stack,
-  #leadsBody td:nth-child(19).actions,
-  #leadsBody td:nth-child(19).leads-actions-col {
-    display: flex !important;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: nowrap !important;
-    min-width: 0;
-  }
+  /* =========================================================
+   ACTIONS COLUMN — SIDE BY SIDE, FULL WIDTH
+========================================================= */
+#leadsBody td:nth-child(19).leads-actions-col,
+#leadsBody td:nth-child(19).action-stack,
+#leadsBody td:nth-child(19).actions {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Make both buttons evenly fill the row */
+#leadsBody td:nth-child(19).leads-actions-col button,
+#leadsBody td:nth-child(19).action-stack button,
+#leadsBody td:nth-child(19).actions button {
+  flex: 1 1 0;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 38px;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
   /* Shared small premium action buttons */
   #leadsBody .lead-action-btn {
