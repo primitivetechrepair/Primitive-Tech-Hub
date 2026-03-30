@@ -3664,6 +3664,20 @@ table thead th {
   width: 100% !important;
 }
 
+/* Status row: keep label on left, dropdown aligned to right content area */
+#leadsBody td:nth-child(9).status-col {
+  display: grid !important;
+  grid-template-columns: 96px 1fr !important;
+  gap: 10px !important;
+  align-items: start;
+}
+
+#leadsBody td:nth-child(9).status-col select {
+  width: 100% !important;
+  min-width: 0 !important;
+  justify-self: stretch;
+}
+
 /* =========================================================
    LEADS MOBILE — INLINE ACTIONS IN THEIR OWN COLUMNS
 ========================================================= */
