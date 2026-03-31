@@ -6,16 +6,16 @@
 export const appDataStore = {
   // Mirrors your current loadEncrypted()
   async loadDecrypted({ storageKey, cryptoKey, decryptJSON, toast, defaultData }) {
-    const raw = localStorage.getItem(storageKey);
-    if (!raw) return null;
+  const raw = localStorage.getItem(storageKey);
+  if (!raw) return null;
 
-    try {
-      return await decryptJSON(JSON.parse(raw), cryptoKey);
-    } catch {
-      toast?.("Could not decrypt saved data.");
-      return defaultData();
-    }
-  },
+  try {
+    return await decryptJSON(JSON.parse(raw), cryptoKey);
+  } catch {
+    toast?.("Could not decrypt saved data.");
+    return false;
+  }
+},
 
   // Mirrors the one line inside persist()
   async saveEncrypted({ storageKey, data, cryptoKey, encryptJSON }) {

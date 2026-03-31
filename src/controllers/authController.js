@@ -19,6 +19,13 @@ export function createAuthController({
   toast,
   setMsg,
 }) {
+  let failedLoginAttempts = 0;
+  let loginLockedUntil = 0;
+
+  function getLockSecondsRemaining() {
+    return Math.max(0, Math.ceil((loginLockedUntil - Date.now()) / 1000));
+  }
+
   function initAuth() {
     const hash = authStore.getAuthHash({ authKey });
     const loggedIn = authStore.hasSessionOk({ sessionKey });
@@ -36,33 +43,32 @@ export function createAuthController({
     );
   }
 
-async function handleSetup(e) {
-  e.preventDefault();
+  async function handleSetup(e) {
+    e.preventDefault();
 
-  const password = el.setupPassword.value.trim();
-  const pin = el.setupPin.value.trim();
+    const password = el.setupPassword.value.trim();
+    const pin = el.setupPin.value.trim();
 
-  if (password.length < 6) return setMsg("Password must be at least 6 characters.");
-  if (pin && pin.length < 4) return setMsg("PIN must be at least 4 chars.");
+    if (password.length < 6) return setMsg("Password must be at least 6 characters.");
+    if (pin && pin.length < 4) return setMsg("PIN must be at least 4 chars.");
 
-await authStore.setAuthHash({
-  authKey,
-  deriveAuthHash,
-  createAuthSalt,
-  password,
-});
-await authStore.setPinHash({ pinKey, sha256, pin });
+    await authStore.setAuthHash({
+      authKey,
+      deriveAuthHash,
+      createAuthSalt,
+      password,
+    });
+    await authStore.setPinHash({ pinKey, sha256, pin });
 
-  authStore.setSessionOk({ sessionKey });
+    authStore.setSessionOk({ sessionKey });
 
-  const ok = await unlockSession(password);
-  if (!ok) return;
+    const ok = await unlockSession(password);
+    if (!ok) return;
 
-  showApp();
+    showApp();
 
-  // ✅ Preserve your original behavior
-  if (typeof renderAll === "function") renderAll();
-}
+    if (typeof renderAll === "function") renderAll();
+  }
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -86,16 +92,16 @@ await authStore.setPinHash({ pinKey, sha256, pin });
     const pinOK = pinHash && pin ? (await sha256(pin)) === pinHash : true;
 
     if (!passOK || !pinOK) {
-  failedLoginAttempts += 1;
+      failedLoginAttempts += 1;
 
-  if (failedLoginAttempts >= 5) {
-    loginLockedUntil = Date.now() + 30_000;
-    failedLoginAttempts = 0;
-    return setMsg("Too many failed attempts. Try again in 30s.", "error");
-  }
+      if (failedLoginAttempts >= 5) {
+        loginLockedUntil = Date.now() + 30_000;
+        failedLoginAttempts = 0;
+        return setMsg("Too many failed attempts. Try again in 30s.", "error");
+      }
 
-  return setMsg(`Invalid credentials. (${failedLoginAttempts}/5)`, "error");
-}
+      return setMsg(`Invalid credentials. (${failedLoginAttempts}/5)`, "error");
+    }
 
     failedLoginAttempts = 0;
     loginLockedUntil = 0;
@@ -113,26 +119,23 @@ await authStore.setPinHash({ pinKey, sha256, pin });
   }
 
   async function unlockSession(password) {
-    // allow callers to pass password; if missing, bail (keeps your behavior)
     if (!password) return false;
 
     const key = await deriveKey(password);
     setCryptoKey(key);
 
-    const loaded = (await loadEncrypted()) || defaultData();
-    setData(loaded);
+    const loaded = await loadEncrypted();
 
+    if (loaded === false) {
+      setCryptoKey(null);
+      authStore.clearSession({ sessionKey });
+      setMsg("Could not unlock saved data. Check your password.", "error");
+      return false;
+    }
+
+    setData(loaded || defaultData());
     return true;
   }
 
   return { initAuth, unlockSession };
-
-
-  let failedLoginAttempts = 0;
-  let loginLockedUntil = 0;
-
-  function getLockSecondsRemaining() {
-    return Math.max(0, Math.ceil((loginLockedUntil - Date.now()) / 1000));
-  }
-
 }
