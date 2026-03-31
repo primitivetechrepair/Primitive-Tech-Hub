@@ -1,4 +1,3 @@
-// src/bootstrap/sessionFacade.js
 import { createSessionService } from "../services/sessionService.js";
 import { maybeAutoBackup as maybeAutoBackupService } from "../services/backupService.js";
 
@@ -10,6 +9,7 @@ export function createSessionFacade(ctx) {
     decryptJSON,
     storageKey,
     getData,
+    getCryptoKey,
     toast,              // expects (el,msg,type) OR wrapper you provide
     setIntegrationLog,  // expects (text) => void
     getEl,              // () => el
@@ -30,7 +30,9 @@ export function createSessionFacade(ctx) {
       maybeAutoBackup: () =>
         maybeAutoBackupService({
           getData,
+          getCryptoKey,
           appDataStore,
+          encryptJSON,
           setIntegrationLog,
         }),
     });

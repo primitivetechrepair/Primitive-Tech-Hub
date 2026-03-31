@@ -24,13 +24,28 @@ export const appDataStore = {
     localStorage.setItem(storageKey, JSON.stringify(encryptedObj));
   },
 
-  // Mirrors your daily backup line (plaintext JSON snapshot)
-  saveDailyBackup({ backupKey = "primitiveTechHubDailyBackup", data }) {
-    localStorage.setItem(
-      backupKey,
-      JSON.stringify({ at: new Date().toISOString(), snapshot: data })
-    );
-  },
+// Encrypted daily backup snapshot
+async saveDailyBackup({
+  backupKey = "primitiveTechHubDailyBackup",
+  data,
+  cryptoKey,
+  encryptJSON,
+}) {
+  if (!cryptoKey || typeof encryptJSON !== "function") return false;
+
+  const payload = {
+    at: new Date().toISOString(),
+    snapshot: data,
+  };
+
+  const encryptedObj = await encryptJSON(payload, cryptoKey);
+  localStorage.setItem(backupKey, JSON.stringify(encryptedObj));
+  return true;
+},
+
+removeDailyBackup({ backupKey = "primitiveTechHubDailyBackup" } = {}) {
+  localStorage.removeItem(backupKey);
+},
 
   // Mirrors your theme set
   setTheme({ themeKey, theme }) {

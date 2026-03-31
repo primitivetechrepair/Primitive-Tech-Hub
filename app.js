@@ -227,17 +227,18 @@ if (location.hostname !== "127.0.0.1" && location.hostname !== "localhost") {
 }
 
 if (!sessionFacade) {
-  sessionFacade = createSessionFacade({
-    defaultData,
-    appDataStore,
-    encryptJSON,
-    decryptJSON,
-    storageKey: STORAGE_KEY,
-    getData,
-    toast,
-    setIntegrationLog: (text) => setIntegrationLog(el, text),
-    getEl: () => el,
-  });
+sessionFacade = createSessionFacade({
+  defaultData,
+  appDataStore,
+  encryptJSON,
+  decryptJSON,
+  storageKey: STORAGE_KEY,
+  getData,
+  getCryptoKey: () => cryptoKey,
+  toast,
+  setIntegrationLog: (text) => setIntegrationLog(el, text),
+  getEl: () => el,
+});
 }
 
 if (!authController) {
