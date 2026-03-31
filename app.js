@@ -268,7 +268,7 @@ authController = createAuthController({
   showApp,
   renderAll: renderAllNow,
   toast,
-  setMsg: (msg, type) => setMsg(el.msg, msg, type),
+  setMsg: (msg, type) => setMsg(el.authMessage, msg, type),
 });
 }
 
