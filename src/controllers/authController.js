@@ -50,7 +50,7 @@ export function createAuthController({
     const pin = el.setupPin.value.trim();
 
     if (password.length < 6) return setMsg("Password must be at least 6 characters.");
-    if (pin && pin.length < 4) return setMsg("PIN must be at least 4 chars.");
+if (!pin || pin.length < 4) return setMsg("PIN must be at least 4 characters.");
 
     await authStore.setAuthHash({
       authKey,
