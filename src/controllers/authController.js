@@ -67,19 +67,39 @@ await authStore.setPinHash({ pinKey, sha256, pin });
   async function handleLogin(e) {
     e.preventDefault();
 
+    const now = Date.now();
+    if (loginLockedUntil > now) {
+      const seconds = getLockSecondsRemaining();
+      return setMsg(`Too many failed attempts. Try again in ${seconds}s.`, "error");
+    }
+
     const password = el.loginPassword.value;
     const pin = el.loginPin.value.trim();
 
     const authRecord = authStore.getAuthRecord({ authKey });
 
-const passOK = authRecord
-  ? (await deriveAuthHash(password, authRecord.salt)) === authRecord.hash
-  : false;
+    const passOK = authRecord
+      ? (await deriveAuthHash(password, authRecord.salt)) === authRecord.hash
+      : false;
 
     const pinHash = authStore.getPinHash({ pinKey });
     const pinOK = pinHash && pin ? (await sha256(pin)) === pinHash : true;
 
-    if (!passOK || !pinOK) return setMsg("Invalid credentials.");
+    if (!passOK || !pinOK) {
+      failedLoginAttempts += 1;
+
+      if (failedLoginAttempts >= 5) {
+        loginLockedUntil = Date.now() + 30_000;
+        failedLoginAttempts = 0;
+        return setMsg("Too many failed attempts. Try again in 30s.", "error");
+      }
+
+      return setMsg("Invalid credentials.", "error");
+    }
+
+    failedLoginAttempts = 0;
+    loginLockedUntil = 0;
+    setMsg("", "");
 
     const key = await deriveKey(password);
     setCryptoKey(key);
@@ -107,3 +127,10 @@ const passOK = authRecord
 
   return { initAuth, unlockSession };
 }
+
+  let failedLoginAttempts = 0;
+  let loginLockedUntil = 0;
+
+  function getLockSecondsRemaining() {
+    return Math.max(0, Math.ceil((loginLockedUntil - Date.now()) / 1000));
+  }
