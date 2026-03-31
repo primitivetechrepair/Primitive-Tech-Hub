@@ -86,16 +86,16 @@ await authStore.setPinHash({ pinKey, sha256, pin });
     const pinOK = pinHash && pin ? (await sha256(pin)) === pinHash : true;
 
     if (!passOK || !pinOK) {
-      failedLoginAttempts += 1;
+  failedLoginAttempts += 1;
 
-      if (failedLoginAttempts >= 5) {
-        loginLockedUntil = Date.now() + 30_000;
-        failedLoginAttempts = 0;
-        return setMsg("Too many failed attempts. Try again in 30s.", "error");
-      }
+  if (failedLoginAttempts >= 5) {
+    loginLockedUntil = Date.now() + 30_000;
+    failedLoginAttempts = 0;
+    return setMsg("Too many failed attempts. Try again in 30s.", "error");
+  }
 
-      return setMsg("Invalid credentials.", "error");
-    }
+  return setMsg(`Invalid credentials. (${failedLoginAttempts}/5)`, "error");
+}
 
     failedLoginAttempts = 0;
     loginLockedUntil = 0;
