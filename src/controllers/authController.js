@@ -126,7 +126,7 @@ await authStore.setPinHash({ pinKey, sha256, pin });
   }
 
   return { initAuth, unlockSession };
-}
+
 
   let failedLoginAttempts = 0;
   let loginLockedUntil = 0;
@@ -134,3 +134,5 @@ await authStore.setPinHash({ pinKey, sha256, pin });
   function getLockSecondsRemaining() {
     return Math.max(0, Math.ceil((loginLockedUntil - Date.now()) / 1000));
   }
+
+}
