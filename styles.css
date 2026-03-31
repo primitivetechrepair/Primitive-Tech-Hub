@@ -74,13 +74,13 @@ body {
   overscroll-behavior-x: none;
   overscroll-behavior-y: none;
   -webkit-text-size-adjust: 100%;
+  touch-action: none;
 }
 
 body {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  touch-action: manipulation;
 }
 
 #app,
@@ -91,6 +91,13 @@ body {
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+input,
+select,
+textarea {
+  touch-action: manipulation;
 }
 
 button,
