@@ -8,7 +8,14 @@ import { createLeadsService } from "./src/services/leadsService.js";
 import { createAuditService } from "./src/services/auditService.js";
 import { createSyncService } from "./src/services/syncService.js";
 
-import { sha256, deriveKey, encryptJSON, decryptJSON } from "./src/services/cryptoService.js";
+import {
+  sha256,
+  deriveKey,
+  deriveAuthHash,
+  createAuthSalt,
+  encryptJSON,
+  decryptJSON,
+} from "./src/services/cryptoService.js";
 
 import { mapEls } from "./src/ui/mapEls.js";
 import { initTheme, toggleTheme } from "./src/ui/theme.js";
@@ -250,6 +257,8 @@ authController = createAuthController({
   pinKey: PIN_KEY,
   sha256,
   deriveKey,
+  deriveAuthHash,
+  createAuthSalt,
   defaultData,
   loadEncrypted,
   setData,

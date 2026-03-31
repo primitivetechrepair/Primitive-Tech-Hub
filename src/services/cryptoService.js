@@ -8,6 +8,40 @@ export async function sha256(input) {
     .join("");
 }
 
+export async function deriveAuthHash(password, salt) {
+  const enc = new TextEncoder();
+
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(String(password)),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      salt: enc.encode(String(salt)),
+      iterations: 150000,
+      hash: "SHA-256",
+    },
+    keyMaterial,
+    256
+  );
+
+  return Array.from(new Uint8Array(bits))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export function createAuthSalt() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 export async function deriveKey(password) {
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(

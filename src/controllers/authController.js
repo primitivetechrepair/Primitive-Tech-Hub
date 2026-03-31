@@ -8,6 +8,8 @@ export function createAuthController({
   pinKey,
   sha256,
   deriveKey,
+  deriveAuthHash,
+  createAuthSalt,
   defaultData,
   loadEncrypted,
   setData,
@@ -43,8 +45,13 @@ async function handleSetup(e) {
   if (password.length < 6) return setMsg("Password must be at least 6 characters.");
   if (pin && pin.length < 4) return setMsg("PIN must be at least 4 chars.");
 
-  await authStore.setAuthHash({ authKey, sha256, password });
-  await authStore.setPinHash({ pinKey, sha256, pin });
+await authStore.setAuthHash({
+  authKey,
+  deriveAuthHash,
+  createAuthSalt,
+  password,
+});
+await authStore.setPinHash({ pinKey, sha256, pin });
 
   authStore.setSessionOk({ sessionKey });
 
@@ -63,8 +70,11 @@ async function handleSetup(e) {
     const password = el.loginPassword.value;
     const pin = el.loginPin.value.trim();
 
-    const passOK =
-      (await sha256(password)) === authStore.getAuthHash({ authKey });
+    const authRecord = authStore.getAuthRecord({ authKey });
+
+const passOK = authRecord
+  ? (await deriveAuthHash(password, authRecord.salt)) === authRecord.hash
+  : false;
 
     const pinHash = authStore.getPinHash({ pinKey });
     const pinOK = pinHash && pin ? (await sha256(pin)) === pinHash : true;
