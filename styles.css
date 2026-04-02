@@ -3937,4 +3937,34 @@ table thead th {
 #leadsBody td:nth-child(13) .lead-parts-cell .lead-action-btn {
   flex-shrink: 0;
 }
+
+/* ===== Empty State Center Fix (Leads Table) ===== */
+.empty-state-row td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 24px 12px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+@media (max-width: 720px) {
+  .empty-state-row td {
+    padding: 32px 12px;
+  }
+
+  .empty-icon {
+    font-size: 28px;
+  }
+
+  .empty-title {
+    font-size: 1.05rem;
+  }
+}
+
 }
