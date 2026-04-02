@@ -66,6 +66,20 @@ html, body {
   height: 100%;
 }
 
+/* ===== Auth/App Fade Transitions ===== */
+#authScreen,
+#app {
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+/* Hidden state override */
+#authScreen.hidden,
+#app.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 html,
 body {
   width: 100%;

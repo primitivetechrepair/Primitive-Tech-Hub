@@ -1,14 +1,36 @@
 // src/ui/appVisibility.js
 
-export function showLockedUI(el) {
-  el.authScreen.classList.remove("hidden");
-  el.app.classList.add("hidden");
+function fadeOut(el, callback) {
+  el.style.opacity = "0";
+  setTimeout(callback, 200);
+}
 
-  el.loginForm.classList.remove("hidden");
-  el.setupForm.classList.add("hidden");
+function fadeIn(el) {
+  el.style.opacity = "0";
+  el.classList.remove("hidden");
+
+  requestAnimationFrame(() => {
+    el.style.opacity = "1";
+  });
+}
+
+export function showLockedUI(el) {
+  fadeOut(el.app, () => {
+    el.app.classList.add("hidden");
+
+    el.authScreen.classList.remove("hidden");
+    fadeIn(el.authScreen);
+
+    el.loginForm.classList.remove("hidden");
+    el.setupForm.classList.add("hidden");
+  });
 }
 
 export function showUnlockedUI(el) {
-  el.authScreen.classList.add("hidden");
-  el.app.classList.remove("hidden");
+  fadeOut(el.authScreen, () => {
+    el.authScreen.classList.add("hidden");
+
+    el.app.classList.remove("hidden");
+    fadeIn(el.app);
+  });
 }
