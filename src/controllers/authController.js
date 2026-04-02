@@ -76,6 +76,7 @@ export function createAuthController({
 
     setFormBusy(el.setupForm, true, "Saving...");
     setMsg("", "");
+    const startTime = Date.now();
 
     try {
       await authStore.setAuthHash({
@@ -96,7 +97,12 @@ export function createAuthController({
 
       if (typeof renderAll === "function") renderAll();
     } finally {
-      setFormBusy(el.setupForm, false);
+      const elapsed = Date.now() - startTime;
+      const delay = Math.max(0, 300 - elapsed);
+
+      setTimeout(() => {
+        setFormBusy(el.setupForm, false);
+      }, delay);
     }
   }
 
@@ -113,6 +119,7 @@ export function createAuthController({
     const pin = el.loginPin.value.trim();
 
     setFormBusy(el.loginForm, true, "Unlocking...");
+    const startTime = Date.now();
 
     try {
       const authRecord = authStore.getAuthRecord({ authKey });
@@ -148,7 +155,12 @@ export function createAuthController({
       authStore.setSessionOk({ sessionKey });
       showApp();
     } finally {
-      setFormBusy(el.loginForm, false);
+      const elapsed = Date.now() - startTime;
+      const delay = Math.max(0, 300 - elapsed);
+
+      setTimeout(() => {
+        setFormBusy(el.loginForm, false);
+      }, delay);
     }
   }
 
