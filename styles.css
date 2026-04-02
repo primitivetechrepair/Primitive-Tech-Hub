@@ -3967,4 +3967,36 @@ table thead th {
   }
 }
 
+/* ===== Leads empty state mobile centering fix ===== */
+@media (max-width: 700px) {
+  #leadsBody tr.empty-state-row {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #leadsBody tr.empty-state-row td {
+    display: block;
+    width: 100%;
+    border: 0 !important;
+    padding: 32px 12px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    background: transparent !important;
+  }
+
+  #leadsBody tr.empty-state-row .empty-state {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+  }
+}
+
 }
