@@ -7,7 +7,11 @@ export function showModal(
     let focusTimer = null;
 
     el.modalTitle.textContent = title;
-    el.modalMessage.textContent = message;
+    if (typeof message === "string" && message.includes("<")) {
+  el.modalMessage.innerHTML = message;
+} else {
+  el.modalMessage.textContent = message;
+}
     el.modalConfirmBtn.textContent = confirmText;
 
     el.modalInput.value = '';

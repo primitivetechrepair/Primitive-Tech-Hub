@@ -4033,4 +4033,47 @@ table thead th {
   }
 }
 
+/* ===== Stock Alert Modal ===== */
+
+.stock-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.stock-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stock-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.4px;
+}
+
+.stock-title.danger {
+  color: #ff6b6b;
+}
+
+.stock-title.warning {
+  color: #ffd166;
+}
+
+.stock-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  font-size: 0.9rem;
+}
+
+.stock-qty {
+  font-weight: 600;
+  opacity: 0.9;
+}
+
 }

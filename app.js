@@ -566,22 +566,26 @@ if (!inventorySyncOnlineWired) {
   }
 
   runAfterUnlock({
-    el,
-    data,
-    esc,
-    appDataStore,
-    themeKey: THEME_KEY,
-    initTheme,
-    settingsUI,
-    connectivityController,
-    applyCustomDropdowns,
-    renderAllController,
-    renderAll: renderAllNow,
-    showSkeletonsOnce,
-    maybeNotifyLowStockService,
-    getData,
-    toast,
-  });
+  el,
+  data,
+  esc,
+  appDataStore,
+  themeKey: THEME_KEY,
+  initTheme,
+  settingsUI,
+  connectivityController,
+  applyCustomDropdowns,
+  renderAllController,
+  renderAll: renderAllNow,
+  showSkeletonsOnce,
+  maybeNotifyLowStockService: (args) =>
+    maybeNotifyLowStockService({
+      ...args,
+      showModal: (opts) => showModal(el, opts),
+    }),
+  getData,
+  toast,
+});
 }
 
 function addAudit(action, details = {}) {
