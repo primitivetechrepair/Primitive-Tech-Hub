@@ -3999,4 +3999,27 @@ table thead th {
   }
 }
 
+/* ===== Fix inventory scroll blocking on mobile ===== */
+@media (max-width: 720px) {
+
+  /* Allow vertical scrolling inside interactive elements */
+  .inventory-table input,
+  .inventory-table select,
+  .inventory-table button,
+  .inventory-table .inline-edit {
+    touch-action: pan-y;
+  }
+
+  /* Prevent elements from trapping gestures */
+  .inventory-table td,
+  .inventory-table tr {
+    touch-action: pan-y;
+  }
+
+  /* Keep swipe actions horizontal only (if used) */
+  .inventory-table tr {
+    touch-action: pan-y;
+  }
+}
+
 }
