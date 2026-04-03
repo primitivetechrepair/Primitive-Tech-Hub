@@ -4076,15 +4076,17 @@ table thead th {
   opacity: 0.9;
 }
 
-/* ===== Modal scroll fix ===== */
+/* ===== Modal layout fix (account for bottom bar) ===== */
 #appModal {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* ⬅️ changed from center */
   justify-content: center;
+  padding-top: 6vh;
+  padding-bottom: 90px; /* ⬅️ space for bottom nav */
 }
 
 #appModal .modal-content {
-  max-height: 85vh;
+  max-height: calc(100vh - 140px); /* ⬅️ prevents overlap */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
