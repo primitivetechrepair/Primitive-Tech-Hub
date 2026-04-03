@@ -9,27 +9,70 @@ export function createLeadPartsController(ctx) {
   const { el, getData, persist, toast } = ctx;
 
   function addSwipeQuickUse(row, itemID) {
-    let startX = 0;
+  let startX = 0;
+  let startY = 0;
+  let endX = 0;
+  let endY = 0;
+  let tracking = false;
 
-    row.addEventListener(
-      "touchstart",
-      (e) => {
-        startX = e.changedTouches[0].clientX;
-      },
-      { passive: true }
-    );
+  row.addEventListener(
+    "touchstart",
+    (e) => {
+      const touch = e.changedTouches[0];
+      if (!touch) return;
 
-    row.addEventListener(
-      "touchend",
-      (e) => {
-        const diff = e.changedTouches[0].clientX - startX;
-        if (diff < -80) {
-          ctx.quickUseItem?.(itemID, 1);
-        }
-      },
-      { passive: true }
-    );
-  }
+      startX = touch.clientX;
+      startY = touch.clientY;
+      endX = touch.clientX;
+      endY = touch.clientY;
+      tracking = true;
+    },
+    { passive: true }
+  );
+
+  row.addEventListener(
+    "touchmove",
+    (e) => {
+      if (!tracking) return;
+
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+
+      endX = touch.clientX;
+      endY = touch.clientY;
+    },
+    { passive: true }
+  );
+
+  row.addEventListener(
+    "touchend",
+    () => {
+      if (!tracking) return;
+      tracking = false;
+
+      const diffX = endX - startX;
+      const diffY = endY - startY;
+
+      const isStrongLeftSwipe =
+        diffX <= -60 &&
+        Math.abs(diffX) > Math.abs(diffY) &&
+        Math.abs(diffY) < 45;
+
+      if (isStrongLeftSwipe) {
+        ctx.quickUseItem?.(itemID, 1);
+      }
+    },
+    { passive: true }
+  );
+
+  row.addEventListener(
+    "touchcancel",
+    () => {
+      tracking = false;
+    },
+    { passive: true }
+  );
+}
 
 async function removePartFromLead(leadID, itemID) {
   const data = getData();
