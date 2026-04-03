@@ -4077,7 +4077,7 @@ table thead th {
 }
 
 
-/* ===== Modal layout refined ===== */
+/* ===== Modal layout refined (mobile + desktop) ===== */
 #appModal {
   display: grid;
   place-items: center;
@@ -4086,12 +4086,19 @@ table thead th {
 }
 
 #appModal .modal-panel {
-  width: min(92vw, 460px);
+  width: min(92vw, 520px);
   max-height: calc(100vh - 150px - env(safe-area-inset-bottom));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
-  padding: 20px 16px 20px; /* even top/bottom spacing */
+  padding: 20px 16px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(15, 18, 22, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255,255,255,0.03) inset;
 }
 
 /* Real modal title/message spacing */
@@ -4117,7 +4124,7 @@ table thead th {
   gap: 10px;
   margin-top: 12px;
   margin-bottom: 0;
-  padding-bottom: 4px; /* slight extra breathing room under Got It */
+  padding-bottom: 4px;
 }
 
 /* Hide Cancel button */
@@ -4132,21 +4139,39 @@ table thead th {
   margin: 0;
 }
 
+@media (min-width: 901px) {
+  #appModal {
+    padding: 32px;
+  }
+
+  #appModal .modal-panel {
+    width: min(560px, 90vw);
+    max-height: calc(100vh - 64px);
+    padding: 24px 20px 24px;
+    border-radius: 14px;
+  }
+
+  #appModal #modalTitle {
+    margin-bottom: 14px;
+  }
+
+  #appModal #modalMessage {
+    margin-bottom: 18px;
+  }
+
+  .stock-alert {
+    max-height: 50vh;
+  }
+
+  #appModal #modalConfirmBtn {
+    min-width: 140px;
+  }
+}
+
 @media (max-width: 900px) {
   #appModal .modal-panel {
     max-height: calc(100vh - 160px - env(safe-area-inset-bottom));
   }
-}
-
-/* ===== Modal border enhancement ===== */
-#appModal .modal-panel {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 12px;
-  background: rgba(15, 18, 22, 0.95); /* subtle depth */
-  backdrop-filter: blur(8px); /* premium glass effect */
-  box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255,255,255,0.03) inset;
 }
 
 }
