@@ -54,7 +54,7 @@ export function showModal(
       resolve(result);
     };
 
-    el.modalCancelBtn.onclick = () => close(false);
+    el.modalCancelBtn.style.display = "none";
     el.modalConfirmBtn.onclick = () => close(requireInput ? el.modalInput.value : true);
   });
 }

@@ -4077,20 +4077,19 @@ table thead th {
 }
 
 /* ===== Modal layout fix (real selectors) ===== */
+/* ===== Modal layout refined ===== */
 #appModal {
   display: grid;
   place-items: center;
-  padding: 16px;
-  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  padding: 20px 16px calc(110px + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
 #appModal .modal-panel {
   width: min(92vw, 460px);
-  max-height: calc(100vh - 140px - env(safe-area-inset-bottom));
+  max-height: calc(100vh - 160px - env(safe-area-inset-bottom));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  margin-bottom: calc(90px + env(safe-area-inset-bottom));
 }
 
 .stock-alert {
@@ -4104,6 +4103,17 @@ table thead th {
     max-height: calc(100vh - 170px - env(safe-area-inset-bottom));
     margin-bottom: calc(100px + env(safe-area-inset-bottom));
   }
+}
+
+/* ===== Modal confirm button cleanup ===== */
+#appModal .modal-actions {
+  display: flex;
+  justify-content: center;
+}
+
+#appModal .modal-actions button {
+  min-width: 120px;
+  font-weight: 600;
 }
 
 }
