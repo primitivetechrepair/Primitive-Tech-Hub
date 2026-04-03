@@ -4076,7 +4076,7 @@ table thead th {
   opacity: 0.9;
 }
 
-/* ===== Modal layout fix (real selectors) ===== */
+
 /* ===== Modal layout refined ===== */
 #appModal {
   display: grid;
@@ -4087,33 +4087,55 @@ table thead th {
 
 #appModal .modal-panel {
   width: min(92vw, 460px);
-  max-height: calc(100vh - 160px - env(safe-area-inset-bottom));
+  max-height: calc(100vh - 150px - env(safe-area-inset-bottom));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+  padding: 20px 16px 20px; /* even top/bottom spacing */
 }
 
+/* Real modal title/message spacing */
+#appModal #modalTitle {
+  margin: 0 0 12px;
+}
+
+#appModal #modalMessage {
+  margin: 0 0 16px;
+}
+
+/* Stock alert scroll area */
 .stock-alert {
   max-height: 45vh;
   overflow-y: auto;
   padding-right: 4px;
 }
 
-@media (max-width: 900px) {
-  #appModal .modal-panel {
-    max-height: calc(100vh - 170px - env(safe-area-inset-bottom));
-    margin-bottom: calc(100px + env(safe-area-inset-bottom));
-  }
-}
-
-/* ===== Modal confirm button cleanup ===== */
-#appModal .modal-actions {
+/* Real modal button row */
+#appModal .row.wrap {
   display: flex;
   justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  margin-bottom: 0;
+  padding-bottom: 4px; /* slight extra breathing room under Got It */
 }
 
-#appModal .modal-actions button {
+/* Hide Cancel button */
+#appModal #modalCancelBtn {
+  display: none !important;
+}
+
+/* Got It button */
+#appModal #modalConfirmBtn {
   min-width: 120px;
   font-weight: 600;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  #appModal .modal-panel {
+    max-height: calc(100vh - 160px - env(safe-area-inset-bottom));
+  }
 }
 
 }
