@@ -4022,4 +4022,15 @@ table thead th {
   }
 }
 
+/* ===== Inventory swipe zone (mobile) ===== */
+@media (max-width: 720px) {
+  .inv-item-header {
+    touch-action: pan-y;
+  }
+
+  .inv-item-text {
+    touch-action: pan-y;
+  }
+}
+
 }

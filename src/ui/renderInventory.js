@@ -512,7 +512,8 @@ function buildInventoryRow(item, ctx, q) {
   tr.querySelector(".deleteInventoryBtn").onclick = () =>
     deleteInventoryItem(item.itemID);
 
-  addSwipeQuickUse(tr, item.itemID);
+  const swipeZone = tr.querySelector(".inv-item-header") || tr;
+addSwipeQuickUse(swipeZone, item.itemID);
 
   return tr;
 }
