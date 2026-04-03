@@ -4138,4 +4138,15 @@ table thead th {
   }
 }
 
+/* ===== Modal border enhancement ===== */
+#appModal .modal-panel {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(15, 18, 22, 0.95); /* subtle depth */
+  backdrop-filter: blur(8px); /* premium glass effect */
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255,255,255,0.03) inset;
+}
+
 }
