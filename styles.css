@@ -4076,26 +4076,34 @@ table thead th {
   opacity: 0.9;
 }
 
-/* ===== Modal layout fix (account for bottom bar) ===== */
+/* ===== Modal layout fix (real selectors) ===== */
 #appModal {
-  display: flex;
-  align-items: flex-start; /* ⬅️ changed from center */
-  justify-content: center;
-  padding-top: 6vh;
-  padding-bottom: 90px; /* ⬅️ space for bottom nav */
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
 }
 
-#appModal .modal-content {
-  max-height: calc(100vh - 140px); /* ⬅️ prevents overlap */
+#appModal .modal-panel {
+  width: min(92vw, 460px);
+  max-height: calc(100vh - 140px - env(safe-area-inset-bottom));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  margin-bottom: calc(90px + env(safe-area-inset-bottom));
 }
 
-/* Stock alert scroll area */
 .stock-alert {
-  max-height: 55vh;
+  max-height: 45vh;
   overflow-y: auto;
   padding-right: 4px;
+}
+
+@media (max-width: 900px) {
+  #appModal .modal-panel {
+    max-height: calc(100vh - 170px - env(safe-area-inset-bottom));
+    margin-bottom: calc(100px + env(safe-area-inset-bottom));
+  }
 }
 
 }
