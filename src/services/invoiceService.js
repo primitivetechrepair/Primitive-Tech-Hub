@@ -106,24 +106,22 @@ export function createInvoiceService({
   return lines;
 };
 
-const makeQrDataUrl = async (text) => {
+const getQrPngBytes = async (text) => {
   if (!text) return null;
 
   try {
     const qrUrl =
       `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(String(text))}`;
 
-    const res = await fetch(qrUrl);
+    const res = await fetch(qrUrl, { cache: "no-store" });
     if (!res.ok) throw new Error(`QR HTTP ${res.status}`);
 
-    const blob = await res.blob();
+    const contentType = res.headers.get("content-type") || "";
+    if (!contentType.includes("image")) {
+      throw new Error(`Unexpected QR content-type: ${contentType}`);
+    }
 
-    return await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
+    return await res.arrayBuffer();
   } catch (err) {
     console.error("QR generation failed:", err);
     return null;
@@ -330,10 +328,9 @@ box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 
 drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
 
-const qrDataUrl = await makeQrDataUrl(invoice.zellePhone || "");
+const qrBytes = await getQrPngBytes(invoice.zellePhone || "");
 
-if (qrDataUrl) {
-  const qrBytes = await fetch(qrDataUrl).then((res) => res.arrayBuffer());
+if (qrBytes) {
   const qrImage = await pdfDoc.embedPng(qrBytes);
 
   page.drawImage(qrImage, {
