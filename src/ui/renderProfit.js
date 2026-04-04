@@ -11,16 +11,24 @@ export function renderProfit(ctx) {
     const labor = Number(lead.laborAmount || 0);
     const profit = repairTotal - partsCost;
 
-    if (profit <= 0 && labor <= 0) return;
+    const hasProfit = profit > 0;
+    const hasLabor = labor > 0;
 
-    totalProfit += profit;
+    if (!hasProfit && !hasLabor) return;
 
-    const laborText = labor > 0 ? ` • Labor $${labor.toFixed(2)}` : "";
+    totalProfit += hasProfit ? profit : labor;
 
-    addListItem(
-      el.profitList,
-      `${lead.leadID} (${lead.customerName}): $${profit.toFixed(2)}${laborText}`
-    );
+    let text = `${lead.leadID} (${lead.customerName}): `;
+
+    if (hasProfit && hasLabor) {
+      text += `$${profit.toFixed(2)} • Labor $${labor.toFixed(2)}`;
+    } else if (hasProfit) {
+      text += `$${profit.toFixed(2)}`;
+    } else {
+      text += `Labor $${labor.toFixed(2)}`;
+    }
+
+    addListItem(el.profitList, text);
   });
 
   const li = document.createElement("li");
