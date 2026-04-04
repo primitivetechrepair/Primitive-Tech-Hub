@@ -5,12 +5,15 @@ export function renderLabor(ctx) {
 
   el.laborList.innerHTML = "";
 
-  (data.leads || []).slice(0, 40).forEach((lead) => {
-    const labor = Number(lead.laborAmount || 0);
+  (data.leads || [])
+    .filter((lead) => Number(lead.laborAmount || 0) > 0)
+    .slice(0, 40)
+    .forEach((lead) => {
+      const labor = Number(lead.laborAmount || 0);
 
-    addListItem(
-      el.laborList,
-      `${lead.leadID} (${lead.customerName}): $${labor.toFixed(2)}`
-    );
-  });
+      addListItem(
+        el.laborList,
+        `${lead.leadID} (${lead.customerName}): $${labor.toFixed(2)}`
+      );
+    });
 }
