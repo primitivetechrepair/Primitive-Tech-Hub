@@ -304,38 +304,74 @@ export function createInvoiceService({
     }
 
     // Payment section
-    const paymentBoxW = 170;
-    const paymentBoxH = 170;
-    const paymentBoxX = width - M - paymentBoxW;
-    const paymentBoxY = 70;
+    const getRemotePngBytes = async (url) => {
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.arrayBuffer();
+  } catch (err) {
+    console.error("Remote image fetch failed:", err);
+    return null;
+  }
+};
 
-    box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
+const paymentBoxW = 220;
+const paymentBoxH = 170;
+const paymentBoxX = width - M - paymentBoxW;
+const paymentBoxY = 70;
 
-    drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
+box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 
-    try {
-      const zelleBytes = await fetch("/zelle-qr.jpg").then((res) => {
-        if (!res.ok) throw new Error("Zelle QR not found");
-        return res.arrayBuffer();
-      });
+drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
 
-      const zelleImage = await pdfDoc.embedJpg(zelleBytes);
+// Zelle QR (real uploaded image)
+try {
+  const zelleBytes = await fetch("/public/zelle-qr.jpg").then((res) => {
+    if (!res.ok) throw new Error("Zelle QR not found");
+    return res.arrayBuffer();
+  });
 
-      page.drawImage(zelleImage, {
-        x: paymentBoxX + 35,
-        y: paymentBoxY + 70,
-        width: 100,
-        height: 100,
-      });
+  const zelleImage = await pdfDoc.embedJpg(zelleBytes);
 
-      drawText("Zelle", paymentBoxX + 60, paymentBoxY + 58, 9, true, colorText);
-    } catch (err) {
-      drawText("Zelle QR missing", paymentBoxX + 24, paymentBoxY + 110, 9, true, colorMuted);
-    }
+  page.drawImage(zelleImage, {
+    x: paymentBoxX + 16,
+    y: paymentBoxY + 58,
+    width: 82,
+    height: 82,
+  });
 
-    drawText("Cash App:", paymentBoxX + 12, paymentBoxY + 40, 8.5, true, colorMuted);
-    drawText("$Primitiverepairs", paymentBoxX + 12, paymentBoxY + 28, 9, true, colorText);
-    drawText("Use invoice # when paying", paymentBoxX + 12, paymentBoxY + 14, 8, false, colorMuted);
+  drawText("Zelle", paymentBoxX + 40, paymentBoxY + 46, 9, true, colorText);
+} catch (err) {
+  drawText("Zelle QR missing", paymentBoxX + 16, paymentBoxY + 92, 9, true, colorMuted);
+}
+
+// Cash App QR (generated from actual Cash App URL)
+try {
+  const cashAppQrUrl =
+    "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
+    encodeURIComponent("https://cash.app/$Primitiverepairs");
+
+  const cashBytes = await getRemotePngBytes(cashAppQrUrl);
+
+  if (cashBytes) {
+    const cashImage = await pdfDoc.embedPng(cashBytes);
+
+    page.drawImage(cashImage, {
+      x: paymentBoxX + 122,
+      y: paymentBoxY + 58,
+      width: 82,
+      height: 82,
+    });
+
+    drawText("Cash App", paymentBoxX + 138, paymentBoxY + 46, 9, true, colorText);
+  } else {
+    drawText("Cash App QR missing", paymentBoxX + 118, paymentBoxY + 92, 9, true, colorMuted);
+  }
+} catch (err) {
+  drawText("Cash App QR missing", paymentBoxX + 118, paymentBoxY + 92, 9, true, colorMuted);
+}
+
+drawText("Use invoice # when paying", paymentBoxX + 30, paymentBoxY + 18, 8.5, false, colorMuted);
 
     if (invoice.paymentMethod) {
       drawText(
