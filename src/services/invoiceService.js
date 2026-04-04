@@ -274,7 +274,7 @@ export function createInvoiceService({
     const totalsW = 260;
     const totalsH = invoice.laborAmount > 0 ? 118 : 92;
     const totalsX = width - M - totalsW;
-    const totalsY = -100;
+    const totalsY = 120;
 
     box(totalsX, totalsY, totalsW, totalsH);
 
