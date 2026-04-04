@@ -470,6 +470,7 @@ if (invoice.paymentMethod) {
       paymentStatus: lead.paymentStatus || "Unpaid",
       laborAmount,
       repairAmount,
+      zellePhone: "786.660.0155",
     };
 
     invoice.lineItems = [
