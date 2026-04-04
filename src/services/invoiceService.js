@@ -110,11 +110,19 @@ const makeQrDataUrl = async (text) => {
   if (!text) return null;
 
   try {
-    const { default: QRCode } = await import("https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm");
+    const qrUrl =
+      `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(String(text))}`;
 
-    return await QRCode.toDataURL(String(text), {
-      margin: 1,
-      width: 180,
+    const res = await fetch(qrUrl);
+    if (!res.ok) throw new Error(`QR HTTP ${res.status}`);
+
+    const blob = await res.blob();
+
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
     });
   } catch (err) {
     console.error("QR generation failed:", err);
