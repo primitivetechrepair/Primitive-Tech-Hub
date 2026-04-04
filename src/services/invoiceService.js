@@ -107,23 +107,36 @@ export function createInvoiceService({
 };
 
 const getQrPngBytes = async (text) => {
-  if (!text) return null;
+  if (!text) {
+    console.error("[QR DEBUG] No text provided for QR");
+    return null;
+  }
 
   try {
     const qrUrl =
       `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(String(text))}`;
 
+    console.log("[QR DEBUG] Fetching QR from:", qrUrl);
+
     const res = await fetch(qrUrl, { cache: "no-store" });
+
+    console.log("[QR DEBUG] Response status:", res.status);
+    console.log("[QR DEBUG] Response ok:", res.ok);
+    console.log("[QR DEBUG] Response type:", res.type);
+    console.log("[QR DEBUG] Response URL:", res.url);
+
     if (!res.ok) throw new Error(`QR HTTP ${res.status}`);
 
     const contentType = res.headers.get("content-type") || "";
+    console.log("[QR DEBUG] content-type:", contentType);
+
     if (!contentType.includes("image")) {
       throw new Error(`Unexpected QR content-type: ${contentType}`);
     }
 
     return await res.arrayBuffer();
   } catch (err) {
-    console.error("QR generation failed:", err);
+    console.error("[QR DEBUG] QR generation failed:", err);
     return null;
   }
 };
