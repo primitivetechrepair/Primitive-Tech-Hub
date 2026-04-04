@@ -194,37 +194,25 @@ if (invoice.address) {
   }
 }
 
-    // Right column: device/service
-    const rx = M + 320;
-    let ry = y - 18;
+    // Right column: compact luxury device/service summary
+const rx = M + 320;
+let ry = y - 18;
 
-    drawText("DEVICE", rx, ry, SMALL, true, colorMuted);
-ry -= 16;
+drawText("DEVICE / SERVICE", rx, ry, SMALL, true, colorMuted);
+ry -= 18;
 
-// Combine device + series
-const deviceLine = [
-  invoice.device || "—",
-  invoice.series ? `(${invoice.series})` : ""
-].join(" ").trim();
+const compactInfo = [
+  `${invoice.device || "—"}${invoice.series ? ` (${invoice.series})` : ""}`,
+  `IMEI / SERIAL: ${invoice.imeiSerial || "—"}`,
+  `REPAIR: ${invoice.repair || "—"}`,
+].join("  •  ");
 
-drawText(deviceLine, rx, ry, BASE, true);
+const compactLines = wrap(compactInfo, width - M - rx - 12, SMALL, false);
 
-ry -= 22;
-
-    ry -= 18;
-    drawText("IMEI / SERIAL", rx, ry, SMALL, true, colorMuted);
-    ry -= 18;
-    drawText(invoice.imeiSerial || "—", rx, ry, SMALL, false, colorMuted);
-
-    ry -= 26;
-    drawText("REPAIR", rx, ry, SMALL, true, colorMuted);
-    ry -= 18;
-
-    const repairLines = wrap(invoice.repair || "—", width - M - rx - 12, SMALL, false);
-    for (const ln of repairLines) {
-      drawText(ln, rx, ry, SMALL, false, colorMuted);
-      ry -= 14;
-    }
+for (const ln of compactLines) {
+  drawText(ln, rx, ry, SMALL, false, colorText);
+  ry -= 14;
+}
 
     y = y - panelH - 18;
 
