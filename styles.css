@@ -310,6 +310,12 @@ table {
   width: 100%;
 }
 
+.parts-cost-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .analytics-grid ul,
 #auditLog,
 #customerHistory {
