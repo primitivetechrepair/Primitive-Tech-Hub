@@ -27,7 +27,8 @@ export function mapEls() {
     // Lists
     'forecastList',
     'profitList',
-    'restockList',
+    'laborList',
+    'restockList',  
     'reminderList',
     'invoiceHistoryList',
     'auditLog',
