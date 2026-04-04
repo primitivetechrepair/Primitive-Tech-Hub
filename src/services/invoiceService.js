@@ -251,35 +251,25 @@ ry -= 22;
         ? invoice.lineItems
         : [{ desc: "No items recorded", qty: "", amount: "" }];
 
-    const totalsW = 260;
+        const totalsW = 260;
     const totalsH = invoice.laborAmount > 0 ? 118 : 92;
     const totalsX = width - M - totalsW;
-    const totalsY = 120;
+    const totalsY = 88;
 
-    const paymentMethodY = 116;
+    const paymentMethodY = 120;
     const warrantyY = 88;
     const warrantyH = 24;
+    const warrantyX = M;
+    const warrantyW = 196;
 
-    const paymentBoxW = totalsW;
-    const paymentBoxX = totalsX;
-    const paymentGapBelow = 10;
-    const paymentGapAbove = 16;
-    const preferredPaymentBoxH = 96;
-    const minPaymentBoxH = 82;
+    const paymentRowGap = 16;
+    const paymentBoxW = 220;
+    const paymentBoxH = 94;
+    const paymentBoxX = width - M - paymentBoxW;
+    const paymentBoxY = totalsY + totalsH + paymentRowGap;
 
-    const paymentBottomY = warrantyY + warrantyH + paymentGapBelow;
-    const maxPaymentTopY = totalsY + totalsH - 6;
-    const availablePaymentH = Math.max(
-      minPaymentBoxH,
-      maxPaymentTopY - paymentBottomY
-    );
-    const paymentBoxH = Math.max(
-      minPaymentBoxH,
-      Math.min(preferredPaymentBoxH, availablePaymentH)
-    );
-    const paymentBoxY = paymentBottomY;
-
-    const tableStopY = paymentBoxY + paymentBoxH + paymentGapAbove;
+    const tableGapAbovePayment = 18;
+    const tableStopY = paymentBoxY + paymentBoxH + tableGapAbovePayment;
 
     for (const it of items) {
       if (y < tableStopY) break;
@@ -325,7 +315,7 @@ ry -= 22;
 
     totals.push(["Total Due", money(totalDue)]);
 
-    let ty = totalsY + totalsH - 22;
+    let ty = totalsY + totalsH - 18;
 
     if (isPaid) {
       drawText("PAID", totalsX + 12, ty, 14, true, colorPaid);
@@ -358,19 +348,19 @@ box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 drawText(
   "PAYMENT",
   paymentBoxX + 12,
-  paymentBoxY + paymentBoxH - 18,
+  paymentBoxY + paymentBoxH - 16,
   SMALL,
   true,
   colorMuted
 );
 
 // Responsive QR sizing and placement
-const qrSize = Math.max(42, Math.min(58, paymentBoxH - 36));
-const qrTopY = paymentBoxY + paymentBoxH - 24 - qrSize;
-const leftQrX = paymentBoxX + 22;
-const rightQrX = paymentBoxX + paymentBoxW - 22 - qrSize;
-const labelY = qrTopY - 10;
-const noteY = paymentBoxY + 8;
+const qrSize = 42;
+const qrTopY = paymentBoxY + paymentBoxH - 56;
+const leftQrX = paymentBoxX + 24;
+const rightQrX = paymentBoxX + paymentBoxW - 24 - qrSize;
+const labelY = qrTopY - 12;
+const noteY = paymentBoxY + 12;
 
 // Zelle QR (real uploaded image)
 try {
@@ -432,15 +422,15 @@ drawText(
       drawText(
         `Payment Method: ${invoice.paymentMethod}`,
         M,
-        116,
+       paymentMethodY,
         SMALL,
         true,
         colorMuted
       );
     }
 
-    box(M, 88, 196, 24);
-    drawText("90-DAY REPAIR WARRANTY", M + 12, 96, 9, true, colorText);
+        box(warrantyX, warrantyY, warrantyW, warrantyH);
+    drawText("90-DAY REPAIR WARRANTY", warrantyX + 12, warrantyY + 8, 9, true, colorText);
 
     drawText("Thank you for choosing Primitive Tech.", M, 64, SMALL, false, colorMuted);
     drawText(
