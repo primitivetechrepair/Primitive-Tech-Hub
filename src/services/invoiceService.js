@@ -321,8 +321,8 @@ const paymentBoxW = totalsW;
 const paymentBoxX = totalsX;
 const paymentBoxY = totalsY + totalsH + paymentGap;
 
-const preferredPaymentBoxH = 118;
-const minPaymentBoxH = 96;
+const preferredPaymentBoxH = 102;
+const minPaymentBoxH = 88;
 const maxPaymentBoxH = Math.max(minPaymentBoxH, height - M - paymentBoxY - 4);
 const paymentBoxH = Math.max(
   minPaymentBoxH,
@@ -341,12 +341,12 @@ drawText(
 );
 
 // Responsive QR sizing and placement
-const qrSize = Math.max(54, Math.min(72, paymentBoxH - 42));
+const qrSize = Math.max(46, Math.min(62, paymentBoxH - 38));
 const qrTopY = paymentBoxY + paymentBoxH - 28 - qrSize;
 const leftQrX = paymentBoxX + 22;
 const rightQrX = paymentBoxX + paymentBoxW - 22 - qrSize;
-const labelY = qrTopY - 12;
-const noteY = paymentBoxY + 12;
+const labelY = qrTopY - 10;
+const noteY = paymentBoxY + 10;
 
 // Zelle QR (real uploaded image)
 try {
