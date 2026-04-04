@@ -355,10 +355,12 @@ export function createInvoiceService({
 
     // Zelle QR
     try {
-      const zelleBytes = await fetch("/public/zelle-qr.jpg").then((res) => {
-        if (!res.ok) throw new Error("Zelle QR not found");
-        return res.arrayBuffer();
-      });
+      const zelleBytes = await fetch(`/public/zelle-qr.jpg?v=${Date.now()}`, {
+  cache: "no-store",
+}).then((res) => {
+  if (!res.ok) throw new Error("Zelle QR not found");
+  return res.arrayBuffer();
+});
 
       const zelleImage = await pdfDoc.embedJpg(zelleBytes);
 
