@@ -138,7 +138,7 @@ export function createInvoiceService({
     const metaW = 220;
     const metaH = 96;
     const metaX = width - M - metaW;
-    const metaY = y - 40;
+    const metaY = y - 64;
 
     box(metaX, metaY, metaW, metaH);
 
