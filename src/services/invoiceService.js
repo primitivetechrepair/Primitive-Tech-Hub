@@ -90,25 +90,29 @@ export function createInvoiceService({
       });
 
     const wrap = (txt, maxWidth, size = BASE, bold = false) => {
-      const words = String(txt || "").split(/\s+/).filter(Boolean);
-      if (!words.length) return [""];
-
-      const lines = [];
-      let cur = words[0];
-
-      for (let i = 1; i < words.length; i++) {
-        const test = `${cur} ${words[i]}`;
-        if (widthOf(test, size, bold) <= maxWidth) {
-          cur = test;
-        } else {
-          lines.push(cur);
-          cur = words[i];
-        }
-      }
-
+  const words = String(txt || "").split(/\s+/).filter(Boolean);
+  if (!words.length) return [""];
+  const lines = [];
+  let cur = words[0];
+  for (let i = 1; i < words.length; i++) {
+    const t = `${cur} ${words[i]}`;
+    if (widthOf(t, size, bold) <= maxWidth) cur = t;
+    else {
       lines.push(cur);
-      return lines;
-    };
+      cur = words[i];
+    }
+  }
+  lines.push(cur);
+  return lines;
+};
+
+const makeQrDataUrl = async (text) => {
+  if (!window.QRCode) throw new Error("QRCode library not loaded.");
+  return await window.QRCode.toDataURL(String(text || ""), {
+    margin: 1,
+    width: 180,
+  });
+};
 
     let y = height - M;
 
@@ -299,6 +303,36 @@ export function createInvoiceService({
       drawRightText(v, totalsX + totalsW - 12, ty, isTotal ? 15 : 12, true, colorText);
       ty -= isTotal ? 30 : 22;
     }
+
+    
+const qrDataUrl = await makeQrDataUrl(invoice.zellePhone || "");
+const qrBytes = await fetch(qrDataUrl).then((res) => res.arrayBuffer());
+const qrImage = await pdfDoc.embedPng(qrBytes);
+
+const paymentBoxW = 150;
+const paymentBoxH = 132;
+const paymentBoxX = width - M - paymentBoxW;
+const paymentBoxY = 88;
+
+box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
+
+drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
+
+page.drawImage(qrImage, {
+  x: paymentBoxX + 35,
+  y: paymentBoxY + 42,
+  width: 80,
+  height: 80,
+});
+
+drawText("Zelle: 786.660.0155", paymentBoxX + 12, paymentBoxY + 28, 8.5, true, colorText);
+drawText("Use invoice # when paying", paymentBoxX + 12, paymentBoxY + 14, 8, false, colorMuted);
+
+// ⬇️ EXISTING CODE (leave it)
+if (invoice.paymentMethod) {
+  drawText("Payment Method:", M + 12, y - 50, SMALL, true, colorMuted);
+  drawText(invoice.paymentMethod || "Unspecified", M + 12, y - 66, BASE, true);
+}
 
     if (invoice.paymentMethod) {
       drawText(
