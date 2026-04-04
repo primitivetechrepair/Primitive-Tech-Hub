@@ -161,9 +161,8 @@ export function createInvoiceService({
       (invoice.paymentStatus || "").toLowerCase() === "paid" ? colorPaid : colorText
     );
 
-    y = metaY - 18;
-    line(M, y, width - M, y, 1);
-    y -= 20;
+    y = metaY - 12;
+y -= 16;
 
     const panelH = 186;
     box(M, y - panelH, width - 2 * M, panelH);
@@ -432,14 +431,17 @@ export function createInvoiceService({
     );
 
     if (invoice.paymentMethod) {
-      drawText(
-        `Payment Method: ${invoice.paymentMethod}`,
-        M,
-        paymentMethodY,
-        SMALL,
-        true,
-        colorMuted
-      );
+      const noteText = "Use invoice # when paying";
+const noteWidth = widthOf(noteText, 8.5, false);
+
+drawText(
+  noteText,
+  leftQrX + (qrGroupW / 2) - (noteWidth / 2),
+  noteY,
+  8.5,
+  false,
+  colorMuted
+);
     }
 
     box(warrantyX, warrantyY, warrantyW, warrantyH);
