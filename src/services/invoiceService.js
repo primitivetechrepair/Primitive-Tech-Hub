@@ -477,8 +477,7 @@ return await pdfDoc.save();
     const partsCost = leadPartsCost(lead);
     const data = getData();
 
-    const invoiceNumber = String(data.invoiceCounter || 1).padStart(4, "0");
-    data.invoiceCounter = (data.invoiceCounter || 1) + 1;
+    const invoiceNumber = String(lead.leadID || "0000").replace(/\D+/g, "") || "0000";
 
     const repairAmount = Number(lead.repairCost ?? lead.chargedAmount ?? 0);
     const laborAmount = Number(lead.laborAmount || 0);
