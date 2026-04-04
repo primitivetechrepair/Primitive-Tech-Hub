@@ -304,6 +304,10 @@ table {
   padding: 10px 12px;
 }
 
+.parts-cost-card h4 {
+  text-align: center;
+}
+
 .analytics-grid ul,
 #auditLog,
 #customerHistory {
