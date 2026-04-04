@@ -385,53 +385,43 @@ y -= 16;
       drawText("Zelle QR missing", leftQrX - 4, qrTopY + qrSize / 2, 9, true, colorMuted);
     }
 
-    // Cash App QR
-    try {
-      const cashAppQrUrl =
-        "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
-        encodeURIComponent("https://cash.app/$Primitiverepairs");
+// Cash App QR
+try {
+  const cashAppQrUrl =
+    "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
+    encodeURIComponent("https://cash.app/$Primitiverepairs");
 
-      const cashBytes = await getRemotePngBytes(cashAppQrUrl);
+  const cashBytes = await getRemotePngBytes(cashAppQrUrl);
 
-      if (cashBytes) {
-        const cashImage = await pdfDoc.embedPng(cashBytes);
+  if (cashBytes) {
+    const cashImage = await pdfDoc.embedPng(cashBytes);
 
-        page.drawImage(cashImage, {
-          x: rightQrX,
-          y: qrTopY,
-          width: qrSize,
-          height: qrSize,
-        });
+    page.drawImage(cashImage, {
+      x: rightQrX,
+      y: qrTopY,
+      width: qrSize,
+      height: qrSize,
+    });
 
-        const cashLabel = "Cash App";
-        const cashWidth = widthOf(cashLabel, 9, true);
-
-        drawText(
-          cashLabel,
-          rightQrX + qrSize / 2 - cashWidth / 2,
-          labelY,
-          9,
-          true,
-          colorText
-        );
-      } else {
-        drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
-      }
-    } catch (err) {
-      drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
-    }
+    const cashLabel = "Cash App";
+    const cashWidth = widthOf(cashLabel, 9, true);
 
     drawText(
-      "Use invoice # when paying",
-      paymentBoxX + 56,
-      noteY,
-      8.5,
-      false,
-      colorMuted
+      cashLabel,
+      rightQrX + qrSize / 2 - cashWidth / 2,
+      labelY,
+      9,
+      true,
+      colorText
     );
+  } else {
+    drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
+  }
+} catch (err) {
+  drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
+}
 
-    if (invoice.paymentMethod) {
-      const noteText = "Use invoice # when paying";
+const noteText = "Use invoice # when paying";
 const noteWidth = widthOf(noteText, 8.5, false);
 
 drawText(
@@ -442,22 +432,32 @@ drawText(
   false,
   colorMuted
 );
-    }
 
-    box(warrantyX, warrantyY, warrantyW, warrantyH);
-    drawText("90-DAY REPAIR WARRANTY", warrantyX + 12, warrantyY + 8, 9, true, colorText);
+if (invoice.paymentMethod) {
+  drawText(
+    `Payment Method: ${invoice.paymentMethod}`,
+    M,
+    paymentMethodY,
+    SMALL,
+    true,
+    colorMuted
+  );
+}
 
-    drawText("Thank you for choosing Primitive Tech.", M, 64, SMALL, false, colorMuted);
-    drawText(
-      "Support: primitiverepairs@gmail.com  |  (786) 404-7011  |  www.primitiverepairs.com",
-      M,
-      50,
-      SMALL,
-      false,
-      colorMuted
-    );
+box(warrantyX, warrantyY, warrantyW, warrantyH);
+drawText("90-DAY REPAIR WARRANTY", warrantyX + 12, warrantyY + 8, 9, true, colorText);
 
-    return await pdfDoc.save();
+drawText("Thank you for choosing Primitive Tech.", M, 64, SMALL, false, colorMuted);
+drawText(
+  "Support: primitiverepairs@gmail.com  |  (786) 404-7011  |  www.primitiverepairs.com",
+  M,
+  50,
+  SMALL,
+  false,
+  colorMuted
+);
+
+return await pdfDoc.save();
   }
 
   async function downloadInvoicePdf(invoice) {
