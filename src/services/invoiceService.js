@@ -315,14 +315,38 @@ export function createInvoiceService({
   }
 };
 
-const paymentBoxW = 220;
-const paymentBoxH = 170;
-const paymentBoxX = width - M - paymentBoxW;
-const paymentBoxY = 70;
+// Payment section — anchored above totals, adaptive sizing
+const paymentGap = 10;
+const paymentBoxW = totalsW;
+const paymentBoxX = totalsX;
+const paymentBoxY = totalsY + totalsH + paymentGap;
+
+const preferredPaymentBoxH = 118;
+const minPaymentBoxH = 96;
+const maxPaymentBoxH = Math.max(minPaymentBoxH, height - M - paymentBoxY - 4);
+const paymentBoxH = Math.max(
+  minPaymentBoxH,
+  Math.min(preferredPaymentBoxH, maxPaymentBoxH)
+);
 
 box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 
-drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
+drawText(
+  "PAYMENT",
+  paymentBoxX + 12,
+  paymentBoxY + paymentBoxH - 18,
+  SMALL,
+  true,
+  colorMuted
+);
+
+// Responsive QR sizing and placement
+const qrSize = Math.max(54, Math.min(72, paymentBoxH - 42));
+const qrTopY = paymentBoxY + paymentBoxH - 28 - qrSize;
+const leftQrX = paymentBoxX + 22;
+const rightQrX = paymentBoxX + paymentBoxW - 22 - qrSize;
+const labelY = qrTopY - 12;
+const noteY = paymentBoxY + 12;
 
 // Zelle QR (real uploaded image)
 try {
@@ -334,15 +358,15 @@ try {
   const zelleImage = await pdfDoc.embedJpg(zelleBytes);
 
   page.drawImage(zelleImage, {
-    x: paymentBoxX + 16,
-    y: paymentBoxY + 58,
-    width: 82,
-    height: 82,
+    x: leftQrX,
+    y: qrTopY,
+    width: qrSize,
+    height: qrSize,
   });
 
-  drawText("Zelle", paymentBoxX + 40, paymentBoxY + 46, 9, true, colorText);
+  drawText("Zelle", leftQrX + 16, labelY, 9, true, colorText);
 } catch (err) {
-  drawText("Zelle QR missing", paymentBoxX + 16, paymentBoxY + 92, 9, true, colorMuted);
+  drawText("Zelle QR missing", leftQrX - 4, qrTopY + qrSize / 2, 9, true, colorMuted);
 }
 
 // Cash App QR (generated from actual Cash App URL)
@@ -357,21 +381,28 @@ try {
     const cashImage = await pdfDoc.embedPng(cashBytes);
 
     page.drawImage(cashImage, {
-      x: paymentBoxX + 122,
-      y: paymentBoxY + 58,
-      width: 82,
-      height: 82,
+      x: rightQrX,
+      y: qrTopY,
+      width: qrSize,
+      height: qrSize,
     });
 
-    drawText("Cash App", paymentBoxX + 138, paymentBoxY + 46, 9, true, colorText);
+    drawText("Cash App", rightQrX + 6, labelY, 9, true, colorText);
   } else {
-    drawText("Cash App QR missing", paymentBoxX + 118, paymentBoxY + 92, 9, true, colorMuted);
+    drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
   }
 } catch (err) {
-  drawText("Cash App QR missing", paymentBoxX + 118, paymentBoxY + 92, 9, true, colorMuted);
+  drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
 }
 
-drawText("Use invoice # when paying", paymentBoxX + 30, paymentBoxY + 18, 8.5, false, colorMuted);
+drawText(
+  "Use invoice # when paying",
+  paymentBoxX + 56,
+  noteY,
+  8.5,
+  false,
+  colorMuted
+);
 
     if (invoice.paymentMethod) {
       drawText(
