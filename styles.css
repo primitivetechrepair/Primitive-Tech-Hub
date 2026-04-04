@@ -305,11 +305,9 @@ table {
 }
 
 .parts-cost-card h4 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
   text-align: center;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .analytics-grid ul,
