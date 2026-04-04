@@ -33,6 +33,7 @@ import { renderCharts } from "./src/ui/renderCharts.js";
 import { renderAuditLog } from "./src/ui/renderAuditLog.js";
 import { renderForecast } from "./src/ui/renderForecast.js";
 import { renderProfit } from "./src/ui/renderProfit.js";
+import { renderLabor } from "./src/ui/renderLabor.js";
 import { renderRestock } from "./src/ui/renderRestock.js";
 import { renderReminders } from "./src/ui/renderReminders.js";
 import { renderInventoryOptions } from "./src/ui/renderInventoryOptions.js";
@@ -487,6 +488,7 @@ if (!inventorySyncOnlineWired) {
     renderCharts,
     renderForecast,
     renderProfit,
+    renderLabor,
     renderRestock,
     renderReminders,
     renderAuditLog,

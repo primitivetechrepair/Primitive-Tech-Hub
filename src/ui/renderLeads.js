@@ -112,9 +112,9 @@ export function renderLeads(ctx) {
       .join("");
 
     const partsCost = leadPartsCost(lead);
-    const charged = Number(lead.repairCost ?? lead.chargedAmount ?? 0);
-    const labor = Number(lead.laborAmount || 0);
-    const profit = charged - partsCost;
+const repairTotal = Number(lead.repairCost || 0);
+const labor = Number(lead.laborAmount || 0);
+const profit = repairTotal - partsCost;
 
     const files =
       (lead.files || [])
