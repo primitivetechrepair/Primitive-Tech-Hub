@@ -107,15 +107,20 @@ export function createInvoiceService({
 };
 
 const makeQrDataUrl = async (text) => {
-  if (!window.QRCode || !text) return null;
+  console.log("[QR DEBUG] text:", text);
+  console.log("[QR DEBUG] window.QRCode:", window.QRCode);
+  console.log("[QR DEBUG] globalThis.QRCode:", globalThis.QRCode);
+
+  const QR = window.QRCode || globalThis.QRCode;
+  if (!QR || !text) return null;
 
   try {
-    return await window.QRCode.toDataURL(String(text), {
+    return await QR.toDataURL(String(text), {
       margin: 1,
       width: 180,
     });
   } catch (err) {
-    console.error("QR generation failed:", err);
+    console.error("[QR DEBUG] QR generation failed:", err);
     return null;
   }
 };
