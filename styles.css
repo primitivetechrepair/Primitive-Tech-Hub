@@ -4040,6 +4040,9 @@ table thead th {
   flex-direction: column;
   gap: 14px;
   margin-top: 8px;
+  max-height: 45vh;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .stock-section {
@@ -4065,19 +4068,20 @@ table thead th {
 .stock-row {
   display: flex;
   justify-content: space-between;
-  padding: 6px 10px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.04);
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
   font-size: 0.9rem;
 }
 
 .stock-qty {
   font-weight: 600;
   opacity: 0.9;
+  flex-shrink: 0;
 }
 
-
-/* ===== Modal layout refined (mobile + desktop) ===== */
+/* ===== Modal layout (mobile + desktop) ===== */
 #appModal {
   display: grid;
   place-items: center;
@@ -4091,38 +4095,32 @@ table thead th {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
-  padding: 20px 16px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  background: rgba(15, 18, 22, 0.95);
+  padding: 20px 16px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(15, 18, 22, 0.96);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255,255,255,0.03) inset;
+    0 16px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
 }
 
-/* Real modal title/message spacing */
+/* Modal title/message spacing */
 #appModal #modalTitle {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
 }
 
 #appModal #modalMessage {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
 }
 
-/* Stock alert scroll area */
-.stock-alert {
-  max-height: 45vh;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-/* Real modal button row */
+/* Modal button row */
 #appModal .row.wrap {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: 14px;
   margin-bottom: 0;
   padding-bottom: 4px;
 }
@@ -4134,7 +4132,7 @@ table thead th {
 
 /* Got It button */
 #appModal #modalConfirmBtn {
-  min-width: 120px;
+  min-width: 140px;
   font-weight: 600;
   margin: 0;
 }
@@ -4147,24 +4145,12 @@ table thead th {
   #appModal .modal-panel {
     width: min(560px, 90vw);
     max-height: calc(100vh - 64px);
-    padding: 24px 20px 24px;
-    border-radius: 14px;
-  }
-
-  #appModal #modalTitle {
-    margin-bottom: 14px;
-  }
-
-  #appModal #modalMessage {
-    margin-bottom: 18px;
+    padding: 24px 20px 28px;
+    border-radius: 16px;
   }
 
   .stock-alert {
     max-height: 50vh;
-  }
-
-  #appModal #modalConfirmBtn {
-    min-width: 140px;
   }
 }
 
@@ -4172,51 +4158,9 @@ table thead th {
   #appModal .modal-panel {
     max-height: calc(100vh - 160px - env(safe-area-inset-bottom));
   }
-}
-
-/* ===== Desktop modal hard override ===== */
-@media (min-width: 901px) {
-  #appModal {
-    padding: 32px !important;
-  }
-
-  #appModal .modal-panel {
-    width: min(560px, 90vw) !important;
-    max-height: calc(100vh - 64px) !important;
-    padding: 24px 20px 24px !important;
-    border-radius: 14px !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    background: rgba(15, 18, 22, 0.96) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    box-shadow:
-      0 16px 40px rgba(0, 0, 0, 0.45),
-      0 0 0 1px rgba(255,255,255,0.04) inset !important;
-    overflow-y: auto !important;
-  }
-
-  #appModal #modalTitle {
-    margin: 0 0 14px !important;
-  }
-
-  #appModal #modalMessage {
-    margin: 0 0 18px !important;
-  }
-
-  #appModal .row.wrap {
-    justify-content: center !important;
-    margin-top: 14px !important;
-    padding-bottom: 4px !important;
-  }
-
-  #appModal #modalConfirmBtn {
-    min-width: 140px !important;
-    margin: 0 !important;
-  }
 
   .stock-alert {
-    max-height: 50vh !important;
-    overflow-y: auto !important;
+    max-height: 45vh;
   }
 }
 
