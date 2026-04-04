@@ -107,7 +107,7 @@ export function createInvoiceService({
       return lines;
     };
 
-    let y = height - M;
+    let y = height - M - 12;
 
     // Logo
     try {
@@ -357,8 +357,11 @@ drawText(
 // Responsive QR sizing and placement
 const qrSize = 42;
 const qrTopY = paymentBoxY + paymentBoxH - 56;
-const leftQrX = paymentBoxX + 24;
-const rightQrX = paymentBoxX + paymentBoxW - 24 - qrSize;
+const qrGap = 10;
+const qrGroupW = (qrSize * 2) + qrGap;
+const qrStartX = paymentBoxX + (paymentBoxW - qrGroupW) / 2;
+const leftQrX = qrStartX;
+const rightQrX = leftQrX + qrSize + qrGap;
 const labelY = qrTopY - 12;
 const noteY = paymentBoxY + 12;
 
