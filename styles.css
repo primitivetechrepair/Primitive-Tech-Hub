@@ -294,8 +294,8 @@ table {
   align-items: center;
   text-align: center;
 
-  width: fit-content;
-  min-width: 80%;
+  width: 100%;
+  max-width: 320px;
 }
 
 .analytics-grid .tracker-total {
