@@ -4174,4 +4174,50 @@ table thead th {
   }
 }
 
+/* ===== Desktop modal hard override ===== */
+@media (min-width: 901px) {
+  #appModal {
+    padding: 32px !important;
+  }
+
+  #appModal .modal-panel {
+    width: min(560px, 90vw) !important;
+    max-height: calc(100vh - 64px) !important;
+    padding: 24px 20px 24px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: rgba(15, 18, 22, 0.96) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    box-shadow:
+      0 16px 40px rgba(0, 0, 0, 0.45),
+      0 0 0 1px rgba(255,255,255,0.04) inset !important;
+    overflow-y: auto !important;
+  }
+
+  #appModal #modalTitle {
+    margin: 0 0 14px !important;
+  }
+
+  #appModal #modalMessage {
+    margin: 0 0 18px !important;
+  }
+
+  #appModal .row.wrap {
+    justify-content: center !important;
+    margin-top: 14px !important;
+    padding-bottom: 4px !important;
+  }
+
+  #appModal #modalConfirmBtn {
+    min-width: 140px !important;
+    margin: 0 !important;
+  }
+
+  .stock-alert {
+    max-height: 50vh !important;
+    overflow-y: auto !important;
+  }
+}
+
 }
