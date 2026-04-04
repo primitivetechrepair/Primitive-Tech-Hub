@@ -58,6 +58,7 @@ export function createRenderAllController({
   renderForecast,
   renderProfit,
   renderLabor,
+  renderPartsCost,
   renderInvoiceHistory,
   renderRestock,
   renderReminders,
@@ -143,6 +144,13 @@ export function createRenderAllController({
       el,
       data,
       addListItem,
+    });
+
+    renderPartsCost({
+      el,
+      data,
+      addListItem,
+      leadPartsCost: leadCostService.leadPartsCost,
     });
 
     renderInvoiceHistory({
