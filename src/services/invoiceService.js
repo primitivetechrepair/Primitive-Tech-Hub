@@ -169,40 +169,49 @@ export function createInvoiceService({
 
     // Left column: customer
     drawText("CUSTOMER", M + 12, y - 18, SMALL, true, colorMuted);
-    drawText(invoice.customer || "—", M + 12, y - 36, BASE, true);
 
-    if (invoice.email) {
-      drawText(invoice.email, M + 12, y - 54, SMALL, false, colorMuted);
-    }
+// Combine name + phone (cleaner, tighter)
+const customerLine = [
+  invoice.customer || "—",
+  invoice.contact || ""
+].filter(Boolean).join(" • ");
 
-    if (invoice.contact) {
-      drawText(invoice.contact, M + 12, y - 70, SMALL, false, colorMuted);
-    }
+drawText(customerLine, M + 12, y - 34, BASE, true);
 
-    if (invoice.address) {
-      const addressLines = wrap(invoice.address, 250, SMALL, false);
-      let ay = y - 88;
+// Email (lighter)
+if (invoice.email) {
+  drawText(invoice.email, M + 12, y - 50, SMALL, false, colorMuted);
+}
 
-      for (const ln of addressLines) {
-        drawText(ln, M + 12, ay, SMALL, false, colorMuted);
-        ay -= 14;
-      }
-    }
+// Address (tighter spacing)
+if (invoice.address) {
+  const addressLines = wrap(invoice.address, 250, SMALL, false);
+  let ay = y - 64;
+
+  for (const ln of addressLines) {
+    drawText(ln, M + 12, ay, SMALL, false, colorMuted);
+    ay -= 12; // tighter than before
+  }
+}
 
     // Right column: device/service
     const rx = M + 320;
     let ry = y - 18;
 
     drawText("DEVICE", rx, ry, SMALL, true, colorMuted);
-    ry -= 18;
-    drawText(invoice.device || "—", rx, ry, BASE, true);
+ry -= 16;
 
-    ry -= 26;
-    drawText("SERIES", rx, ry, SMALL, true, colorMuted);
-    ry -= 18;
-    drawText(invoice.series || "—", rx, ry, SMALL, false, colorMuted);
+// Combine device + series
+const deviceLine = [
+  invoice.device || "—",
+  invoice.series ? `(${invoice.series})` : ""
+].join(" ").trim();
 
-    ry -= 26;
+drawText(deviceLine, rx, ry, BASE, true);
+
+ry -= 22;
+
+    ry -= 18;
     drawText("IMEI / SERIAL", rx, ry, SMALL, true, colorMuted);
     ry -= 18;
     drawText(invoice.imeiSerial || "—", rx, ry, SMALL, false, colorMuted);
