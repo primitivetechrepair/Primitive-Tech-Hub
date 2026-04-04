@@ -281,15 +281,21 @@ table {
 /* ===== Dashboard Tracker Totals ===== */
 .tracker-total {
   list-style: none;
-  margin-top: 12px;
-  padding-top: 10px;
+  margin: 12px auto 0 auto;
+  padding: 10px 12px;
   border-top: 1px solid rgba(102, 252, 241, 0.25);
 
   font-size: 18px;
   font-weight: 700;
   color: var(--heading);
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+
+  width: fit-content;
+  min-width: 80%;
 }
 
 .analytics-grid .tracker-total {
