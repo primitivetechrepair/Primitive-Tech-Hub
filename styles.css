@@ -4035,26 +4035,34 @@ table thead th {
 
 /* ===== Stock Alert Modal ===== */
 
+#appModal .modal-message {
+  width: 100%;
+}
+
 .stock-alert {
   display: flex;
   flex-direction: column;
   gap: 14px;
   margin-top: 8px;
+  width: 100%;
   max-height: 45vh;
   overflow-y: auto;
   padding-right: 4px;
+  box-sizing: border-box;
 }
 
 .stock-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  width: 100%;
 }
 
 .stock-title {
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 700;
+  font-size: 0.98rem;
   letter-spacing: 0.4px;
+  margin: 0;
 }
 
 .stock-title.danger {
@@ -4068,16 +4076,32 @@ table thead th {
 .stock-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  font-size: 0.9rem;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  box-sizing: border-box;
+}
+
+.stock-section .stock-row {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stock-section:has(.stock-title.danger) .stock-row {
+  background: rgba(255, 107, 107, 0.10);
+  border-color: rgba(255, 107, 107, 0.22);
+}
+
+.stock-section:has(.stock-title.warning) .stock-row {
+  background: rgba(255, 209, 102, 0.10);
+  border-color: rgba(255, 209, 102, 0.22);
 }
 
 .stock-qty {
-  font-weight: 600;
-  opacity: 0.9;
+  font-weight: 700;
+  opacity: 0.95;
   flex-shrink: 0;
 }
 
@@ -4113,6 +4137,7 @@ table thead th {
 
 #appModal #modalMessage {
   margin: 0 0 18px;
+  width: 100%;
 }
 
 /* Modal button row */
@@ -4143,14 +4168,19 @@ table thead th {
   }
 
   #appModal .modal-panel {
-    width: min(560px, 90vw);
+    width: min(680px, 92vw);
     max-height: calc(100vh - 64px);
-    padding: 24px 20px 28px;
+    padding: 24px 22px 28px;
     border-radius: 16px;
   }
 
   .stock-alert {
-    max-height: 50vh;
+    max-height: 52vh;
+  }
+
+  .stock-row {
+    padding: 12px 14px;
+    font-size: 0.95rem;
   }
 }
 
