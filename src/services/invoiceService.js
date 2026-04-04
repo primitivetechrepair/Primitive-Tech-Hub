@@ -23,14 +23,15 @@ export function createInvoiceService({
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
     const M = 64;
-    const BASE = 11;
-    const SMALL = 9.5;
-    const H2 = 12;
+    const BASE = 10.75;
+    const SMALL = 9;
+    const H2 = 13;
 
-    const colorText = rgb(0.12, 0.12, 0.14);
-    const colorMuted = rgb(0.45, 0.45, 0.5);
-    const colorLine = rgb(0.82, 0.82, 0.86);
-    const colorPanel = rgb(0.965, 0.965, 0.975);
+    const colorText = rgb(0.11, 0.11, 0.13);
+    const colorMuted = rgb(0.50, 0.50, 0.56);
+    const colorLine = rgb(0.86, 0.86, 0.90);
+    const colorPanel = rgb(0.972, 0.972, 0.980);
+    const colorTotalsPanel = rgb(0.955, 0.958, 0.970);
     const colorPaid = rgb(0.0, 0.55, 0.18);
 
     const money = (n) => {
@@ -68,21 +69,21 @@ export function createInvoiceService({
       drawText(text, rightX - tw, y, size, bold, color);
     };
 
-    const line = (x1, y1, x2, y2) =>
+    const line = (x1, y1, x2, y2, thickness = 1) =>
       page.drawLine({
         start: { x: x1, y: y1 },
         end: { x: x2, y: y2 },
-        thickness: 1,
+        thickness,
         color: colorLine,
       });
 
-    const box = (x, y, w, h) =>
+    const box = (x, y, w, h, fill = colorPanel) =>
       page.drawRectangle({
         x,
         y,
         width: w,
         height: h,
-        color: colorPanel,
+        color: fill,
         borderColor: colorLine,
         borderWidth: 1,
       });
@@ -138,99 +139,91 @@ export function createInvoiceService({
     box(metaX, metaY, metaW, metaH);
 
     drawText("INVOICE #", metaX + 12, metaY + metaH - 18, SMALL, true, colorMuted);
-    drawText(invoice.invoiceId, metaX + 12, metaY + metaH - 34, BASE, true);
+    drawText(invoice.invoiceId, metaX + 12, metaY + metaH - 36, 11.25, true);
 
-    drawText("DATE", metaX + 12, metaY + metaH - 52, SMALL, true, colorMuted);
+    drawText("DATE", metaX + 12, metaY + metaH - 54, SMALL, true, colorMuted);
     drawText(
       formatDate(invoice.completedAt),
       metaX + 12,
-      metaY + metaH - 68,
+      metaY + metaH - 70,
       SMALL,
       false,
       colorMuted
     );
 
-    drawText("STATUS", metaX + 12, metaY + metaH - 84, SMALL, true, colorMuted);
+    drawText("STATUS", metaX + 12, metaY + metaH - 86, SMALL, true, colorMuted);
     drawText(
       (invoice.paymentStatus || "Unpaid").toUpperCase(),
-      metaX + 70,
-      metaY + metaH - 84,
+      metaX + 72,
+      metaY + metaH - 86,
       SMALL,
       true,
       (invoice.paymentStatus || "").toLowerCase() === "paid" ? colorPaid : colorText
     );
 
-    y = metaY - 16;
-    line(M, y, width - M, y);
-    y -= 18;
+    y = metaY - 18;
+    line(M, y, width - M, y, 1);
+    y -= 20;
 
-    const panelH = 188;
+    const panelH = 186;
     box(M, y - panelH, width - 2 * M, panelH);
 
     // Left column: customer
     drawText("CUSTOMER", M + 12, y - 18, SMALL, true, colorMuted);
 
-// Combine name + phone (cleaner, tighter)
-const customerLine = [
-  invoice.customer || "—",
-  invoice.contact || ""
-].filter(Boolean).join(" • ");
+    const customerLine = [invoice.customer || "—", invoice.contact || ""]
+      .filter(Boolean)
+      .join(" • ");
 
-drawText(customerLine, M + 12, y - 34, BASE, true);
+    drawText(customerLine, M + 12, y - 36, 11, true);
 
-// Email (lighter)
-if (invoice.email) {
-  drawText(invoice.email, M + 12, y - 50, SMALL, false, colorMuted);
-}
+    if (invoice.email) {
+      drawText(invoice.email, M + 12, y - 53, SMALL, false, colorMuted);
+    }
 
-// Address (tighter spacing)
-if (invoice.address) {
-  const addressLines = wrap(invoice.address, 250, SMALL, false);
-  let ay = y - 64;
+    if (invoice.address) {
+      const addressLines = wrap(invoice.address, 250, SMALL, false);
+      let ay = y - 68;
 
-  for (const ln of addressLines) {
-    drawText(ln, M + 12, ay, SMALL, false, colorMuted);
-    ay -= 12; // tighter than before
-  }
-}
+      for (const ln of addressLines) {
+        drawText(ln, M + 12, ay, SMALL, false, colorMuted);
+        ay -= 12;
+      }
+    }
 
     // Right column: device/service
     const rx = M + 320;
     let ry = y - 18;
 
     drawText("DEVICE", rx, ry, SMALL, true, colorMuted);
-ry -= 16;
+    ry -= 16;
 
-// Combine device + series
-const deviceLine = [
-  invoice.device || "—",
-  invoice.series ? `(${invoice.series})` : ""
-].join(" ").trim();
+    const deviceLine = [invoice.device || "—", invoice.series ? `(${invoice.series})` : ""]
+      .join(" ")
+      .trim();
 
-drawText(deviceLine, rx, ry, BASE, true);
+    drawText(deviceLine, rx, ry, 11, true);
 
-ry -= 22;
-
-    ry -= 18;
+    ry -= 24;
     drawText("IMEI / SERIAL", rx, ry, SMALL, true, colorMuted);
-    ry -= 18;
+    ry -= 16;
     drawText(invoice.imeiSerial || "—", rx, ry, SMALL, false, colorMuted);
 
-    ry -= 26;
+    ry -= 24;
     drawText("REPAIR", rx, ry, SMALL, true, colorMuted);
-    ry -= 18;
+    ry -= 16;
 
     const repairLines = wrap(invoice.repair || "—", width - M - rx - 12, SMALL, false);
     for (const ln of repairLines) {
       drawText(ln, rx, ry, SMALL, false, colorMuted);
-      ry -= 14;
+      ry -= 13;
     }
 
-    y = y - panelH - 18;
+    y = y - panelH - 20;
 
     drawText("Service & Parts Breakdown", M, y, H2, true);
-    y -= 12;
-    line(M, y, width - M, y);
+    y -= 13;
+    line(M, y, width - M, y, 1);
     y -= 18;
 
     const tableRight = width - M;
@@ -243,7 +236,7 @@ ry -= 22;
     drawRightText("Amount", xAmt, y, SMALL, true, colorMuted);
 
     y -= 10;
-    line(M, y, width - M, y);
+    line(M, y, width - M, y, 1);
     y -= 16;
 
     const items =
@@ -251,7 +244,7 @@ ry -= 22;
         ? invoice.lineItems
         : [{ desc: "No items recorded", qty: "", amount: "" }];
 
-        const totalsW = 260;
+    const totalsW = 260;
     const totalsH = invoice.laborAmount > 0 ? 118 : 92;
     const totalsX = width - M - totalsW;
     const totalsY = 88;
@@ -290,19 +283,17 @@ ry -= 22;
       for (let i = 1; i < descLines.length; i++) {
         if (y < tableStopY) break;
         drawText(descLines[i], xDesc, y, BASE, false, colorMuted);
-        y -= 14;
+        y -= 13;
       }
 
       y -= 8;
     }
 
     y -= 4;
-    line(M, y, width - M, y);
+    line(M, y, width - M, y, 1);
     y -= 18;
 
-  
-
-    box(totalsX, totalsY, totalsW, totalsH);
+    box(totalsX, totalsY, totalsW, totalsH, colorTotalsPanel);
 
     const isPaid = (invoice.paymentStatus || "").toLowerCase() === "paid";
     const totalDue = isPaid ? 0 : Number(invoice.charged || 0);
@@ -318,142 +309,138 @@ ry -= 22;
     let ty = totalsY + totalsH - 18;
 
     if (isPaid) {
-      drawText("PAID", totalsX + 12, ty, 14, true, colorPaid);
+      drawText("PAID", totalsX + 12, ty, 13.5, true, colorPaid);
       ty -= 20;
     }
 
     for (const [k, v] of totals) {
       const isTotal = k === "Total Due";
-      drawText(k, totalsX + 12, ty, isTotal ? 12 : 11, true, colorText);
-      drawRightText(v, totalsX + totalsW - 12, ty, isTotal ? 15 : 12, true, colorText);
-      ty -= isTotal ? 30 : 22;
+      drawText(k, totalsX + 12, ty, isTotal ? 12 : 10.75, true, colorText);
+      drawRightText(v, totalsX + totalsW - 12, ty, isTotal ? 14.5 : 11.5, true, colorText);
+      ty -= isTotal ? 30 : 21;
     }
 
-    // Payment section
     const getRemotePngBytes = async (url) => {
-  try {
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.arrayBuffer();
-  } catch (err) {
-    console.error("Remote image fetch failed:", err);
-    return null;
-  }
-};
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.arrayBuffer();
+      } catch (err) {
+        console.error("Remote image fetch failed:", err);
+        return null;
+      }
+    };
 
-// Payment section — anchored above warranty, protected from totals/table overlap
-
-box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
-
-drawText(
-  "PAYMENT",
-  paymentBoxX + 12,
-  paymentBoxY + paymentBoxH - 16,
-  SMALL,
-  true,
-  colorMuted
-);
-
-// Responsive QR sizing and placement
-const qrSize = 42;
-const qrTopY = paymentBoxY + paymentBoxH - 56;
-const qrGap = 10;
-const qrGroupW = (qrSize * 2) + qrGap;
-const qrStartX = paymentBoxX + (paymentBoxW - qrGroupW) / 2;
-const leftQrX = qrStartX;
-const rightQrX = leftQrX + qrSize + qrGap;
-const labelY = qrTopY - 12;
-const noteY = paymentBoxY + 12;
-
-// Zelle QR (real uploaded image)
-try {
-  const zelleBytes = await fetch("/public/zelle-qr.jpg").then((res) => {
-    if (!res.ok) throw new Error("Zelle QR not found");
-    return res.arrayBuffer();
-  });
-
-  const zelleImage = await pdfDoc.embedJpg(zelleBytes);
-
-  page.drawImage(zelleImage, {
-    x: leftQrX,
-    y: qrTopY,
-    width: qrSize,
-    height: qrSize,
-  });
-
-    const zelleLabel = "Zelle";
-  const zelleWidth = widthOf(zelleLabel, 9, true);
-
-  drawText(
-    zelleLabel,
-    leftQrX + (qrSize / 2) - (zelleWidth / 2),
-    labelY,
-    9,
-    true,
-    colorText
-  );
-  
-} catch (err) {
-  drawText("Zelle QR missing", leftQrX - 4, qrTopY + qrSize / 2, 9, true, colorMuted);
-}
-
-// Cash App QR (generated from actual Cash App URL)
-try {
-  const cashAppQrUrl =
-    "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
-    encodeURIComponent("https://cash.app/$Primitiverepairs");
-
-  const cashBytes = await getRemotePngBytes(cashAppQrUrl);
-
-  if (cashBytes) {
-    const cashImage = await pdfDoc.embedPng(cashBytes);
-
-    page.drawImage(cashImage, {
-      x: rightQrX,
-      y: qrTopY,
-      width: qrSize,
-      height: qrSize,
-    });
-
-        const cashLabel = "Cash App";
-    const cashWidth = widthOf(cashLabel, 9, true);
+    // Payment section
+    box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 
     drawText(
-      cashLabel,
-      rightQrX + (qrSize / 2) - (cashWidth / 2),
-      labelY,
-      9,
+      "PAYMENT",
+      paymentBoxX + 12,
+      paymentBoxY + paymentBoxH - 16,
+      SMALL,
       true,
-      colorText
+      colorMuted
     );
-  } else {
-    drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
-  }
-} catch (err) {
-  drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
-}
 
-drawText(
-  "Use invoice # when paying",
-  paymentBoxX + 56,
-  noteY,
-  8.5,
-  false,
-  colorMuted
-);
+    const qrSize = 42;
+    const qrTopY = paymentBoxY + paymentBoxH - 56;
+    const qrGap = 10;
+    const qrGroupW = qrSize * 2 + qrGap;
+    const qrStartX = paymentBoxX + (paymentBoxW - qrGroupW) / 2;
+    const leftQrX = qrStartX;
+    const rightQrX = leftQrX + qrSize + qrGap;
+    const labelY = qrTopY - 12;
+    const noteY = paymentBoxY + 12;
+
+    // Zelle QR
+    try {
+      const zelleBytes = await fetch("/public/zelle-qr.jpg").then((res) => {
+        if (!res.ok) throw new Error("Zelle QR not found");
+        return res.arrayBuffer();
+      });
+
+      const zelleImage = await pdfDoc.embedJpg(zelleBytes);
+
+      page.drawImage(zelleImage, {
+        x: leftQrX,
+        y: qrTopY,
+        width: qrSize,
+        height: qrSize,
+      });
+
+      const zelleLabel = "Zelle";
+      const zelleWidth = widthOf(zelleLabel, 9, true);
+
+      drawText(
+        zelleLabel,
+        leftQrX + qrSize / 2 - zelleWidth / 2,
+        labelY,
+        9,
+        true,
+        colorText
+      );
+    } catch (err) {
+      drawText("Zelle QR missing", leftQrX - 4, qrTopY + qrSize / 2, 9, true, colorMuted);
+    }
+
+    // Cash App QR
+    try {
+      const cashAppQrUrl =
+        "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
+        encodeURIComponent("https://cash.app/$Primitiverepairs");
+
+      const cashBytes = await getRemotePngBytes(cashAppQrUrl);
+
+      if (cashBytes) {
+        const cashImage = await pdfDoc.embedPng(cashBytes);
+
+        page.drawImage(cashImage, {
+          x: rightQrX,
+          y: qrTopY,
+          width: qrSize,
+          height: qrSize,
+        });
+
+        const cashLabel = "Cash App";
+        const cashWidth = widthOf(cashLabel, 9, true);
+
+        drawText(
+          cashLabel,
+          rightQrX + qrSize / 2 - cashWidth / 2,
+          labelY,
+          9,
+          true,
+          colorText
+        );
+      } else {
+        drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
+      }
+    } catch (err) {
+      drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
+    }
+
+    drawText(
+      "Use invoice # when paying",
+      paymentBoxX + 56,
+      noteY,
+      8.5,
+      false,
+      colorMuted
+    );
 
     if (invoice.paymentMethod) {
       drawText(
         `Payment Method: ${invoice.paymentMethod}`,
         M,
-       paymentMethodY,
+        paymentMethodY,
         SMALL,
         true,
         colorMuted
       );
     }
 
-        box(warrantyX, warrantyY, warrantyW, warrantyH);
+    box(warrantyX, warrantyY, warrantyW, warrantyH);
     drawText("90-DAY REPAIR WARRANTY", warrantyX + 12, warrantyY + 8, 9, true, colorText);
 
     drawText("Thank you for choosing Primitive Tech.", M, 64, SMALL, false, colorMuted);
