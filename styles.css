@@ -319,7 +319,8 @@ table {
 }
 
 #profitList,
-#laborList {
+#laborList,
+#partsCostList {
   padding-left: 0;
   list-style: none;
 }
