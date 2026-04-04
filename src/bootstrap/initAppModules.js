@@ -1,5 +1,6 @@
 // src/bootstrap/initAppModules.js
 
+import { renderPartsCost } from "../ui/renderPartsCost.js";
 import { createAdminGate } from "../services/adminGate.js";
 import { createLeadStatusService } from "../services/leadStatusService.js";
 import { createInventoryIdService } from "../services/inventoryIdService.js";
@@ -414,6 +415,7 @@ export function initAppModules(ctx) {
       renderForecast,
       renderProfit,
       renderLabor,
+      renderPartsCost,
       renderInvoiceHistory,
       renderRestock,
       renderReminders,
