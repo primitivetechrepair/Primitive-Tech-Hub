@@ -272,6 +272,32 @@ table {
   padding: var(--space-2);
 }
 
+.analytics-grid > div {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+}
+
+/* ===== Dashboard Tracker Totals ===== */
+.tracker-total {
+  list-style: none;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(102, 252, 241, 0.25);
+
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--heading);
+
+  text-align: center;
+}
+
+.analytics-grid .tracker-total {
+  background: rgba(102, 252, 241, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
 .analytics-grid ul,
 #auditLog,
 #customerHistory {
