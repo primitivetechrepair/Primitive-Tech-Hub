@@ -22,15 +22,17 @@ export function createInvoiceService({
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    const M = 64;
+    const M = 48;
     const BASE = 11;
     const SMALL = 9.5;
+    const H1 = 22;
     const H2 = 12;
 
     const colorText = rgb(0.12, 0.12, 0.14);
     const colorMuted = rgb(0.45, 0.45, 0.5);
     const colorLine = rgb(0.82, 0.82, 0.86);
     const colorPanel = rgb(0.965, 0.965, 0.975);
+    const colorAccent = rgb(0.08, 0.5, 0.48);
     const colorPaid = rgb(0.0, 0.55, 0.18);
 
     const money = (n) => {
@@ -88,35 +90,67 @@ export function createInvoiceService({
       });
 
     const wrap = (txt, maxWidth, size = BASE, bold = false) => {
-      const words = String(txt || "").split(/\s+/).filter(Boolean);
-      if (!words.length) return [""];
-
-      const lines = [];
-      let cur = words[0];
-
-      for (let i = 1; i < words.length; i++) {
-        const t = `${cur} ${words[i]}`;
-        if (widthOf(t, size, bold) <= maxWidth) cur = t;
-        else {
-          lines.push(cur);
-          cur = words[i];
-        }
-      }
-
+  const words = String(txt || "").split(/\s+/).filter(Boolean);
+  if (!words.length) return [""];
+  const lines = [];
+  let cur = words[0];
+  for (let i = 1; i < words.length; i++) {
+    const t = `${cur} ${words[i]}`;
+    if (widthOf(t, size, bold) <= maxWidth) cur = t;
+    else {
       lines.push(cur);
-      return lines;
-    };
+      cur = words[i];
+    }
+  }
+  lines.push(cur);
+  return lines;
+};
+
+const getQrPngBytes = async (text) => {
+  if (!text) {
+    console.error("[QR DEBUG] No text provided for QR");
+    return null;
+  }
+
+  try {
+    const qrUrl =
+      `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(String(text))}`;
+
+    console.log("[QR DEBUG] Fetching QR from:", qrUrl);
+
+    const res = await fetch(qrUrl, { cache: "no-store" });
+
+    console.log("[QR DEBUG] Response status:", res.status);
+    console.log("[QR DEBUG] Response ok:", res.ok);
+    console.log("[QR DEBUG] Response type:", res.type);
+    console.log("[QR DEBUG] Response URL:", res.url);
+
+    if (!res.ok) throw new Error(`QR HTTP ${res.status}`);
+
+    const contentType = res.headers.get("content-type") || "";
+    console.log("[QR DEBUG] content-type:", contentType);
+
+    if (!contentType.includes("image")) {
+      throw new Error(`Unexpected QR content-type: ${contentType}`);
+    }
+
+    return await res.arrayBuffer();
+  } catch (err) {
+    console.error("[QR DEBUG] QR generation failed:", err);
+    return null;
+  }
+};
 
     let y = height - M;
 
-    // Logo
+    // Logo (safe fallback)
+    let logoDrawn = false;
     try {
       const logoUrl = "/logo2.png";
       const logoBytes = await fetch(logoUrl).then((res) => {
         if (!res.ok) throw new Error("Logo not found");
         return res.arrayBuffer();
       });
-
       const logoImage = await pdfDoc.embedPng(logoBytes);
       const logoDims = logoImage.scale(0.05);
 
@@ -126,14 +160,16 @@ export function createInvoiceService({
         width: logoDims.width,
         height: logoDims.height,
       });
+
+      logoDrawn = true;
     } catch {
-      // Safe fallback: no logo
+      logoDrawn = false;
     }
 
     const metaW = 220;
     const metaH = 96;
     const metaX = width - M - metaW;
-    const metaY = y - 40;
+    const metaY = y - 64;
 
     box(metaX, metaY, metaW, metaH);
 
@@ -141,14 +177,7 @@ export function createInvoiceService({
     drawText(invoice.invoiceId, metaX + 12, metaY + metaH - 34, BASE, true);
 
     drawText("DATE", metaX + 12, metaY + metaH - 52, SMALL, true, colorMuted);
-    drawText(
-      formatDate(invoice.completedAt),
-      metaX + 12,
-      metaY + metaH - 68,
-      SMALL,
-      false,
-      colorMuted
-    );
+    drawText(formatDate(invoice.completedAt), metaX + 12, metaY + metaH - 68, SMALL, false, colorMuted);
 
     drawText("STATUS", metaX + 12, metaY + metaH - 84, SMALL, true, colorMuted);
     drawText(
@@ -174,15 +203,12 @@ export function createInvoiceService({
     if (invoice.email) {
       drawText(invoice.email, M + 12, y - 54, SMALL, false, colorMuted);
     }
-
     if (invoice.contact) {
       drawText(invoice.contact, M + 12, y - 70, SMALL, false, colorMuted);
     }
-
     if (invoice.address) {
       const addressLines = wrap(invoice.address, 250, SMALL, false);
       let ay = y - 88;
-
       for (const ln of addressLines) {
         drawText(ln, M + 12, ay, SMALL, false, colorMuted);
         ay -= 14;
@@ -243,7 +269,7 @@ export function createInvoiceService({
         : [{ desc: "No items recorded", qty: "", amount: "" }];
 
     for (const it of items) {
-      if (y < 210) break;
+      if (y < 190) break;
 
       const descLines = wrap(it.desc, tableRight - xDesc - 145, BASE, false);
       drawText(descLines[0] || "", xDesc, y, BASE);
@@ -259,7 +285,7 @@ export function createInvoiceService({
       y -= 14;
 
       for (let i = 1; i < descLines.length; i++) {
-        if (y < 210) break;
+        if (y < 190) break;
         drawText(descLines[i], xDesc, y, BASE, false, colorMuted);
         y -= 14;
       }
@@ -274,14 +300,16 @@ export function createInvoiceService({
     const totalsW = 260;
     const totalsH = invoice.laborAmount > 0 ? 118 : 92;
     const totalsX = width - M - totalsW;
-    const totalsY = 120;
+    const totalsY = 110;
 
     box(totalsX, totalsY, totalsW, totalsH);
 
     const isPaid = (invoice.paymentStatus || "").toLowerCase() === "paid";
     const totalDue = isPaid ? 0 : Number(invoice.charged || 0);
 
-    const totals = [["Repair Cost", money(invoice.repairAmount || 0)]];
+    const totals = [
+      ["Repair Cost", money(invoice.repairAmount || 0)],
+    ];
 
     if (Number(invoice.laborAmount || 0) > 0) {
       totals.push(["Labor", money(invoice.laborAmount || 0)]);
@@ -303,39 +331,39 @@ export function createInvoiceService({
       ty -= isTotal ? 30 : 22;
     }
 
-    // Payment section
-    const paymentBoxW = 170;
-    const paymentBoxH = 170;
-    const paymentBoxX = width - M - paymentBoxW;
-    const paymentBoxY = 70;
+    
+const paymentBoxW = 150;
+const paymentBoxH = 132;
+const paymentBoxX = width - M - paymentBoxW;
+const paymentBoxY = 88;
 
-    box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
+box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 
-    drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
+drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
 
-    try {
-      const zelleBytes = await fetch("/zelle-qr.jpg").then((res) => {
-        if (!res.ok) throw new Error("Zelle QR not found");
-        return res.arrayBuffer();
-      });
+try {
+  const zelleBytes = await fetch("./zelle-qr.jpg").then(res => res.arrayBuffer());
+  const zelleImage = await pdfDoc.embedJpg(zelleBytes);
 
-      const zelleImage = await pdfDoc.embedJpg(zelleBytes);
+  page.drawImage(zelleImage, {
+    x: paymentBoxX + 35,
+    y: paymentBoxY + 70,
+    width: 100,
+    height: 100,
+  });
 
-      page.drawImage(zelleImage, {
-        x: paymentBoxX + 35,
-        y: paymentBoxY + 70,
-        width: 100,
-        height: 100,
-      });
+  drawText("Zelle", paymentBoxX + 60, paymentBoxY + 58, 9, true, colorText);
+} catch (err) {
+  drawText("Zelle QR missing", paymentBoxX + 20, paymentBoxY + 110, 9, true, colorMuted);
+}
 
-      drawText("Zelle", paymentBoxX + 60, paymentBoxY + 58, 9, true, colorText);
-    } catch (err) {
-      drawText("Zelle QR missing", paymentBoxX + 24, paymentBoxY + 110, 9, true, colorMuted);
-    }
+drawText("Zelle: 786.660.0155", paymentBoxX + 12, paymentBoxY + 28, 8.5, true, colorText);
+drawText("Use invoice # when paying", paymentBoxX + 12, paymentBoxY + 14, 8, false, colorMuted);
 
-    drawText("Cash App:", paymentBoxX + 12, paymentBoxY + 40, 8.5, true, colorMuted);
-    drawText("$Primitiverepairs", paymentBoxX + 12, paymentBoxY + 28, 9, true, colorText);
-    drawText("Use invoice # when paying", paymentBoxX + 12, paymentBoxY + 14, 8, false, colorMuted);
+if (invoice.paymentMethod) {
+  drawText("Payment Method:", M + 12, y - 50, SMALL, true, colorMuted);
+  drawText(invoice.paymentMethod || "Unspecified", M + 12, y - 66, BASE, true);
+}
 
     if (invoice.paymentMethod) {
       drawText(
@@ -389,6 +417,12 @@ export function createInvoiceService({
     const charged = repairAmount + laborAmount;
     const profit = charged - partsCost;
 
+    const money = (n) =>
+      Number(n || 0).toLocaleString(undefined, {
+        style: "currency",
+        currency: "USD",
+      });
+
     const inventory = Array.isArray(data.inventory) ? data.inventory : [];
     const used = Array.isArray(lead.inventoryUsed) ? lead.inventoryUsed : [];
     const qtyMap = lead.inventoryUsedQty || {};
@@ -437,6 +471,7 @@ export function createInvoiceService({
       paymentStatus: lead.paymentStatus || "Unpaid",
       laborAmount,
       repairAmount,
+      zellePhone: "786.660.0155",
     };
 
     invoice.lineItems = [
