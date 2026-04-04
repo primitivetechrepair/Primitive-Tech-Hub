@@ -135,23 +135,10 @@ export function createInvoiceService({
       logoDrawn = false;
     }
 
-    const brandX = logoDrawn ? M + 90 : M;
-
-    drawText("PRIMITIVE TECH", brandX, y - 8, H1, true, colorAccent);
-    drawText("Professional Repair Invoice", brandX, y - 26, SMALL, false, colorMuted);
-    drawText(
-      "primitiverepairs@gmail.com  |  (786) 404-7011  |  www.primitiverepairs.com",
-      brandX,
-      y - 42,
-      SMALL,
-      false,
-      colorMuted
-    );
-
     const metaW = 220;
     const metaH = 96;
     const metaX = width - M - metaW;
-    const metaY = y - 64;
+    const metaY = y - 40;
 
     box(metaX, metaY, metaW, metaH);
 
