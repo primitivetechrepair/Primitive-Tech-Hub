@@ -381,7 +381,18 @@ try {
     height: qrSize,
   });
 
-  drawText("Zelle", leftQrX + 16, labelY, 9, true, colorText);
+    const zelleLabel = "Zelle";
+  const zelleWidth = widthOf(zelleLabel, 9, true);
+
+  drawText(
+    zelleLabel,
+    leftQrX + (qrSize / 2) - (zelleWidth / 2),
+    labelY,
+    9,
+    true,
+    colorText
+  );
+  
 } catch (err) {
   drawText("Zelle QR missing", leftQrX - 4, qrTopY + qrSize / 2, 9, true, colorMuted);
 }
@@ -404,7 +415,17 @@ try {
       height: qrSize,
     });
 
-    drawText("Cash App", rightQrX + 6, labelY, 9, true, colorText);
+        const cashLabel = "Cash App";
+    const cashWidth = widthOf(cashLabel, 9, true);
+
+    drawText(
+      cashLabel,
+      rightQrX + (qrSize / 2) - (cashWidth / 2),
+      labelY,
+      9,
+      true,
+      colorText
+    );
   } else {
     drawText("Cash App QR missing", rightQrX - 6, qrTopY + qrSize / 2, 9, true, colorMuted);
   }
