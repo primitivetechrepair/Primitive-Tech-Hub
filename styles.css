@@ -4148,41 +4148,41 @@ table thead th {
 }
 
 /* Hide Cancel button */
+#appModal #modalCancelBtn {
+  display: none !important;
+}
+
+/* Got It button */
 #appModal #modalConfirmBtn {
   min-width: 148px;
   min-height: 42px;
   padding: 10px 18px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
   margin: 0;
-
   border-radius: 999px;
 
-  /* 👇 ADD HERE */
-  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-  border: 1px solid rgba(255,255,255,0.12);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #ffffff;
 
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+  /* brighter premium button */
+  background: linear-gradient(180deg, rgba(102, 252, 241, 0.28), rgba(69, 162, 158, 0.22));
+  border: 1px solid rgba(102, 252, 241, 0.32);
 
-  #appModal #modalConfirmBtn:hover {
-  transform: translateY(-1px);
-  background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06));
-}
-
-#appModal #modalConfirmBtn:active {
-  transform: translateY(0);
-}
-
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
 }
 
 #appModal #modalConfirmBtn:hover {
   transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(102, 252, 241, 0.36), rgba(69, 162, 158, 0.28));
 }
 
 #appModal #modalConfirmBtn:active {
   transform: translateY(0);
 }
 
+/* ===== Desktop refinement ===== */
 @media (min-width: 901px) {
   #appModal {
     padding: 32px;
@@ -4205,6 +4205,7 @@ table thead th {
   }
 }
 
+/* ===== Mobile refinement ===== */
 @media (max-width: 900px) {
   #appModal .modal-panel {
     max-height: calc(100vh - 160px - env(safe-area-inset-bottom));
