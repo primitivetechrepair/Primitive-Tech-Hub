@@ -107,11 +107,17 @@ export function createInvoiceService({
 };
 
 const makeQrDataUrl = async (text) => {
-  if (!window.QRCode) throw new Error("QRCode library not loaded.");
-  return await window.QRCode.toDataURL(String(text || ""), {
-    margin: 1,
-    width: 180,
-  });
+  if (!window.QRCode || !text) return null;
+
+  try {
+    return await window.QRCode.toDataURL(String(text), {
+      margin: 1,
+      width: 180,
+    });
+  } catch (err) {
+    console.error("QR generation failed:", err);
+    return null;
+  }
 };
 
     let y = height - M;
@@ -305,10 +311,6 @@ const makeQrDataUrl = async (text) => {
     }
 
     
-const qrDataUrl = await makeQrDataUrl(invoice.zellePhone || "");
-const qrBytes = await fetch(qrDataUrl).then((res) => res.arrayBuffer());
-const qrImage = await pdfDoc.embedPng(qrBytes);
-
 const paymentBoxW = 150;
 const paymentBoxH = 132;
 const paymentBoxX = width - M - paymentBoxW;
@@ -318,17 +320,25 @@ box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 
 drawText("PAYMENT", paymentBoxX + 12, paymentBoxY + paymentBoxH - 18, SMALL, true, colorMuted);
 
-page.drawImage(qrImage, {
-  x: paymentBoxX + 35,
-  y: paymentBoxY + 42,
-  width: 80,
-  height: 80,
-});
+const qrDataUrl = await makeQrDataUrl(invoice.zellePhone || "");
+
+if (qrDataUrl) {
+  const qrBytes = await fetch(qrDataUrl).then((res) => res.arrayBuffer());
+  const qrImage = await pdfDoc.embedPng(qrBytes);
+
+  page.drawImage(qrImage, {
+    x: paymentBoxX + 35,
+    y: paymentBoxY + 42,
+    width: 80,
+    height: 80,
+  });
+} else {
+  drawText("QR unavailable", paymentBoxX + 34, paymentBoxY + 76, 10, true, colorMuted);
+}
 
 drawText("Zelle: 786.660.0155", paymentBoxX + 12, paymentBoxY + 28, 8.5, true, colorText);
 drawText("Use invoice # when paying", paymentBoxX + 12, paymentBoxY + 14, 8, false, colorMuted);
 
-// ⬇️ EXISTING CODE (leave it)
 if (invoice.paymentMethod) {
   drawText("Payment Method:", M + 12, y - 50, SMALL, true, colorMuted);
   drawText(invoice.paymentMethod || "Unspecified", M + 12, y - 66, BASE, true);
