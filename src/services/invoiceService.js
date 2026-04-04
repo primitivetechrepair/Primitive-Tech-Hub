@@ -8,238 +8,337 @@ export function createInvoiceService({
   addAudit,
   toast,
 }) {
-async function buildInvoicePdfBytes(invoice) {
-  if (!window.PDFLib) throw new Error("PDFLib not loaded. Add pdf-lib script before main.js.");
-  const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
-
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([612, 792]);
-  const { width, height } = page.getSize();
-
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-
-  const M = 48;
-  const BASE = 11;
-  const SMALL = 9.5;
-  const H1 = 20;
-  const H2 = 12;
-
-  const colorText = rgb(0.12, 0.12, 0.14);
-  const colorMuted = rgb(0.45, 0.45, 0.5);
-  const colorLine = rgb(0.82, 0.82, 0.86);
-  const colorPanel = rgb(0.965, 0.965, 0.975);
-
-  const money = (n) => {
-    const v = Number(n || 0);
-    return v.toLocaleString(undefined, { style: "currency", currency: "USD" });
-  };
-
-  const formatDate = (iso) => {
-    try {
-      return new Date(iso).toLocaleString();
-    } catch {
-      return String(iso || "");
+  async function buildInvoicePdfBytes(invoice) {
+    if (!window.PDFLib) {
+      throw new Error("PDFLib not loaded. Add pdf-lib script before main.js.");
     }
-  };
 
-  const widthOf = (txt, size, bold = false) =>
-    (bold ? fontBold : font).widthOfTextAtSize(String(txt || ""), size);
+    const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
 
-  const drawText = (txt, x, y, size = BASE, bold = false, color = colorText) => {
-    page.drawText(String(txt ?? ""), {
-      x,
-      y,
-      size,
-      font: bold ? fontBold : font,
-      color,
-    });
-  };
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([612, 792]);
+    const { width, height } = page.getSize();
 
-  const line = (x1, y1, x2, y2) =>
-    page.drawLine({
-      start: { x: x1, y: y1 },
-      end: { x: x2, y: y2 },
-      thickness: 1,
-      color: colorLine,
-    });
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-  const box = (x, y, w, h) =>
-    page.drawRectangle({
-      x,
-      y,
-      width: w,
-      height: h,
-      color: colorPanel,
-      borderColor: colorLine,
-      borderWidth: 1,
-    });
+    const M = 48;
+    const BASE = 11;
+    const SMALL = 9.5;
+    const H1 = 22;
+    const H2 = 12;
 
-  const wrap = (txt, maxWidth, size = BASE, bold = false) => {
-    const words = String(txt || "").split(/\s+/).filter(Boolean);
-    if (!words.length) return [""];
-    const lines = [];
-    let cur = words[0];
-    for (let i = 1; i < words.length; i++) {
-      const t = `${cur} ${words[i]}`;
-      if (widthOf(t, size, bold) <= maxWidth) cur = t;
-      else {
-        lines.push(cur);
-        cur = words[i];
+    const colorText = rgb(0.12, 0.12, 0.14);
+    const colorMuted = rgb(0.45, 0.45, 0.5);
+    const colorLine = rgb(0.82, 0.82, 0.86);
+    const colorPanel = rgb(0.965, 0.965, 0.975);
+    const colorAccent = rgb(0.08, 0.5, 0.48);
+    const colorPaid = rgb(0.0, 0.55, 0.18);
+
+    const money = (n) => {
+      const v = Number(n || 0);
+      return v.toLocaleString(undefined, {
+        style: "currency",
+        currency: "USD",
+      });
+    };
+
+    const formatDate = (iso) => {
+      try {
+        return new Date(iso).toLocaleString();
+      } catch {
+        return String(iso || "");
+      }
+    };
+
+    const widthOf = (txt, size, bold = false) =>
+      (bold ? fontBold : font).widthOfTextAtSize(String(txt || ""), size);
+
+    const drawText = (txt, x, y, size = BASE, bold = false, color = colorText) => {
+      page.drawText(String(txt ?? ""), {
+        x,
+        y,
+        size,
+        font: bold ? fontBold : font,
+        color,
+      });
+    };
+
+    const drawRightText = (txt, rightX, y, size = BASE, bold = false, color = colorText) => {
+      const text = String(txt ?? "");
+      const tw = widthOf(text, size, bold);
+      drawText(text, rightX - tw, y, size, bold, color);
+    };
+
+    const line = (x1, y1, x2, y2) =>
+      page.drawLine({
+        start: { x: x1, y: y1 },
+        end: { x: x2, y: y2 },
+        thickness: 1,
+        color: colorLine,
+      });
+
+    const box = (x, y, w, h) =>
+      page.drawRectangle({
+        x,
+        y,
+        width: w,
+        height: h,
+        color: colorPanel,
+        borderColor: colorLine,
+        borderWidth: 1,
+      });
+
+    const wrap = (txt, maxWidth, size = BASE, bold = false) => {
+      const words = String(txt || "").split(/\s+/).filter(Boolean);
+      if (!words.length) return [""];
+
+      const lines = [];
+      let cur = words[0];
+
+      for (let i = 1; i < words.length; i++) {
+        const test = `${cur} ${words[i]}`;
+        if (widthOf(test, size, bold) <= maxWidth) {
+          cur = test;
+        } else {
+          lines.push(cur);
+          cur = words[i];
+        }
+      }
+
+      lines.push(cur);
+      return lines;
+    };
+
+    let y = height - M;
+
+    // Logo (safe fallback)
+    let logoDrawn = false;
+    try {
+      const logoUrl = "/logo2.png";
+      const logoBytes = await fetch(logoUrl).then((res) => {
+        if (!res.ok) throw new Error("Logo not found");
+        return res.arrayBuffer();
+      });
+      const logoImage = await pdfDoc.embedPng(logoBytes);
+      const logoDims = logoImage.scale(0.05);
+
+      page.drawImage(logoImage, {
+        x: M,
+        y: y - logoDims.height + 6,
+        width: logoDims.width,
+        height: logoDims.height,
+      });
+
+      logoDrawn = true;
+    } catch {
+      logoDrawn = false;
+    }
+
+    const brandX = logoDrawn ? M + 90 : M;
+
+    drawText("PRIMITIVE TECH", brandX, y - 8, H1, true, colorAccent);
+    drawText("Professional Repair Invoice", brandX, y - 26, SMALL, false, colorMuted);
+    drawText(
+      "primitiverepairs@gmail.com  |  (786) 404-7011  |  www.primitiverepairs.com",
+      brandX,
+      y - 42,
+      SMALL,
+      false,
+      colorMuted
+    );
+
+    const metaW = 220;
+    const metaH = 96;
+    const metaX = width - M - metaW;
+    const metaY = y - 64;
+
+    box(metaX, metaY, metaW, metaH);
+
+    drawText("INVOICE #", metaX + 12, metaY + metaH - 18, SMALL, true, colorMuted);
+    drawText(invoice.invoiceId, metaX + 12, metaY + metaH - 34, BASE, true);
+
+    drawText("DATE", metaX + 12, metaY + metaH - 52, SMALL, true, colorMuted);
+    drawText(formatDate(invoice.completedAt), metaX + 12, metaY + metaH - 68, SMALL, false, colorMuted);
+
+    drawText("STATUS", metaX + 12, metaY + metaH - 84, SMALL, true, colorMuted);
+    drawText(
+      (invoice.paymentStatus || "Unpaid").toUpperCase(),
+      metaX + 70,
+      metaY + metaH - 84,
+      SMALL,
+      true,
+      (invoice.paymentStatus || "").toLowerCase() === "paid" ? colorPaid : colorText
+    );
+
+    y = metaY - 16;
+    line(M, y, width - M, y);
+    y -= 18;
+
+    const panelH = 188;
+    box(M, y - panelH, width - 2 * M, panelH);
+
+    // Left column: customer
+    drawText("CUSTOMER", M + 12, y - 18, SMALL, true, colorMuted);
+    drawText(invoice.customer || "—", M + 12, y - 36, BASE, true);
+
+    if (invoice.email) {
+      drawText(invoice.email, M + 12, y - 54, SMALL, false, colorMuted);
+    }
+    if (invoice.contact) {
+      drawText(invoice.contact, M + 12, y - 70, SMALL, false, colorMuted);
+    }
+    if (invoice.address) {
+      const addressLines = wrap(invoice.address, 250, SMALL, false);
+      let ay = y - 88;
+      for (const ln of addressLines) {
+        drawText(ln, M + 12, ay, SMALL, false, colorMuted);
+        ay -= 14;
       }
     }
-    lines.push(cur);
-    return lines;
-  };
 
-  let y = height - M;
+    // Right column: device/service
+    const rx = M + 320;
+    let ry = y - 18;
 
-  const logoUrl = "/logo2.png";
-  const logoBytes = await fetch(logoUrl).then((res) => res.arrayBuffer());
-  const logoImage = await pdfDoc.embedPng(logoBytes);
-  const logoDims = logoImage.scale(0.05);
+    drawText("DEVICE", rx, ry, SMALL, true, colorMuted);
+    ry -= 18;
+    drawText(invoice.device || "—", rx, ry, BASE, true);
 
-  page.drawImage(logoImage, {
-    x: M,
-    y: y - logoDims.height,
-    width: logoDims.width,
-    height: logoDims.height,
-  });
+    ry -= 26;
+    drawText("SERIES", rx, ry, SMALL, true, colorMuted);
+    ry -= 18;
+    drawText(invoice.series || "—", rx, ry, SMALL, false, colorMuted);
 
-  const metaW = 240;
-  const metaH = 82;
-  const metaX = width - M - metaW;
-  const metaY = y - 56;
+    ry -= 26;
+    drawText("IMEI / SERIAL", rx, ry, SMALL, true, colorMuted);
+    ry -= 18;
+    drawText(invoice.imeiSerial || "—", rx, ry, SMALL, false, colorMuted);
 
-  box(metaX, metaY, metaW, metaH);
+    ry -= 26;
+    drawText("REPAIR", rx, ry, SMALL, true, colorMuted);
+    ry -= 18;
 
-  drawText("INVOICE #", metaX + 12, metaY + metaH - 18, SMALL, true, colorMuted);
-  drawText(invoice.invoiceId, metaX + 12, metaY + metaH - 34, BASE, true);
-
-  drawText("DATE", metaX + 12, metaY + metaH - 52, SMALL, true, colorMuted);
-  drawText(formatDate(invoice.completedAt), metaX + 12, metaY + metaH - 68, SMALL, false, colorMuted);
-
-  y = metaY - 16;
-  line(M, y, width - M, y);
-  y -= 18;
-
-  const panelH = 180;
-  box(M, y - panelH, width - 2 * M, panelH);
-
-  drawText("CUSTOMER", M + 12, y - 18, SMALL, true, colorMuted);
-  drawText(invoice.customer || "—", M + 12, y - 36, BASE, true);
-  if (invoice.email) drawText(invoice.email, M + 12, y - 52, SMALL, false, colorMuted);
-  if (invoice.contact) drawText(invoice.contact, M + 12, y - 66, SMALL, false, colorMuted);
-
-  const rx = M + 320;
-  let ry = y - 18;
-
-  drawText("DEVICE", rx, ry, SMALL, true, colorMuted);
-  ry -= 18;
-  drawText(invoice.device || "—", rx, ry, BASE, true);
-
-  ry -= 26;
-  drawText("SERIES", rx, ry, SMALL, true, colorMuted);
-  ry -= 18;
-  drawText(invoice.series || "—", rx, ry, SMALL, false, colorMuted);
-
-  ry -= 26;
-  drawText("IMEI / SERIAL", rx, ry, SMALL, true, colorMuted);
-  ry -= 18;
-  drawText(invoice.imeiSerial || "—", rx, ry, SMALL, false, colorMuted);
-
-  ry -= 26;
-  drawText("REPAIR", rx, ry, SMALL, true, colorMuted);
-  ry -= 18;
-
-  const repairLines = wrap(invoice.repair || "—", width - M - rx - 12, SMALL, false);
-  drawText(repairLines[0] || "—", rx, ry, SMALL, false, colorMuted);
-
-  y = y - panelH - 18;
-
-  drawText("Repair Summary", M, y, H2, true);
-  y -= 12;
-  line(M, y, width - M, y);
-  y -= 18;
-
-  const tableW = width - 2 * M;
-  const xDesc = M;
-  const xQty = width - M - 60;
-
-  drawText("Description", xDesc, y, SMALL, true, colorMuted);
-  drawText("Qty", xQty, y, SMALL, true, colorMuted);
-  y -= 10;
-  line(M, y, width - M, y);
-  y -= 16;
-
-  const items = Array.isArray(invoice.lineItems) && invoice.lineItems.length
-    ? invoice.lineItems
-    : [{ desc: "No parts recorded", qty: "" }];
-
-  for (const it of items) {
-    if (y < 190) break;
-
-    const descLines = wrap(it.desc, tableW - 90, BASE, false);
-    drawText(descLines[0], xDesc, y, BASE);
-
-    if (it.qty !== "") {
-      drawText(String(it.qty), xQty, y, BASE);
+    const repairLines = wrap(invoice.repair || "—", width - M - rx - 12, SMALL, false);
+    for (const ln of repairLines) {
+      drawText(ln, rx, ry, SMALL, false, colorMuted);
+      ry -= 14;
     }
 
-    y -= 14;
+    y = y - panelH - 18;
 
-    for (let i = 1; i < descLines.length; i++) {
+    drawText("Service & Parts Breakdown", M, y, H2, true);
+    y -= 12;
+    line(M, y, width - M, y);
+    y -= 18;
+
+    const tableRight = width - M;
+    const xDesc = M;
+    const xQty = width - M - 120;
+    const xAmt = width - M;
+
+    drawText("Description", xDesc, y, SMALL, true, colorMuted);
+    drawText("Qty", xQty, y, SMALL, true, colorMuted);
+    drawRightText("Amount", xAmt, y, SMALL, true, colorMuted);
+
+    y -= 10;
+    line(M, y, width - M, y);
+    y -= 16;
+
+    const items =
+      Array.isArray(invoice.lineItems) && invoice.lineItems.length
+        ? invoice.lineItems
+        : [{ desc: "No items recorded", qty: "", amount: "" }];
+
+    for (const it of items) {
       if (y < 190) break;
-      drawText(descLines[i], xDesc, y, BASE, false, colorMuted);
+
+      const descLines = wrap(it.desc, tableRight - xDesc - 145, BASE, false);
+      drawText(descLines[0] || "", xDesc, y, BASE);
+
+      if (it.qty !== "" && it.qty !== null && it.qty !== undefined) {
+        drawText(String(it.qty), xQty, y, BASE);
+      }
+
+      if (it.amount !== "" && it.amount !== null && it.amount !== undefined) {
+        drawRightText(money(it.amount), xAmt, y, BASE);
+      }
+
       y -= 14;
+
+      for (let i = 1; i < descLines.length; i++) {
+        if (y < 190) break;
+        drawText(descLines[i], xDesc, y, BASE, false, colorMuted);
+        y -= 14;
+      }
+
+      y -= 8;
     }
 
-    y -= 6;
+    y -= 4;
+    line(M, y, width - M, y);
+    y -= 18;
+
+    const totalsW = 260;
+    const totalsH = invoice.laborAmount > 0 ? 118 : 92;
+    const totalsX = width - M - totalsW;
+    const totalsY = 110;
+
+    box(totalsX, totalsY, totalsW, totalsH);
+
+    const isPaid = (invoice.paymentStatus || "").toLowerCase() === "paid";
+    const totalDue = isPaid ? 0 : Number(invoice.charged || 0);
+
+    const totals = [
+      ["Repair Cost", money(invoice.repairAmount || 0)],
+    ];
+
+    if (Number(invoice.laborAmount || 0) > 0) {
+      totals.push(["Labor", money(invoice.laborAmount || 0)]);
+    }
+
+    totals.push(["Total Due", money(totalDue)]);
+
+    let ty = totalsY + totalsH - 22;
+
+    if (isPaid) {
+      drawText("PAID", totalsX + 12, ty, 14, true, colorPaid);
+      ty -= 20;
+    }
+
+    for (const [k, v] of totals) {
+      const isTotal = k === "Total Due";
+      drawText(k, totalsX + 12, ty, isTotal ? 12 : 11, true, colorText);
+      drawRightText(v, totalsX + totalsW - 12, ty, isTotal ? 15 : 12, true, colorText);
+      ty -= isTotal ? 30 : 22;
+    }
+
+    if (invoice.paymentMethod) {
+      drawText(
+        `Payment Method: ${invoice.paymentMethod}`,
+        M,
+        116,
+        SMALL,
+        true,
+        colorMuted
+      );
+    }
+
+    box(M, 88, 196, 24);
+    drawText("90-DAY REPAIR WARRANTY", M + 12, 96, 9, true, colorText);
+
+    drawText("Thank you for choosing Primitive Tech.", M, 64, SMALL, false, colorMuted);
+    drawText(
+      "Support: primitiverepairs@gmail.com  |  (786) 404-7011  |  www.primitiverepairs.com",
+      M,
+      50,
+      SMALL,
+      false,
+      colorMuted
+    );
+
+    return await pdfDoc.save();
   }
-
-  y -= 6;
-  line(M, y, width - M, y);
-  y -= 16;
-
-  const totalsW = 260;
-  const totalsH = 100;
-  const totalsX = width - M - totalsW;
-  const totalsY = 120;
-
-  box(totalsX, totalsY, totalsW, totalsH);
-
-  const isPaid = (invoice.paymentStatus || "").toLowerCase() === "paid";
-  const totalDue = isPaid ? 0 : Number(invoice.charged || 0);
-
-  const totals = [
-    ["Total Due", money(totalDue)]
-  ];
-
-  // Highlight PAID
-  if (isPaid) {
-    drawText("PAID", totalsX + 12, totalsY - 20, 14, true, rgb(0, 0.6, 0));
-
-    // Add the payment method to the invoice
-    drawText("Payment Method:", M + 12, y - 50, SMALL, true, colorMuted);
-    drawText(invoice.paymentMethod || "Unspecified", M + 12, y - 66, BASE, true);  // Display payment method
-  }
-
-  let ty = totalsY + totalsH - 24;
-  for (const [k, v] of totals) {
-    drawText(k, totalsX + 12, ty, 11, true, colorText);
-    const vw = widthOf(v, 15, true);
-    drawText(v, totalsX + totalsW - 12 - vw, ty - 18, 15, true, colorText);
-    ty -= 34;
-  }
-
-  box(M, 96, 180, 24);
-  drawText("90-DAY REPAIR WARRANTY", M + 12, 104, 9, true, colorText);
-
-  drawText("Thank you for choosing Primitive Tech.", M, 72, SMALL, false, colorMuted);
-  drawText("Support: primitiverepairs@gmail.com  |  (786) 404-7011  |  www.primitiverepairs.com", M, 58, SMALL, false, colorMuted);
-
-  return await pdfDoc.save();
-}
 
   async function downloadInvoicePdf(invoice) {
     const bytes = await buildInvoicePdfBytes(invoice);
@@ -256,16 +355,13 @@ async function buildInvoicePdfBytes(invoice) {
 
   async function createAndSendInvoice(lead) {
     const partsCost = leadPartsCost(lead);
-
     const data = getData();
 
     const invoiceNumber = String(data.invoiceCounter || 1).padStart(4, "0");
-
     data.invoiceCounter = (data.invoiceCounter || 1) + 1;
 
     const repairAmount = Number(lead.repairCost ?? lead.chargedAmount ?? 0);
     const laborAmount = Number(lead.laborAmount || 0);
-
     const charged = repairAmount + laborAmount;
     const profit = charged - partsCost;
 
@@ -275,53 +371,75 @@ async function buildInvoicePdfBytes(invoice) {
         currency: "USD",
       });
 
-const invoice = {
-  invoiceId: `INV-${invoiceNumber}`,
-  leadID: lead.leadID,
-  customer: lead.customerName,
-  email: lead.email || "",
-  contact: lead.contactNumber || "",
-  device: lead.device,
-  series: lead.series,
-  imeiSerial: lead.imeiSerial || lead.serialNumber || "",
-  repair: lead.repairType || lead.issueDescription || "",
-  inventoryUsed: lead.inventoryUsed,
-  charged,
-  partsCost,
-  profit,
-  completedAt: new Date().toISOString(),
-  paymentMethod: lead.paymentMethod || "",  // Ensure payment method is passed
-  paymentStatus: lead.paymentStatus || "Unpaid", // Ensure payment status is passed
-};
+    const inventory = Array.isArray(data.inventory) ? data.inventory : [];
+    const used = Array.isArray(lead.inventoryUsed) ? lead.inventoryUsed : [];
+    const qtyMap = lead.inventoryUsedQty || {};
 
-    data.invoices = Array.isArray(data.invoices) ? data.invoices : [];
-    data.invoices.unshift({
-      ...invoice,
-      laborAmount,
-      repairAmount,
+    const partLines = used.map((id) => {
+      const item = inventory.find((x) => x.itemID === id);
+      const qty = Number(qtyMap[id] || 1);
+      const name = item?.itemName || id;
+
+      const meta = [
+        item?.brand ? `Brand: ${item.brand}` : "",
+        item?.series ? `Series: ${item.series}` : "",
+        item?.partType ? `Part: ${item.partType}` : "",
+      ]
+        .filter(Boolean)
+        .join(" • ");
+
+      return {
+        desc: meta ? `Part Used: ${name} (${meta})` : `Part Used: ${name}`,
+        qty,
+        amount: "",
+      };
     });
 
-    const repairDesc = [
-      lead.device,
-      lead.series,
-      lead.repairType || lead.issueDescription
-    ]
+    const repairDesc = [lead.device, lead.series, lead.repairType || lead.issueDescription]
       .filter(Boolean)
       .join(" ");
 
+    const invoice = {
+      invoiceId: `INV-${invoiceNumber}`,
+      leadID: lead.leadID,
+      customer: lead.customerName,
+      email: lead.email || "",
+      contact: lead.contactNumber || "",
+      address: lead.address || "",
+      device: lead.device,
+      series: lead.series,
+      imeiSerial: lead.imeiSerial || lead.serialNumber || "",
+      repair: lead.repairType || lead.issueDescription || "",
+      inventoryUsed: lead.inventoryUsed,
+      charged,
+      partsCost,
+      profit,
+      completedAt: new Date().toISOString(),
+      paymentMethod: lead.paymentMethod || "",
+      paymentStatus: lead.paymentStatus || "Unpaid",
+      laborAmount,
+      repairAmount,
+    };
+
     invoice.lineItems = [
       {
-        desc: repairDesc,
+        desc: repairDesc || "Repair Service",
         qty: 1,
+        amount: repairAmount,
       },
+      ...partLines,
     ];
 
-    if (lead.laborAmount) {
+    if (laborAmount > 0) {
       invoice.lineItems.push({
-        desc: `Labor - ${money(lead.laborAmount)}`,
+        desc: "Labor",
         qty: "",
+        amount: laborAmount,
       });
     }
+
+    data.invoices = Array.isArray(data.invoices) ? data.invoices : [];
+    data.invoices.unshift({ ...invoice });
 
     await downloadInvoicePdf(invoice);
 
