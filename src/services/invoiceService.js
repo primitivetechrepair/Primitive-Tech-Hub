@@ -194,25 +194,37 @@ if (invoice.address) {
   }
 }
 
-    // Right column: compact luxury device/service summary
-const rx = M + 320;
-let ry = y - 18;
+    // Right column: device/service
+    const rx = M + 320;
+    let ry = y - 18;
 
-drawText("DEVICE / SERVICE", rx, ry, SMALL, true, colorMuted);
-ry -= 18;
+    drawText("DEVICE", rx, ry, SMALL, true, colorMuted);
+ry -= 16;
 
-const compactInfo = [
-  `${invoice.device || "—"}${invoice.series ? ` (${invoice.series})` : ""}`,
-  `IMEI / SERIAL: ${invoice.imeiSerial || "—"}`,
-  `REPAIR: ${invoice.repair || "—"}`,
-].join("  •  ");
+// Combine device + series
+const deviceLine = [
+  invoice.device || "—",
+  invoice.series ? `(${invoice.series})` : ""
+].join(" ").trim();
 
-const compactLines = wrap(compactInfo, width - M - rx - 12, SMALL, false);
+drawText(deviceLine, rx, ry, BASE, true);
 
-for (const ln of compactLines) {
-  drawText(ln, rx, ry, SMALL, false, colorText);
-  ry -= 14;
-}
+ry -= 22;
+
+    ry -= 18;
+    drawText("IMEI / SERIAL", rx, ry, SMALL, true, colorMuted);
+    ry -= 18;
+    drawText(invoice.imeiSerial || "—", rx, ry, SMALL, false, colorMuted);
+
+    ry -= 26;
+    drawText("REPAIR", rx, ry, SMALL, true, colorMuted);
+    ry -= 18;
+
+    const repairLines = wrap(invoice.repair || "—", width - M - rx - 12, SMALL, false);
+    for (const ln of repairLines) {
+      drawText(ln, rx, ry, SMALL, false, colorMuted);
+      ry -= 14;
+    }
 
     y = y - panelH - 18;
 
@@ -239,8 +251,38 @@ for (const ln of compactLines) {
         ? invoice.lineItems
         : [{ desc: "No items recorded", qty: "", amount: "" }];
 
+    const totalsW = 260;
+    const totalsH = invoice.laborAmount > 0 ? 118 : 92;
+    const totalsX = width - M - totalsW;
+    const totalsY = 120;
+
+    const paymentMethodY = 116;
+    const warrantyY = 88;
+    const warrantyH = 24;
+
+    const paymentBoxW = totalsW;
+    const paymentBoxX = totalsX;
+    const paymentGapBelow = 10;
+    const paymentGapAbove = 16;
+    const preferredPaymentBoxH = 96;
+    const minPaymentBoxH = 82;
+
+    const paymentBottomY = warrantyY + warrantyH + paymentGapBelow;
+    const maxPaymentTopY = totalsY + totalsH - 6;
+    const availablePaymentH = Math.max(
+      minPaymentBoxH,
+      maxPaymentTopY - paymentBottomY
+    );
+    const paymentBoxH = Math.max(
+      minPaymentBoxH,
+      Math.min(preferredPaymentBoxH, availablePaymentH)
+    );
+    const paymentBoxY = paymentBottomY;
+
+    const tableStopY = paymentBoxY + paymentBoxH + paymentGapAbove;
+
     for (const it of items) {
-      if (y < 210) break;
+      if (y < tableStopY) break;
 
       const descLines = wrap(it.desc, tableRight - xDesc - 145, BASE, false);
       drawText(descLines[0] || "", xDesc, y, BASE);
@@ -256,7 +298,7 @@ for (const ln of compactLines) {
       y -= 14;
 
       for (let i = 1; i < descLines.length; i++) {
-        if (y < 210) break;
+        if (y < tableStopY) break;
         drawText(descLines[i], xDesc, y, BASE, false, colorMuted);
         y -= 14;
       }
@@ -268,10 +310,7 @@ for (const ln of compactLines) {
     line(M, y, width - M, y);
     y -= 18;
 
-    const totalsW = 260;
-    const totalsH = invoice.laborAmount > 0 ? 118 : 92;
-    const totalsX = width - M - totalsW;
-    const totalsY = 120;
+  
 
     box(totalsX, totalsY, totalsW, totalsH);
 
@@ -312,19 +351,7 @@ for (const ln of compactLines) {
   }
 };
 
-// Payment section — anchored above totals, adaptive sizing
-const paymentGap = 10;
-const paymentBoxW = totalsW;
-const paymentBoxX = totalsX;
-const paymentBoxY = totalsY + totalsH + paymentGap;
-
-const preferredPaymentBoxH = 102;
-const minPaymentBoxH = 88;
-const maxPaymentBoxH = Math.max(minPaymentBoxH, height - M - paymentBoxY - 4);
-const paymentBoxH = Math.max(
-  minPaymentBoxH,
-  Math.min(preferredPaymentBoxH, maxPaymentBoxH)
-);
+// Payment section — anchored above warranty, protected from totals/table overlap
 
 box(paymentBoxX, paymentBoxY, paymentBoxW, paymentBoxH);
 
@@ -338,12 +365,12 @@ drawText(
 );
 
 // Responsive QR sizing and placement
-const qrSize = Math.max(46, Math.min(62, paymentBoxH - 38));
-const qrTopY = paymentBoxY + paymentBoxH - 28 - qrSize;
+const qrSize = Math.max(42, Math.min(58, paymentBoxH - 36));
+const qrTopY = paymentBoxY + paymentBoxH - 24 - qrSize;
 const leftQrX = paymentBoxX + 22;
 const rightQrX = paymentBoxX + paymentBoxW - 22 - qrSize;
 const labelY = qrTopY - 10;
-const noteY = paymentBoxY + 10;
+const noteY = paymentBoxY + 8;
 
 // Zelle QR (real uploaded image)
 try {
