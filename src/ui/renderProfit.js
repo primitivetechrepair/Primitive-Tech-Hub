@@ -9,6 +9,8 @@ export function renderProfit(ctx) {
     const labor = Number(lead.laborAmount || 0);
     const profit = repairTotal - partsCost;
 
+    if (repairTotal <= 0 && labor <= 0 && partsCost <= 0) return;
+
     addListItem(
       el.profitList,
       `${lead.leadID} (${lead.customerName}): Profit $${profit.toFixed(2)} • Labor $${labor.toFixed(2)} • Parts $${partsCost.toFixed(2)} • Total $${repairTotal.toFixed(2)}`
