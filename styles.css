@@ -3917,6 +3917,40 @@ table thead th {
   word-break: break-word;
 }
 
+/* ===== Clamp Notes (keep card heights consistent) ===== */
+
+.lead-card-row:last-child {
+  /* This targets the Notes row */
+}
+
+.lead-card-row:last-child {
+  max-height: 72px;           /* controls total height of notes block */
+  overflow: hidden;
+  position: relative;
+}
+
+/* Clamp the actual text (2–3 lines) */
+.lead-card-row:last-child .muted,
+.lead-card-row:last-child {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;      /* 👈 change to 2 or 4 if you want */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Optional subtle fade at bottom (premium look) */
+.lead-card-row:last-child::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.6));
+  pointer-events: none;
+  border-radius: 0 0 12px 12px;
+}
+
 /* Address links */
 .lead-card-row .address-link {
   display: inline-block;
