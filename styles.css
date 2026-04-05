@@ -3746,7 +3746,7 @@ table thead th {
   grid-template-columns: 1fr;
   gap: 16px;
   width: 100%;
-  align-items: stretch; /* ✅ KEY FIX */
+  align-items: start;
 }
 
 /* Desktop */
@@ -3768,13 +3768,14 @@ table thead th {
 .lead-card-wrapper {
   width: 100%;
   min-width: 0;
+  align-self: start;
 }
 
 /* Actual lead card */
 .lead-card {
   width: 100%;
   min-width: 0;
-  height: 100%; /* ✅ FORCE UNIFORM HEIGHT */
+  height: auto;
   padding: 14px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.05);
@@ -3783,7 +3784,6 @@ table thead th {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
 .lead-card:hover {
