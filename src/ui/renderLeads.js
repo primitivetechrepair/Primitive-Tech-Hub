@@ -258,15 +258,23 @@ tr.classList.add("lead-card-wrapper");
 
         <div class="lead-card-row lead-notes-row">
           <div class="lead-card-row lead-notes-row">
-  <strong>Notes:</strong>
-  <button
-    type="button"
-    class="lead-notes-preview"
-    title="Open full lead notes"
-    aria-label="Open full lead notes"
-  >
+<div class="lead-card-row lead-notes-row">
+  <div class="lead-notes-header">
+    <strong>Notes:</strong>
+    <button
+      type="button"
+      class="lead-notes-preview"
+      title="Open full lead notes"
+      aria-label="Open full lead notes"
+    >
+      View Notes
+    </button>
+  </div>
+
+  <div class="lead-notes-snippet">
     ${esc(lead.notes || "No notes added")}
-  </button>
+  </div>
+
   <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
 </div>
       </div>
