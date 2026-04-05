@@ -3746,7 +3746,7 @@ table thead th {
   grid-template-columns: 1fr;
   gap: 16px;
   width: 100%;
-  align-items: start;
+  align-items: stretch; /* ✅ KEY FIX */
 }
 
 /* Desktop */
@@ -3774,6 +3774,7 @@ table thead th {
 .lead-card {
   width: 100%;
   min-width: 0;
+  height: 100%; /* ✅ FORCE UNIFORM HEIGHT */
   padding: 14px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.05);
@@ -3849,8 +3850,10 @@ table thead th {
 
 /* Body */
 .lead-card-body {
-  display: grid;
+  display: flex;          /* ✅ switch to flex */
+  flex-direction: column;
   gap: 10px;
+  flex: 1;                /* ✅ fills card evenly */
 }
 
 /* Individual data row */
@@ -3862,6 +3865,8 @@ table thead th {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.07);
   min-width: 0;
+
+  flex-shrink: 0; /* ✅ prevents rows from stretching unevenly */
 }
 
 .lead-card-row strong {
@@ -4072,4 +4077,11 @@ table thead th {
 /* Spacing fix */
 .lead-notes-row .muted {
   margin-top: 0;
+}
+
+.lead-parts-list,
+.lead-card-row a,
+.lead-card-row div {
+  max-height: 60px;   /* ✅ prevents runaway growth */
+  overflow: hidden;
 }
