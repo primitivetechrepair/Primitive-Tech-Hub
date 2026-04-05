@@ -3725,465 +3725,46 @@ table thead th {
   transform: scale(1.1);
 }
 /* =========================================================
-   LEADS TABLE — MOBILE CARD VIEW
-   Keep desktop table untouched
-========================================================= */
-@media (max-width: 700px) {
-  .leads-table {
-    width: 100% !important;
-    min-width: 100% !important;
-    table-layout: fixed !important;
-    border-collapse: separate;
-    border-spacing: 0;
-  }
-
-  .leads-table thead {
-    display: none;
-  }
-
-  .leads-table,
-  .leads-table tbody {
-    display: block;
-    width: 100%;
-  }
-
-  .leads-table tr {
-    display: block;
-    width: 100%;
-  }
-
-
-/* =========================================================
-   LEADS MOBILE — INLINE ACTIONS IN THEIR OWN COLUMNS
+   REPAIR LEADS — CARD SYSTEM
+   Replaces old table/mobile-card hybrid rules
 ========================================================= */
 
-/* Lead ID cell: info left, copy button right */
-#leadsBody td:nth-child(1) .lead-id-cell-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-  flex-wrap: nowrap;
-}
-
-#leadsBody td:nth-child(1) .lead-id-text {
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-/* Contact cell: phone left, call/text right */
-#leadsBody td:nth-child(3) .lead-contact-cell {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-  flex-wrap: nowrap;
-}
-
-#leadsBody td:nth-child(3) .lead-contact-text {
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-#leadsBody td:nth-child(3) .lead-contact-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 0 0 auto;
-  flex-wrap: nowrap;
-}
-
-/* Inventory Used cell: parts left, add-part button right */
-#leadsBody td:nth-child(13) .lead-parts-cell {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-  flex-wrap: nowrap;
-}
-
-#leadsBody td:nth-child(13) .lead-parts-list {
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-/* Shared small premium action buttons
-   Keep copy / call / text / add-part compact */
-#leadsBody .lead-action-btn {
-  width: 34px !important;
-  min-width: 34px !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 34px !important;
-  border-radius: 10px !important;
-  font-size: 15px !important;
-  line-height: 1 !important;
-  box-sizing: border-box;
-  white-space: nowrap;
-}
-
-/* Actions column: invoice + delete should fill the whole right side */
-#leadsBody td:nth-child(19).leads-actions-col,
-#leadsBody td:nth-child(19).action-stack,
-#leadsBody td:nth-child(19).actions {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: stretch !important;
-  justify-content: stretch !important;
-  gap: 8px !important;
-  width: 100% !important;
-  min-width: 0 !important;
-}
-
-/* Override the small icon-button sizing just for invoice/delete */
-#leadsBody td:nth-child(19).leads-actions-col .lead-action-btn,
-#leadsBody td:nth-child(19).action-stack .lead-action-btn,
-#leadsBody td:nth-child(19).actions .lead-action-btn,
-#leadsBody td:nth-child(19).leads-actions-col button,
-#leadsBody td:nth-child(19).action-stack button,
-#leadsBody td:nth-child(19).actions button {
-  flex: 1 1 0 !important;
-  width: auto !important;
-  min-width: 0 !important;
-  height: 40px !important;
-  min-height: 40px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border-radius: 12px !important;
-}
-
-/* Keep right-aligned inline action groups horizontal */
-#leadsBody td:nth-child(1) .lead-action-btn,
-#leadsBody td:nth-child(3) .lead-contact-actions .lead-action-btn,
-#leadsBody td:nth-child(13) .lead-parts-cell .lead-action-btn {
-  flex-shrink: 0;
-}
-
-/* ===== Empty State Center Fix (Leads Table) ===== */
-.empty-state-row td {
-  text-align: center;
-  vertical-align: middle;
-  padding: 24px 12px;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-@media (max-width: 720px) {
-  .empty-state-row td {
-    padding: 32px 12px;
-  }
-
-  .empty-icon {
-    font-size: 28px;
-  }
-
-  .empty-title {
-    font-size: 1.05rem;
-  }
-}
-
-/* ===== Leads empty state mobile centering fix ===== */
-@media (max-width: 700px) {
-  #leadsBody tr.empty-state-row {
-    display: block;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  #leadsBody tr.empty-state-row td {
-    display: block;
-    width: 100%;
-    border: 0 !important;
-    padding: 32px 12px !important;
-    text-align: center !important;
-    background: transparent !important;
-  }
-
-  #leadsBody tr.empty-state-row .empty-state {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    text-align: center;
-  }
-}
-
-/* ===== Fix inventory scroll blocking on mobile ===== */
-@media (max-width: 720px) {
-
-  /* Allow vertical scrolling inside interactive elements */
-  .inventory-table input,
-  .inventory-table select,
-  .inventory-table button,
-  .inventory-table .inline-edit {
-    touch-action: pan-y;
-  }
-
-  /* Prevent elements from trapping gestures */
-  .inventory-table td,
-  .inventory-table tr {
-    touch-action: pan-y;
-  }
-
-  /* Keep swipe actions horizontal only (if used) */
-  .inventory-table tr {
-    touch-action: pan-y;
-  }
-}
-
-/* ===== Inventory swipe zone (mobile) ===== */
-@media (max-width: 720px) {
-  .inv-item-header {
-    touch-action: pan-y;
-  }
-
-  .inv-item-text {
-    touch-action: pan-y;
-  }
-}
-
-/* ===== Stock Alert Modal ===== */
-
-#appModal .modal-message {
-  width: 100%;
-}
-
-.stock-alert {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: 8px;
-  width: 100%;
-  max-height: 45vh;
-  overflow-y: auto;
-  padding-right: 4px;
-  box-sizing: border-box;
-}
-
-.stock-section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-}
-
-.stock-title {
-  font-weight: 700;
-  font-size: 0.98rem;
-  letter-spacing: 0.4px;
-  margin: 0;
-}
-
-.stock-title.danger {
-  color: #ff6b6b;
-}
-
-.stock-title.warning {
-  color: #ffd166;
-}
-
-.stock-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-sizing: border-box;
-}
-
-/* safer than :has() */
-.stock-section.out-of-stock .stock-row {
-  background: rgba(255, 107, 107, 0.10);
-  border-color: rgba(255, 107, 107, 0.22);
-}
-
-.stock-section.low-stock .stock-row {
-  background: rgba(255, 209, 102, 0.10);
-  border-color: rgba(255, 209, 102, 0.22);
-}
-
-.stock-qty {
-  font-weight: 700;
-  opacity: 0.95;
-  flex-shrink: 0;
-}
-
-/* ===== Modal layout (mobile + desktop) ===== */
-#appModal {
-  display: grid;
-  place-items: center;
-  padding: 20px 16px calc(110px + env(safe-area-inset-bottom));
-  box-sizing: border-box;
-}
-
-#appModal .modal-panel {
-  width: min(92vw, 520px);
-  max-height: calc(100vh - 150px - env(safe-area-inset-bottom));
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
-  padding: 20px 16px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  background: rgba(15, 18, 22, 0.96);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-}
-
-/* Modal title/message spacing */
-#appModal #modalTitle {
-  margin: 0 0 14px;
-}
-
-#appModal #modalMessage {
-  margin: 0 0 18px;
-  width: 100%;
-}
-
-/* Modal button row */
-#appModal .row.wrap {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 14px;
-  margin-bottom: 0;
-  padding-bottom: 4px;
-}
-
-/* Hide Cancel button */
-#appModal #modalCancelBtn {
-  display: none !important;
-}
-
-/* Got It button */
-#appModal #modalConfirmBtn {
-  min-width: 148px;
-  min-height: 42px;
-  padding: 10px 18px;
-  margin: 0;
-  border-radius: 999px;
-
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  color: #ffffff;
-
-  /* brighter premium button */
-  background: linear-gradient(180deg, rgba(102, 252, 241, 0.28), rgba(69, 162, 158, 0.22));
-  border: 1px solid rgba(102, 252, 241, 0.32);
-
-  box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.22),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-}
-
-#appModal #modalConfirmBtn:hover {
-  transform: translateY(-1px);
-  background: linear-gradient(180deg, rgba(102, 252, 241, 0.36), rgba(69, 162, 158, 0.28));
-}
-
-#appModal #modalConfirmBtn:active {
-  transform: translateY(0);
-}
-
-/* ===== Desktop refinement ===== */
-@media (min-width: 901px) {
-  #appModal {
-    padding: 32px;
-  }
-
-  #appModal .modal-panel {
-    width: min(680px, 92vw);
-    max-height: calc(100vh - 64px);
-    padding: 24px 22px 28px;
-    border-radius: 16px;
-  }
-
-  .stock-alert {
-    max-height: 52vh;
-  }
-
-  .stock-row {
-    padding: 12px 14px;
-    font-size: 0.95rem;
-  }
-}
-
-/* ===== Mobile refinement ===== */
-@media (max-width: 900px) {
-  #appModal .modal-panel {
-    max-height: calc(100vh - 160px - env(safe-area-inset-bottom));
-  }
-
-  .stock-alert {
-    max-height: 45vh;
-  }
-}
-
-/* =========================================================
-   REPAIR LEADS — INNER PANEL + CARD LAYER
-   ========================================================= */
-
-/* Inner panel that sits inside the Repair Leads section */
+/* Outer leads panel inside the Repair Leads section */
 .leads-card-wrap {
   width: 100%;
   margin-top: 18px;
-  padding: 14px;
+  padding: 16px;
   border-radius: 18px;
   background: rgba(0, 0, 0, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
-/* Card list grid */
+/* Leads list grid */
 .leads-card-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 14px;
+  gap: 16px;
   width: 100%;
+  align-items: start;
 }
 
-/* Desktop layout */
+/* Desktop */
 @media (min-width: 901px) {
   .leads-card-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 18px;
   }
 }
 
-/* Wide desktop */
+/* Large desktop */
 @media (min-width: 1280px) {
   .leads-card-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-/* Individual wrapper */
+/* Individual lead wrapper */
 .lead-card-wrapper {
   width: 100%;
   min-width: 0;
@@ -4208,6 +3789,13 @@ table thead th {
   transform: translateY(-2px);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.26);
   background: rgba(255, 255, 255, 0.06);
+}
+
+/* Restored card state */
+.lead-card-wrapper.lead-just-restored .lead-card {
+  box-shadow:
+    inset 0 0 0 2px rgba(102, 252, 241, 0.55),
+    0 10px 24px rgba(0, 0, 0, 0.20);
 }
 
 /* Header */
@@ -4238,6 +3826,7 @@ table thead th {
   word-break: break-word;
 }
 
+/* Top action group */
 .lead-card-actions {
   display: flex;
   flex-wrap: wrap;
@@ -4251,6 +3840,11 @@ table thead th {
   min-height: 36px;
   padding: 8px 10px;
   margin: 0;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 /* Body */
@@ -4259,7 +3853,7 @@ table thead th {
   gap: 10px;
 }
 
-/* Each info block */
+/* Individual data row */
 .lead-card-row {
   display: grid;
   gap: 6px;
@@ -4278,7 +3872,7 @@ table thead th {
   letter-spacing: 0.05em;
 }
 
-/* Inputs/selects inside card rows */
+/* Form controls inside lead cards */
 .lead-card-row input,
 .lead-card-row select,
 .lead-card-row textarea,
@@ -4291,28 +3885,62 @@ table thead th {
 .lead-card-row textarea {
   width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 }
 
-/* Parts / files readability */
+/* Parts list items */
+.lead-part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
+}
+
+.lead-part:last-child {
+  margin-bottom: 0;
+}
+
+/* Keep remove buttons compact */
+.removePartBtn {
+  flex-shrink: 0;
+}
+
+/* Parts / files / notes readability */
 .lead-parts-list,
 .lead-card-row a,
 .lead-card-row .muted {
   word-break: break-word;
 }
 
-/* Empty state inside panel */
-.leads-card-list .empty-state-row {
+/* Address links */
+.lead-card-row .address-link {
+  display: inline-block;
+}
+
+/* Empty state */
+.empty-state-row {
   width: 100%;
 }
 
-.leads-card-list .empty-state {
+.empty-state {
   padding: 24px 16px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
 }
 
-/* Mobile tweaks */
+/* Tablet + mobile */
 @media (max-width: 900px) {
   .leads-card-wrap {
     padding: 12px;
@@ -4338,6 +3966,7 @@ table thead th {
   }
 }
 
+/* Small mobile */
 @media (max-width: 600px) {
   .leads-card-list {
     grid-template-columns: 1fr;
@@ -4351,6 +3980,4 @@ table thead th {
   .lead-card-actions .lead-action-btn {
     width: 100%;
   }
-}
-
 }
