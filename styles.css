@@ -4281,39 +4281,65 @@ table thead th {
 }
 
 /* =========================================================
-   LEADS → DESKTOP CARD GRID (PHASE 1)
+   LEADS → STACKED CARD LAYOUT FOUNDATION (ALL SCREENS)
 ========================================================= */
 
-@media (min-width: 901px) {
+.leads-table-wrap {
+  overflow: visible !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
-  /* kill horizontal scroll */
-  .leads-table-wrap {
-    overflow: visible !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
+.leads-table {
+  width: 100% !important;
+  min-width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
 
-  /* turn tbody into grid */
-  #leadsBody {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-  }
+.leads-table thead {
+  display: none !important;
+}
 
-  /* remove table row behavior */
-  #leadsBody tr {
-    display: block;
-    width: 100%;
-  }
+.leads-table,
+.leads-table tbody {
+  display: block;
+  width: 100%;
+}
 
-  /* remove table cell structure */
-  #leadsBody td {
-    display: block;
-    width: 100%;
-    border: none !important;
-    padding: 0 !important;
-  }
+#leadsBody {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
 
+#leadsBody tr {
+  display: block;
+  width: 100%;
+}
+
+#leadsBody td {
+  display: block;
+  width: 100%;
+  border: none !important;
+  padding: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+
+#leadsBody tr:not(.empty-state-row) {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+#leadsBody tr.empty-state-row td {
+  padding: 0 !important;
 }
 
 }
