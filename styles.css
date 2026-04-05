@@ -4280,4 +4280,40 @@ table thead th {
   }
 }
 
+/* =========================================================
+   LEADS → DESKTOP CARD GRID (PHASE 1)
+========================================================= */
+
+@media (min-width: 901px) {
+
+  /* kill horizontal scroll */
+  .leads-table-wrap {
+    overflow: visible !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* turn tbody into grid */
+  #leadsBody {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* remove table row behavior */
+  #leadsBody tr {
+    display: block;
+    width: 100%;
+  }
+
+  /* remove table cell structure */
+  #leadsBody td {
+    display: block;
+    width: 100%;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+}
+
 }
