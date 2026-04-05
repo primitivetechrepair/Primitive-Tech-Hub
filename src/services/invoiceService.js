@@ -552,13 +552,16 @@ return await pdfDoc.save();
     }
 
     data.invoices = Array.isArray(data.invoices) ? data.invoices : [];
-    data.invoices.unshift({ ...invoice });
 
-    console.log("[INVOICE DEBUG] after push", {
-      invoiceId: invoice.invoiceId,
-      invoicesLength: data.invoices.length,
-      firstInvoice: data.invoices[0],
-    });
+// ❌ Prevent duplicate invoices for same invoiceId
+const exists = data.invoices.some(
+  (inv) => String(inv?.invoiceId) === String(invoice.invoiceId)
+);
+
+if (!exists) {
+  data.invoices.unshift({ ...invoice });
+}
+
 
     await downloadInvoicePdf(invoice);
 
@@ -589,18 +592,11 @@ return await pdfDoc.save();
       userAction: "invoice_export",
     });
 
-    console.log("[INVOICE DEBUG] before persist", {
-      invoiceId: invoice.invoiceId,
-      invoicesLength: Array.isArray(data.invoices) ? data.invoices.length : "not-array",
-    });
 
     toast(`Invoice ${invoice.invoiceId} generated.`, "success");
     await persist();
 
-    console.log("[INVOICE DEBUG] after persist", {
-      invoiceId: invoice.invoiceId,
-      invoicesLength: Array.isArray(data.invoices) ? data.invoices.length : "not-array",
-    });
+
   }
 
   return {
