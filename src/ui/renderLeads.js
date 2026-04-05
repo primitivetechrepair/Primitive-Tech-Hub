@@ -1,5 +1,18 @@
 // src/ui/renderLeads.js
 export function renderLeads(ctx) {
+  // ===== UI Collapse State (local only) =====
+  const COLLAPSE_KEY = "primitiveTechHub_leadCollapseState";
+  const collapseState = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || "{}");
+
+  function isCollapsed(id) {
+    return collapseState[id] === true;
+  }
+
+  function setCollapsed(id, val) {
+    collapseState[id] = val;
+    localStorage.setItem(COLLAPSE_KEY, JSON.stringify(collapseState));
+  }
+
   const {
     el,
     data,
@@ -127,7 +140,11 @@ export function renderLeads(ctx) {
     )}`;
 
     const tr = document.createElement("div");
-    tr.classList.add("lead-card-wrapper");
+tr.classList.add("lead-card-wrapper");
+
+if (isCollapsed(lead.leadID)) {
+  tr.classList.add("lead-collapsed");
+}
 
     if (lead.justRestored) {
       tr.classList.add("lead-just-restored");
@@ -145,6 +162,7 @@ export function renderLeads(ctx) {
           </div>
 
           <div class="lead-card-actions">
+  <button class="tiny lead-action-btn collapseToggleBtn" title="Collapse / Expand">▾</button>
             <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
             <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
             <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
@@ -497,6 +515,13 @@ export function renderLeads(ctx) {
 
     tr.querySelector(".useForRepairBtn").onclick = () => addPartToLead(lead.leadID);
     tr.querySelector(".invoiceBtn").onclick = () => createAndSendInvoice(lead);
+    const collapseBtn = tr.querySelector(".collapseToggleBtn");
+if (collapseBtn) {
+  collapseBtn.onclick = () => {
+    const currentlyCollapsed = tr.classList.toggle("lead-collapsed");
+    setCollapsed(lead.leadID, currentlyCollapsed);
+  };
+}
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
 
     const notesPreviewBtn = tr.querySelector(".lead-notes-preview");

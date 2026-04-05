@@ -4085,3 +4085,19 @@ table thead th {
   max-height: 60px;   /* ✅ prevents runaway growth */
   overflow: hidden;
 }
+
+/* ===== Collapsible Lead Cards ===== */
+
+.lead-card-wrapper.lead-collapsed .lead-card-body {
+  display: none;
+}
+
+/* Optional: tighten collapsed card */
+.lead-card-wrapper.lead-collapsed .lead-card {
+  padding-bottom: 10px;
+}
+
+/* Rotate arrow when collapsed */
+.lead-card-wrapper.lead-collapsed .collapseToggleBtn {
+  transform: rotate(-90deg);
+}
