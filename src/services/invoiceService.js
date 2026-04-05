@@ -587,5 +587,8 @@ return await pdfDoc.save();
     await persist();
   }
 
-  return { createAndSendInvoice };
+  return {
+    createAndSendInvoice,
+    downloadInvoicePdf,
+  };
 }

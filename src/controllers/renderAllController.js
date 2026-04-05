@@ -186,6 +186,7 @@ export function createRenderAllController({
       persist,
       renderAll,
       createAndSendInvoice: invoiceService.createAndSendInvoice,
+      downloadInvoicePdf: invoiceService.downloadInvoicePdf,
     });
 
         renderDeletedLeads({

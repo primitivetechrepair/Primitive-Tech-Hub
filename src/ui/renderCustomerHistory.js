@@ -11,6 +11,7 @@ export function renderCustomerHistory({
   persist,
   renderAll,
   createAndSendInvoice,
+  downloadInvoicePdf,
 }) {
   el.customerHistory.innerHTML = "";
 
@@ -55,6 +56,32 @@ export function renderCustomerHistory({
     const lastContactText = lastContact ? fmtDateShort(lastContact) : "No contact";
 
     const address = getBestAddress(repairs);
+
+    const repairLeadIDs = new Set(
+      repairs.map((lead) => String(lead?.leadID || "").trim()).filter(Boolean)
+    );
+
+    const storedInvoices = (Array.isArray(data.invoices) ? data.invoices : [])
+      .filter((invoice) => {
+        const invoiceLeadID = String(invoice?.leadID || "").trim();
+        if (invoiceLeadID && repairLeadIDs.has(invoiceLeadID)) return true;
+
+        const sameCustomer =
+          normalizeStr(invoice?.customer) === normalizeStr(parsed.name);
+
+        const sameContact =
+          !parsed.contact ||
+          normalizeStr(invoice?.contact) === normalizeStr(parsed.contact) ||
+          normalizeStr(invoice?.email) === normalizeStr(parsed.contact);
+
+        return sameCustomer && sameContact;
+      })
+      .slice()
+      .sort((a, b) => {
+        const da = new Date(a?.completedAt || 0).getTime();
+        const db = new Date(b?.completedAt || 0).getTime();
+        return db - da;
+      });
 
     const isRepeat = repairs.length > 1;
     const isHighValue = repairs.length >= 3;
@@ -131,6 +158,39 @@ export function renderCustomerHistory({
               </div>
             </div>
           `).join("")}
+
+          <div class="customer-history-invoices">
+            <div class="customer-history-invoices__title">🧾 Invoice History</div>
+
+            ${
+              storedInvoices.length
+                ? storedInvoices.map((invoice) => `
+                  <div class="customer-history-invoice-row">
+                    <div class="customer-history-invoice-row__main">
+                      <div class="customer-history-invoice-row__id">
+                        ${escapeHtml(invoice.invoiceId || "No Invoice ID")}
+                      </div>
+                      <div class="customer-history-invoice-row__meta">
+                        ${[
+                          invoice.completedAt ? `Date: ${escapeHtml(fmtDateShort(invoice.completedAt))}` : "",
+                          invoice.paymentStatus ? `Status: ${escapeHtml(invoice.paymentStatus)}` : "",
+                          `Total: ${escapeHtml(formatCurrency(invoice.charged || 0))}`,
+                        ].filter(Boolean).join(" • ")}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="tiny-btn customer-history-download-invoice-btn"
+                      data-invoice-id="${escapeHtml(invoice.invoiceId || "")}"
+                    >
+                      ⬇️ Download
+                    </button>
+                  </div>
+                `).join("")
+                : `<div class="customer-history-invoices__empty">No saved invoices yet.</div>`
+            }
+          </div>
         </div>
       </div>
     `;
@@ -190,6 +250,35 @@ if (invoiceBtn) {
     }
   });
 }
+
+li.querySelectorAll(".customer-history-download-invoice-btn").forEach((btn) => {
+  btn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+
+    const invoiceId = btn.dataset.invoiceId;
+    const invoice = storedInvoices.find(
+      (entry) => String(entry?.invoiceId || "") === String(invoiceId || "")
+    );
+
+    if (!invoice) {
+      toast("Saved invoice not found.", "warning");
+      return;
+    }
+
+    if (typeof downloadInvoicePdf !== "function") {
+      toast("Invoice download is not wired yet.", "warning");
+      return;
+    }
+
+    try {
+      await downloadInvoicePdf(invoice);
+      toast(`Invoice ${invoice.invoiceId} downloaded.`, "success");
+    } catch (err) {
+      console.error("Invoice download failed:", err);
+      toast("Could not download invoice.", "error");
+    }
+  });
+});
 
     if (isAdminEnabled()) {
       const actions = document.createElement("div");
@@ -330,6 +419,18 @@ function buildContactActions(contact) {
       >📋 Copy</button>
     </div>
   `;
+}
+
+function normalizeStr(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function formatCurrency(value) {
+  const amount = Number(value || 0);
+  return amount.toLocaleString(undefined, {
+    style: "currency",
+    currency: "USD",
+  });
 }
 
 function escapeHtml(str) {
