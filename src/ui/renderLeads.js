@@ -97,9 +97,9 @@ export function renderLeads(ctx) {
         return `
           <div class="lead-part">
             <span>${esc(name)} ${qty > 1 ? `(${qty})` : ""}</span>
-            <button 
-              class="tiny removePartBtn premium-remove-btn" 
-              data-item="${esc(id)}" 
+            <button
+              class="tiny removePartBtn premium-remove-btn"
+              data-item="${esc(id)}"
               title="Remove part"
             >
               <span class="icon">🗑️</span>
@@ -110,9 +110,9 @@ export function renderLeads(ctx) {
       .join("");
 
     const partsCost = leadPartsCost(lead);
-const repairTotal = Number(lead.repairCost || 0);
-const labor = Number(lead.laborAmount || 0);
-const profit = repairTotal - partsCost;
+    const repairTotal = Number(lead.repairCost || 0);
+    const labor = Number(lead.laborAmount || 0);
+    const profit = repairTotal - partsCost;
 
     const files =
       (lead.files || [])
@@ -127,160 +127,156 @@ const profit = repairTotal - partsCost;
     )}`;
 
     const tr = document.createElement("div");
-tr.classList.add("lead-card-wrapper");
+    tr.classList.add("lead-card-wrapper");
 
     if (lead.justRestored) {
       tr.classList.add("lead-just-restored");
     }
 
     tr.innerHTML = `
-    <div class="lead-card">
+      <div class="lead-card">
+        <div class="lead-card-header">
+          <div class="lead-card-title copy-lead-id" title="Click to copy">
+            ${esc(lead.customerName || "Unknown")}
+            <span class="lead-card-id">
+              ${esc(lead.leadID)}
+              ${lead.justRestored ? ` <span class="lead-restored-badge">RESTORED</span>` : ""}
+            </span>
+          </div>
 
-      <div class="lead-card-header">
-        <div class="lead-card-title copy-lead-id" title="Click to copy">
-          ${esc(lead.customerName || "Unknown")}
-          <span class="lead-card-id">
-            ${esc(lead.leadID)}
-            ${lead.justRestored ? ` <span class="lead-restored-badge">RESTORED</span>` : ""}
-          </span>
+          <div class="lead-card-actions">
+            <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
+            <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
+            <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
+            <button class="tiny lead-action-btn invoiceBtn" title="Invoice">🧾</button>
+            <button class="tiny lead-action-btn delete-btn deleteLeadBtn" title="Delete">🗑️</button>
+          </div>
         </div>
 
-        <div class="lead-card-actions">
-          <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
-          <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
-          <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
-          <button class="tiny lead-action-btn invoiceBtn" title="Invoice">🧾</button>
-          <button class="tiny lead-action-btn delete-btn deleteLeadBtn" title="Delete">🗑️</button>
-        </div>
-      </div>
+        <div class="lead-card-body">
+          <div class="lead-card-row">
+            <strong>Device:</strong> ${esc(lead.device || "-")} ${esc(lead.series || "")}
+          </div>
 
-      <div class="lead-card-body">
-        <div class="lead-card-row">
-          <strong>Device:</strong> ${esc(lead.device || "-")} ${esc(lead.series || "")}
-        </div>
+          <div class="lead-card-row">
+            <strong>Repair:</strong> ${esc(lead.repairType || "-")}
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Repair:</strong> ${esc(lead.repairType || "-")}
-        </div>
+          <div class="lead-card-row">
+            <strong>Phone:</strong> ${esc(lead.contactNumber || "-")}
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Phone:</strong> ${esc(lead.contactNumber || "-")}
-        </div>
+          <div class="lead-card-row">
+            <strong>Email:</strong> ${esc(lead.email || "-")}
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Email:</strong> ${esc(lead.email || "-")}
-        </div>
+          <div class="lead-card-row">
+            <strong>Address:</strong>
+            <a class="address-link" href="${mapAddress}" target="_blank" rel="noopener">
+              ${esc(lead.address || "-")}
+            </a>
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Address:</strong>
-          <a class="address-link" href="${mapAddress}" target="_blank" rel="noopener">
-            ${esc(lead.address || "-")}
-          </a>
-        </div>
+          <div class="lead-card-row">
+            <strong>Status:</strong>
+            <select class="leadStatusSel">
+              ${STATUS_ORDER.map(
+                (s) =>
+                  `<option value="${esc(s)}" ${lead.status === s ? "selected" : ""}>${esc(s)}</option>`
+              ).join("")}
+            </select>
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Status:</strong>
-          <select class="leadStatusSel">
-            ${STATUS_ORDER.map(
-              (s) =>
-                `<option value="${esc(s)}" ${lead.status === s ? "selected" : ""}>${esc(s)}</option>`
-            ).join("")}
-          </select>
-        </div>
+          <div class="lead-card-row">
+            <strong>Repair Cost:</strong>
+            <input
+              type="number"
+              class="repairCostInput"
+              value="${Number(lead.repairCost ?? lead.chargedAmount ?? 0)}"
+              min="0"
+              step="0.01"
+            />
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Repair Cost:</strong>
-          <input
-            type="number"
-            class="repairCostInput"
-            value="${Number(lead.repairCost ?? lead.chargedAmount ?? 0)}"
-            min="0"
-            step="0.01"
-          />
-        </div>
+          <div class="lead-card-row">
+            <strong>Labor:</strong>
+            <input
+              type="number"
+              class="laborAmountInput"
+              value="${Number(lead.laborAmount || 0)}"
+              min="0"
+              step="0.01"
+            />
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Labor:</strong>
-          <input
-            type="number"
-            class="laborAmountInput"
-            value="${Number(lead.laborAmount || 0)}"
-            min="0"
-            step="0.01"
-          />
-        </div>
+          <div class="lead-card-row">
+            <strong>Payment Method:</strong>
+            <select class="paymentMethodSel">
+              <option value="Cash" ${lead.paymentMethod === "Cash" ? "selected" : ""}>Cash</option>
+              <option value="Zelle Transfer" ${lead.paymentMethod === "Zelle Transfer" ? "selected" : ""}>Zelle Transfer</option>
+              <option value="CashApp" ${lead.paymentMethod === "CashApp" ? "selected" : ""}>CashApp</option>
+            </select>
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Payment Method:</strong>
-          <select class="paymentMethodSel">
-            <option value="Cash" ${lead.paymentMethod === "Cash" ? "selected" : ""}>Cash</option>
-            <option value="Zelle Transfer" ${lead.paymentMethod === "Zelle Transfer" ? "selected" : ""}>Zelle Transfer</option>
-            <option value="CashApp" ${lead.paymentMethod === "CashApp" ? "selected" : ""}>CashApp</option>
-          </select>
-        </div>
+          <div class="lead-card-row">
+            <strong>Payment Status:</strong>
+            <select class="paymentStatusSel">
+              <option value="Unpaid" ${lead.paymentStatus === "Unpaid" ? "selected" : ""}>Unpaid</option>
+              <option value="Partially Paid" ${lead.paymentStatus === "Partially Paid" ? "selected" : ""}>Partially Paid</option>
+              <option value="Paid" ${lead.paymentStatus === "Paid" ? "selected" : ""}>Paid</option>
+            </select>
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Payment Status:</strong>
-          <select class="paymentStatusSel">
-            <option value="Unpaid" ${lead.paymentStatus === "Unpaid" ? "selected" : ""}>Unpaid</option>
-            <option value="Partially Paid" ${lead.paymentStatus === "Partially Paid" ? "selected" : ""}>Partially Paid</option>
-            <option value="Paid" ${lead.paymentStatus === "Paid" ? "selected" : ""}>Paid</option>
-          </select>
-        </div>
+          <div class="lead-card-row">
+            <strong>Parts:</strong>
+            <div class="lead-parts-list">${used || "-"}</div>
+            <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩 Add Part</button>
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Parts:</strong>
-          <div class="lead-parts-list">${used || "-"}</div>
-          <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩 Add Part</button>
-        </div>
+          <div class="lead-card-row">
+            <strong>Files:</strong>
+            <div>${files}</div>
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Files:</strong>
-          <div>${files}</div>
-        </div>
+          <div class="lead-card-row">
+            <strong>Date Reported:</strong>
+            ${
+              lead.dateReported
+                ? String(lead.dateReported).split("-").length === 3
+                  ? `${String(lead.dateReported).split("-")[1]}/${String(lead.dateReported).split("-")[2]}/${String(lead.dateReported).split("-")[0]}`
+                  : fmtDateShort(lead.dateReported)
+                : "-"
+            }
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Date Reported:</strong>
-          ${
-            lead.dateReported
-              ? String(lead.dateReported).split("-").length === 3
-                ? `${String(lead.dateReported).split("-")[1]}/${String(lead.dateReported).split("-")[2]}/${String(lead.dateReported).split("-")[0]}`
-                : fmtDateShort(lead.dateReported)
-              : "-"
-          }
-        </div>
+          <div class="lead-card-row">
+            <strong>Profit:</strong>
+            ${fmtMoney(profit)}
+            <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
+          </div>
 
-        <div class="lead-card-row">
-          <strong>Profit:</strong>
-          ${fmtMoney(profit)}
-          <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
-        </div>
-
-        <div class="lead-card-row lead-notes-row">
           <div class="lead-card-row lead-notes-row">
-<div class="lead-card-row lead-notes-row">
-  <div class="lead-notes-header">
-    <strong>Notes:</strong>
-    <button
-      type="button"
-      class="lead-notes-preview"
-      title="Open full lead notes"
-      aria-label="Open full lead notes"
-    >
-      View Notes
-    </button>
-  </div>
+            <div class="lead-notes-header">
+              <strong>Notes:</strong>
+              <button
+                type="button"
+                class="lead-notes-preview"
+                title="Open full lead notes"
+                aria-label="Open full lead notes"
+              >
+                View Notes
+              </button>
+            </div>
 
-  <div class="lead-notes-snippet">
-    ${esc(lead.notes || "No notes added")}
-  </div>
+            <div class="lead-notes-snippet">
+              ${esc(lead.notes || "No notes added")}
+            </div>
 
-  <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
-</div>
+            <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
+          </div>
+        </div>
       </div>
-
-    </div>
-`;
+    `;
 
     tr.querySelector(".leadStatusSel").addEventListener("change", async (e) => {
       const newStatus = e.target.value;
@@ -504,16 +500,16 @@ tr.classList.add("lead-card-wrapper");
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
 
     const notesPreviewBtn = tr.querySelector(".lead-notes-preview");
-if (notesPreviewBtn) {
-  notesPreviewBtn.onclick = async () => {
-    await window.Modal?.open({
-      title: "Lead Notes",
-      message: String(lead.notes || "No notes for this lead."),
-      confirmText: "Close",
-      requireInput: false,
-    });
-  };
-}
+    if (notesPreviewBtn) {
+      notesPreviewBtn.onclick = async () => {
+        await window.Modal?.open({
+          title: "Lead Notes",
+          message: String(lead.notes || "No notes for this lead."),
+          confirmText: "Close",
+          requireInput: false,
+        });
+      };
+    }
 
     tr.querySelector(".copyCustomerBtn").onclick = async (e) => {
       e.stopPropagation();
