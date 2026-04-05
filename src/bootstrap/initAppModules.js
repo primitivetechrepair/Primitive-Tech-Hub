@@ -179,15 +179,15 @@ export function initAppModules(ctx) {
 
   if (!out.invoiceService) {
     out.invoiceService = createInvoiceService({
-      getData,
-      persist,
-      download,
-      leadPartsCost: out.leadCostService.leadPartsCost,
-      setIntegrationLog: (text) => setIntegrationLog(el, text),
-      queueCloudSync: (...args) => out.connectivityController.queueCloudSync(...args),
-      addAudit: ctx.addAudit,
-      toast: toastMsg,
-    });
+  getData,
+  persist: async () => persist(getData(), getCryptoKey()),
+  download,
+  leadPartsCost: out.leadCostService.leadPartsCost,
+  setIntegrationLog: (text) => setIntegrationLog(el, text),
+  queueCloudSync: (...args) => out.connectivityController.queueCloudSync(...args),
+  addAudit: ctx.addAudit,
+  toast: toastMsg,
+});
   }
 
   if (!out.inventoryController) {
