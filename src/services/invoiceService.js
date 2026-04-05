@@ -553,14 +553,12 @@ return await pdfDoc.save();
 
     data.invoices = Array.isArray(data.invoices) ? data.invoices : [];
 
-// ❌ Prevent duplicate invoices for same invoiceId
-const exists = data.invoices.some(
-  (inv) => String(inv?.invoiceId) === String(invoice.invoiceId)
+// Keep only one invoice per invoiceId
+data.invoices = data.invoices.filter(
+  (inv) => String(inv?.invoiceId) !== String(invoice.invoiceId)
 );
 
-if (!exists) {
-  data.invoices.unshift({ ...invoice });
-}
+data.invoices.unshift({ ...invoice });
 
 
     await downloadInvoicePdf(invoice);
