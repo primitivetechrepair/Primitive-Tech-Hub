@@ -4092,12 +4092,45 @@ table thead th {
   display: none;
 }
 
-/* Optional: tighten collapsed card */
+/* Tighten collapsed card slightly */
 .lead-card-wrapper.lead-collapsed .lead-card {
   padding-bottom: 10px;
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-/* Rotate arrow when collapsed */
+/* Premium collapse control */
+.collapseToggleBtn {
+  min-width: 118px !important;
+  min-height: 34px !important;
+  padding: 7px 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: none !important;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.collapseToggleBtn:hover {
+  background: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Make collapsed state more obvious */
+.lead-card-wrapper.lead-collapsed .lead-card-header {
+  padding-bottom: 0;
+  border-bottom-color: transparent;
+}
+
+.lead-card-wrapper.lead-collapsed .lead-card-title {
+  opacity: 0.96;
+}
+
 .lead-card-wrapper.lead-collapsed .collapseToggleBtn {
-  transform: rotate(-90deg);
+  background: rgba(102, 252, 241, 0.10) !important;
+  border-color: rgba(102, 252, 241, 0.30) !important;
 }

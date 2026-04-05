@@ -162,7 +162,14 @@ if (isCollapsed(lead.leadID)) {
           </div>
 
           <div class="lead-card-actions">
-  <button class="tiny lead-action-btn collapseToggleBtn" title="Collapse / Expand">▾</button>
+  <button
+    class="tiny lead-action-btn collapseToggleBtn"
+    type="button"
+    title="${isCollapsed(lead.leadID) ? "Show Details" : "Hide Details"}"
+    aria-label="${isCollapsed(lead.leadID) ? "Show Details" : "Hide Details"}"
+  >
+    ${isCollapsed(lead.leadID) ? "Show Details" : "Hide Details"}
+  </button>
             <button class="tiny lead-action-btn copyCustomerBtn" title="Copy Info">📋</button>
             <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
             <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
@@ -520,6 +527,13 @@ if (collapseBtn) {
   collapseBtn.onclick = () => {
     const currentlyCollapsed = tr.classList.toggle("lead-collapsed");
     setCollapsed(lead.leadID, currentlyCollapsed);
+
+    collapseBtn.textContent = currentlyCollapsed ? "Show Details" : "Hide Details";
+    collapseBtn.title = currentlyCollapsed ? "Show Details" : "Hide Details";
+    collapseBtn.setAttribute(
+      "aria-label",
+      currentlyCollapsed ? "Show Details" : "Hide Details"
+    );
   };
 }
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
