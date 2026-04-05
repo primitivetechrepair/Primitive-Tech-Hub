@@ -74,15 +74,13 @@ export function renderLeads(ctx) {
 
   if (!leads.length) {
     el.leadsBody.innerHTML = `
-      <tr class="empty-state-row">
-        <td colspan="19">
-          <div class="empty-state">
-            <div class="empty-icon">🛠️</div>
-            <div class="empty-title">No Repair Leads Yet</div>
-            <div class="muted">Create a lead to start tracking repairs.</div>
-          </div>
-        </td>
-      </tr>
+      <div class="empty-state-row">
+        <div class="empty-state">
+          <div class="empty-icon">🛠️</div>
+          <div class="empty-title">No Repair Leads Yet</div>
+          <div class="muted">Create a lead to start tracking repairs.</div>
+        </div>
+      </div>
     `;
     return;
   }
@@ -136,7 +134,6 @@ tr.classList.add("lead-card-wrapper");
     }
 
     tr.innerHTML = `
-  <td colspan="19">
     <div class="lead-card">
 
       <div class="lead-card-header">
@@ -267,7 +264,6 @@ tr.classList.add("lead-card-wrapper");
       </div>
 
     </div>
-  </td>
 `;
 
     tr.querySelector(".leadStatusSel").addEventListener("change", async (e) => {
