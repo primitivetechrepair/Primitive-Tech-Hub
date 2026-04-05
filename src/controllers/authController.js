@@ -179,7 +179,14 @@ export function createAuthController({
       return false;
     }
 
-    setData(loaded || defaultData());
+    const nextData = loaded || defaultData();
+
+// 🔒 Preserve invoices if missing from loaded data
+if (!Array.isArray(nextData.invoices)) {
+  nextData.invoices = [];
+}
+
+setData(nextData);
     return true;
   }
 
