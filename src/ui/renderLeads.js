@@ -128,7 +128,8 @@ const profit = repairTotal - partsCost;
       lead.address || ""
     )}`;
 
-    const tr = document.createElement("tr");
+    const tr = document.createElement("div");
+tr.classList.add("lead-card-wrapper");
 
     if (lead.justRestored) {
       tr.classList.add("lead-just-restored");

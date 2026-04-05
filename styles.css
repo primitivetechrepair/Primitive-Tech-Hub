@@ -4345,4 +4345,8 @@ table thead th {
   }
 }
 
+.lead-card-wrapper {
+  width: 100%;
+}
+
 }
