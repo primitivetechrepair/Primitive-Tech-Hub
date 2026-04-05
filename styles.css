@@ -4281,7 +4281,7 @@ table thead th {
 }
 
 /* =========================================================
-   LEADS → STACKED CARD LAYOUT FOUNDATION (ALL SCREENS)
+   LEADS → CARD LAYOUT (FINAL FOUNDATION)
 ========================================================= */
 
 .leads-table-wrap {
@@ -4296,63 +4296,53 @@ table thead th {
   table-layout: fixed !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
+  display: block !important;
 }
 
 .leads-table thead {
   display: none !important;
 }
 
-.leads-table,
 .leads-table tbody {
-  display: block;
-  width: 100%;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+  width: 100% !important;
 }
 
-#leadsBody {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-@media (min-width: 901px) {
-  #leadsBody {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-}
-
-@media (min-width: 1280px) {
-  #leadsBody {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-#leadsBody tr {
-  display: block;
-  width: 100%;
-}
-
-#leadsBody td {
-  display: block;
-  width: 100%;
-  border: none !important;
-  padding: 0 !important;
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: unset !important;
-}
-
-#leadsBody tr:not(.empty-state-row) {
-  display: block;
-  margin: 0;
-  padding: 0;
+.leads-table tbody tr {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
   transform: none !important;
 }
 
-#leadsBody tr.empty-state-row td {
+.leads-table tbody td {
+  display: block !important;
+  width: 100% !important;
+  border: none !important;
   padding: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  background: transparent !important;
+}
+
+/* Desktop: 2 cards */
+@media (min-width: 901px) {
+  .leads-table tbody {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+/* Large desktop: 3 cards */
+@media (min-width: 1280px) {
+  .leads-table tbody {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
 }
 
 }
