@@ -4015,3 +4015,47 @@ table thead th {
     width: 100%;
   }
 }
+
+/* Notes preview should look like clean card text, not a button */
+.lead-notes-preview {
+  width: 100%;
+  min-height: unset !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+
+  color: var(--text-color);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+
+  display: block;
+  cursor: pointer;
+}
+
+.lead-notes-preview:hover {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.lead-notes-preview:active {
+  transform: none !important;
+}
+
+.lead-notes-row {
+  align-content: start;
+}
+
+.lead-notes-row .muted {
+  margin-top: 2px;
+}

@@ -259,8 +259,13 @@ tr.classList.add("lead-card-wrapper");
         <div class="lead-card-row lead-notes-row">
           <div class="lead-card-row lead-notes-row">
   <strong>Notes:</strong>
-  <button type="button" class="lead-notes-preview" title="View full note">
-    ${esc(lead.notes || "-")}
+  <button
+    type="button"
+    class="lead-notes-preview"
+    title="Open full lead notes"
+    aria-label="Open full lead notes"
+  >
+    ${esc(lead.notes || "No notes added")}
   </button>
   <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
 </div>
