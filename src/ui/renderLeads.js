@@ -256,11 +256,14 @@ tr.classList.add("lead-card-wrapper");
           <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
         </div>
 
-        <div class="lead-card-row">
-          <strong>Notes:</strong>
-          ${esc(lead.notes || "-")}
-          <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
-        </div>
+        <div class="lead-card-row lead-notes-row">
+          <div class="lead-card-row lead-notes-row">
+  <strong>Notes:</strong>
+  <button type="button" class="lead-notes-preview" title="View full note">
+    ${esc(lead.notes || "-")}
+  </button>
+  <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
+</div>
       </div>
 
     </div>
@@ -486,6 +489,18 @@ tr.classList.add("lead-card-wrapper");
     tr.querySelector(".useForRepairBtn").onclick = () => addPartToLead(lead.leadID);
     tr.querySelector(".invoiceBtn").onclick = () => createAndSendInvoice(lead);
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
+
+    const notesPreviewBtn = tr.querySelector(".lead-notes-preview");
+if (notesPreviewBtn) {
+  notesPreviewBtn.onclick = async () => {
+    await window.Modal?.open({
+      title: "Lead Notes",
+      message: String(lead.notes || "No notes for this lead."),
+      confirmText: "Close",
+      requireInput: false,
+    });
+  };
+}
 
     tr.querySelector(".copyCustomerBtn").onclick = async (e) => {
       e.stopPropagation();
