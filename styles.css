@@ -2595,6 +2595,7 @@ table thead th {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
+  align-items: stretch;
 }
 
 .customer-history-card .customer-contact-actions a.customer-contact-action,
@@ -2609,13 +2610,13 @@ table thead th {
 
   flex: 1 1 0 !important;
   width: auto !important;
-  min-width: 0 !important;
+  min-width: 42px !important;
   min-height: 36px !important;
 
   padding: 8px 10px !important;
   margin: 0 !important;
 
-  border-radius: 999px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   background: rgba(255, 255, 255, 0.06) !important;
   background-image: none !important;
@@ -2627,14 +2628,21 @@ table thead th {
   font-weight: 600 !important;
   line-height: 1 !important;
   text-align: center !important;
+  white-space: nowrap !important;
   cursor: pointer !important;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease !important;
 }
 
 .customer-history-card .customer-contact-actions a.customer-contact-action:hover,
 .customer-history-card .customer-contact-actions button.customer-contact-action:hover,
 .customer-history-card .customer-history-extra-actions button.invoice-btn:hover {
-  background: linear-gradient(90deg, var(--primary), var(--accent-2)) !important;
-  color: #001517 !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: var(--text-color) !important;
   transform: translateY(-1px);
 }
 
