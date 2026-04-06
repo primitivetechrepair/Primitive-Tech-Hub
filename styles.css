@@ -2303,23 +2303,27 @@ table thead th {
 }
 
 .customer-history-card {
-  padding: 14px 16px;
+  padding: 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-left: 4px solid rgba(102, 252, 241, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.20);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
 .customer-history-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-  background: rgba(255, 255, 255, 0.055);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.26);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .customer-history-card.is-open {
-  background: rgba(255, 255, 255, 0.065);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.26);
 }
 
 .customer-history-card.is-high-value {
@@ -2327,33 +2331,50 @@ table thead th {
   box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.1);
 }
 
+.customer-history-card__shell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .customer-history-card__toggle {
   width: 100%;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 14px 16px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0 0 10px;
   margin: 0;
   color: inherit;
   text-align: left;
   cursor: pointer;
 
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  transition: none;
 }
 
 .customer-history-card__toggle:hover {
   transform: none;
   box-shadow: none;
   filter: none;
+}
+
+.customer-history-card__body {
+  display: grid;
+  gap: 10px;
+}
+
+.customer-history-card__body .customer-history-card__meta--stack {
+  margin-top: 0;
+}
+
+.customer-history-card__body .customer-contact-actions,
+.customer-history-card__body .customer-history-extra-actions {
+  margin-top: 0;
 }
 
 .customer-history-card__top {
@@ -2482,13 +2503,12 @@ table thead th {
 }
 
 .customer-history-card__details {
-  margin-top: 12px;
+  margin-top: 0;
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: grid;
   gap: 10px;
 
-  /* ✅ ADD animation behavior */
   max-height: 2000px;
   opacity: 1;
   overflow: hidden;
