@@ -2301,7 +2301,6 @@ table thead th {
   display: grid;
   grid-template-columns: 1fr;
   gap: 14px;
-
   max-height: none;
   overflow: visible;
 }
@@ -2320,6 +2319,8 @@ table thead th {
 }
 
 .customer-history-card {
+  min-width: 0;
+  align-self: start;
   padding: 14px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.05);
@@ -2349,18 +2350,10 @@ table thead th {
 }
 
 .customer-history-card__shell {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.customer-history-card {
-  min-width: 0;
-  align-self: start;
-}
-
-.customer-history-card__shell {
-  min-width: 0;
 }
 
 .customer-history-card__toggle {
@@ -2373,11 +2366,9 @@ table thead th {
   color: inherit;
   text-align: left;
   cursor: pointer;
-
   display: flex;
   flex-direction: column;
   gap: 10px;
-
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: none;
   transition: none;
@@ -2394,10 +2385,7 @@ table thead th {
   gap: 10px;
 }
 
-.customer-history-card__body .customer-history-card__meta--stack {
-  margin-top: 0;
-}
-
+.customer-history-card__body .customer-history-card__meta--stack,
 .customer-history-card__body .customer-contact-actions,
 .customer-history-card__body .customer-history-extra-actions {
   margin-top: 0;
@@ -2534,7 +2522,6 @@ table thead th {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: grid;
   gap: 10px;
-
   max-height: 2000px;
   opacity: 1;
   overflow: hidden;
@@ -2546,9 +2533,6 @@ table thead th {
   will-change: max-height, opacity, transform;
 }
 
-/* ❌ REMOVE .hidden completely */
-
-/* ✅ NEW collapse state */
 .customer-history-card__details.is-collapsed {
   max-height: 0;
   opacity: 0;
@@ -2589,8 +2573,10 @@ table thead th {
   line-height: 1.45;
 }
 
+/* ===== Action rows ===== */
 .customer-contact-actions,
-.customer-history-extra-actions {
+.customer-history-extra-actions,
+.customer-history-card__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -2598,22 +2584,23 @@ table thead th {
   align-items: stretch;
 }
 
+/* ===== Icon-only action buttons ===== */
 .customer-history-card .customer-contact-actions a.customer-contact-action,
 .customer-history-card .customer-contact-actions button.customer-contact-action,
-.customer-history-card .customer-history-extra-actions button.invoice-btn {
+.customer-history-card .customer-history-extra-actions button.invoice-btn,
+.customer-history-card button.customer-history-download-invoice-btn,
+.customer-history-card .customer-history-card__actions button.delete-btn {
   all: unset;
-
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   box-sizing: border-box !important;
 
-  flex: 1 1 0 !important;
-  width: auto !important;
+  width: 42px !important;
   min-width: 42px !important;
+  height: 36px !important;
   min-height: 36px !important;
-
-  padding: 8px 10px !important;
+  padding: 0 !important;
   margin: 0 !important;
 
   border-radius: 10px !important;
@@ -2622,14 +2609,13 @@ table thead th {
   background-image: none !important;
   box-shadow: none !important;
 
-  color: var(--text-color) !important;
-  text-decoration: none !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
+  color: transparent !important;
+  font-size: 0 !important;
   line-height: 1 !important;
   text-align: center !important;
-  white-space: nowrap !important;
+  text-decoration: none !important;
   cursor: pointer !important;
+  position: relative;
 
   transition:
     background 0.18s ease,
@@ -2639,19 +2625,50 @@ table thead th {
 
 .customer-history-card .customer-contact-actions a.customer-contact-action:hover,
 .customer-history-card .customer-contact-actions button.customer-contact-action:hover,
-.customer-history-card .customer-history-extra-actions button.invoice-btn:hover {
+.customer-history-card .customer-history-extra-actions button.invoice-btn:hover,
+.customer-history-card button.customer-history-download-invoice-btn:hover,
+.customer-history-card .customer-history-card__actions button.delete-btn:hover {
   background: rgba(255, 255, 255, 0.10) !important;
   border-color: rgba(255, 255, 255, 0.22) !important;
-  color: var(--text-color) !important;
   transform: translateY(-1px);
+}
+
+.customer-history-card .customer-contact-actions a.customer-contact-action::before,
+.customer-history-card .customer-contact-actions button.customer-contact-action::before,
+.customer-history-card .customer-history-extra-actions button.invoice-btn::before,
+.customer-history-card button.customer-history-download-invoice-btn::before,
+.customer-history-card .customer-history-card__actions button.delete-btn::before {
+  font-size: 16px !important;
+  line-height: 1 !important;
+  color: var(--text-color) !important;
+}
+
+.customer-history-card .customer-contact-actions a[href*="voice.google.com/u/0/r/calls"]::before {
+  content: "📞";
+}
+
+.customer-history-card .customer-contact-actions a[href*="voice.google.com/u/0/messages"]::before {
+  content: "💬";
+}
+
+.customer-history-card .customer-contact-actions .customer-contact-action--copy::before {
+  content: "📋";
+}
+
+.customer-history-card .customer-history-extra-actions .invoice-btn::before {
+  content: "🧾";
+}
+
+.customer-history-card .customer-history-download-invoice-btn::before {
+  content: "⬇️";
+}
+
+.customer-history-card .customer-history-card__actions .delete-btn::before {
+  content: "🗑️";
 }
 
 .customer-contact-action--copy {
   font-family: inherit;
-}
-
-.customer-history-card__actions {
-  margin-top: 12px;
 }
 
 .customer-history-empty {
@@ -2680,20 +2697,24 @@ table thead th {
     gap: 4px;
   }
 
-.customer-contact-actions,
-.customer-history-extra-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-  gap: 8px;
-}
+  .customer-contact-actions,
+  .customer-history-extra-actions,
+  .customer-history-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
   .customer-history-card .customer-contact-actions a.customer-contact-action,
   .customer-history-card .customer-contact-actions button.customer-contact-action,
-  .customer-history-card .customer-history-extra-actions button.invoice-btn {
-    width: 100% !important;
-    justify-content: center !important;
-    padding: 8px 10px !important;
-    font-size: 12px !important;
+  .customer-history-card .customer-history-extra-actions button.invoice-btn,
+  .customer-history-card button.customer-history-download-invoice-btn,
+  .customer-history-card .customer-history-card__actions button.delete-btn {
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
   }
 }
 
