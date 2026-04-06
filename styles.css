@@ -2048,249 +2048,6 @@ table thead th {
 }
 
 /* =========================================================
-   STOCK HISTORY / AUDIT LOG — TIMELINE UI
-   Used by: renderAuditLog.js
-========================================================= */
-#auditLog {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 14px;
-}
-
-.audit-log-group {
-  list-style: none;
-  margin: 6px 0 2px 18px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--heading);
-  opacity: 0.9;
-}
-
-.audit-log-card {
-  position: relative;
-  margin-left: 18px;
-  padding: 14px 16px 14px 18px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 4px solid rgba(255, 255, 255, 0.18);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-}
-
-.audit-log-card::before {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: -14px;
-  bottom: -14px;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.audit-log-card::after {
-  content: "";
-  position: absolute;
-  left: -22px;
-  top: 18px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #9ca3af;
-  border: 2px solid #0f141a;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
-}
-
-.audit-log-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-  background: rgba(255, 255, 255, 0.055);
-}
-
-.audit-log-card.is-added {
-  border-left-color: #22c55e;
-}
-.audit-log-card.is-added::after {
-  background: #22c55e;
-}
-
-.audit-log-card.is-used {
-  border-left-color: #eab308;
-}
-.audit-log-card.is-used::after {
-  background: #eab308;
-}
-
-.audit-log-card.is-adjusted,
-.audit-log-card.is-updated {
-  border-left-color: #38bdf8;
-}
-.audit-log-card.is-adjusted::after,
-.audit-log-card.is-updated::after {
-  background: #38bdf8;
-}
-
-.audit-log-card.is-deleted {
-  border-left-color: #ef4444;
-}
-.audit-log-card.is-deleted::after {
-  background: #ef4444;
-}
-
-.audit-log-card__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.audit-log-card__badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--heading);
-}
-
-.audit-log-card__date {
-  font-size: 12px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.audit-log-card__title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 6px;
-  line-height: 1.35;
-}
-
-.audit-log-card__title strong {
-  color: var(--heading);
-  font-weight: 700;
-}
-
-.audit-log-card__meta {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-.audit-log-card__details {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  display: grid;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-.audit-log-card__actions {
-  margin-top: 12px;
-}
-
-.audit-log-empty {
-  list-style: none;
-  margin-left: 18px;
-  padding: 14px 16px 14px 18px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--muted);
-  position: relative;
-}
-
-.audit-log-empty::before {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.audit-log-empty::after {
-  content: "";
-  position: absolute;
-  left: -22px;
-  top: 18px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #6b7280;
-  border: 2px solid #0f141a;
-}
-
-@media (max-width: 700px) {
-  .audit-log-card,
-  .audit-log-empty {
-    margin-left: 14px;
-    padding: 12px 14px 12px 16px;
-  }
-
-  .audit-log-card::before,
-  .audit-log-empty::before {
-    left: -12px;
-  }
-
-  .audit-log-card::after,
-  .audit-log-empty::after {
-    left: -18px;
-    width: 12px;
-    height: 12px;
-  }
-
-  .audit-log-card__top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-
-  .audit-log-card__date {
-    white-space: normal;
-  }
-}
-
-/* Expand / Collapse */
-.audit-log-card__details.hidden {
-  display: none;
-}
-
-.audit-log-card__expandHint {
-  margin-top: 8px;
-  font-size: 11px;
-  color: var(--primary);
-  opacity: 0.8;
-
-  cursor: pointer; /* 🔥 THIS is the missing piece */
-
-  transition: opacity 0.2s ease, transform 0.15s ease;
-}
-
-.audit-log-card__expandHint:hover {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
-/* Open state */
-.audit-log-card.is-open {
-  background: rgba(255,255,255,0.065);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.3);
-}
-
-/* =========================================================
    CUSTOMER HISTORY — CARD UI
    Used by: renderCustomerHistory.js
 ========================================================= */
@@ -2441,8 +2198,12 @@ table thead th {
 
 .customer-history-card__meta--stack {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .customer-history-meta-row {
@@ -2488,7 +2249,6 @@ table thead th {
   display: grid;
   gap: 10px;
 
-  /* ✅ ADD animation behavior */
   max-height: 2000px;
   opacity: 1;
   overflow: hidden;
@@ -2500,9 +2260,6 @@ table thead th {
   will-change: max-height, opacity, transform;
 }
 
-/* ❌ REMOVE .hidden completely */
-
-/* ✅ NEW collapse state */
 .customer-history-card__details.is-collapsed {
   max-height: 0;
   opacity: 0;
@@ -2556,7 +2313,7 @@ table thead th {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1; /* 🔥 makes them equal width */
+  flex: 1;
   padding: 8px 10px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -2611,12 +2368,12 @@ table thead th {
     gap: 4px;
   }
 
-.customer-contact-actions,
-.customer-history-extra-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-  gap: 8px;
-}
+  .customer-contact-actions,
+  .customer-history-extra-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 8px;
+  }
 
   .customer-contact-action,
   .tiny-btn.invoice-btn {
@@ -3752,6 +3509,7 @@ table thead th {
   line-height: 1;
   transform: scale(1.1);
 }
+
 /* =========================================================
    REPAIR LEADS — CARD SYSTEM
    Replaces old table/mobile-card hybrid rules
