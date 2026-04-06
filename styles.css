@@ -3807,6 +3807,7 @@ table thead th {
   gap: 12px;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer; /* ✅ ADD THIS LINE */
 }
 
 .lead-card-title {

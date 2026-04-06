@@ -536,6 +536,29 @@ if (collapseBtn) {
     );
   };
 }
+
+const header = tr.querySelector(".lead-card-header");
+
+if (header) {
+  header.addEventListener("click", (e) => {
+    // 🚫 Prevent triggering when clicking buttons
+    if (e.target.closest("button")) return;
+
+    const collapseBtn = tr.querySelector(".collapseToggleBtn");
+    if (!collapseBtn) return;
+
+    const currentlyCollapsed = tr.classList.toggle("lead-collapsed");
+    setCollapsed(lead.leadID, currentlyCollapsed);
+
+    collapseBtn.textContent = currentlyCollapsed ? "Show Details" : "Hide Details";
+    collapseBtn.title = currentlyCollapsed ? "Show Details" : "Hide Details";
+    collapseBtn.setAttribute(
+      "aria-label",
+      currentlyCollapsed ? "Show Details" : "Hide Details"
+    );
+  });
+}
+
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
 
     const notesPreviewBtn = tr.querySelector(".lead-notes-preview");
