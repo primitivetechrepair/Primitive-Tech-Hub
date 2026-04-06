@@ -116,6 +116,10 @@ export function renderCustomerHistory({
             Latest: ${escapeHtml(buildLeadSummary(repairs[0], fmtDateShort))}
           </div>
 
+          <div class="customer-history-card__expandHint">Show History</div>
+        </button>
+
+        <div class="customer-history-card__body">
           <div class="customer-history-card__meta customer-history-card__meta--stack">
             <div class="customer-history-meta-row">
               <span class="customer-history-meta-label">📍 Address</span>
@@ -128,13 +132,11 @@ export function renderCustomerHistory({
             </div>
           </div>
 
-          <div class="customer-history-card__expandHint">Show History</div>
-        </button>
+          ${buildContactActions(parsed.contact)}
 
-        ${buildContactActions(parsed.contact)}
-
-        <div class="customer-history-extra-actions">
-          <button type="button" class="tiny-btn invoice-btn">🧾 Invoice</button>
+          <div class="customer-history-extra-actions">
+            <button type="button" class="tiny-btn invoice-btn">🧾 Invoice</button>
+          </div>
         </div>
 
         <div id="${detailId}" class="customer-history-card__details is-collapsed">
