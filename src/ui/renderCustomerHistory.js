@@ -137,7 +137,7 @@ export function renderCustomerHistory({
           <button type="button" class="tiny-btn invoice-btn">🧾 Invoice</button>
         </div>
 
-        <div id="${detailId}" class="customer-history-card__details hidden">
+        <div id="${detailId}" class="customer-history-card__details is-collapsed">
           ${repairs.map((lead) => `
             <div class="customer-history-detail">
               <div class="customer-history-detail__top">
@@ -199,31 +199,45 @@ export function renderCustomerHistory({
     const detailsEl = li.querySelector(".customer-history-card__details");
     const hintEl = li.querySelector(".customer-history-card__expandHint");
 
-    if (toggle && detailsEl && hintEl) {
-      hintEl.addEventListener("click", (e) => {
-        e.stopPropagation();
-
-        const expanded = toggle.getAttribute("aria-expanded") === "true";
-        toggle.setAttribute("aria-expanded", String(!expanded));
-        detailsEl.classList.toggle("hidden");
-        li.classList.toggle("is-open");
-
-        hintEl.textContent = expanded ? "Click to view more" : "Click to collapse";
-      });
+if (toggle && detailsEl && hintEl) {
+  const toggleCard = (e) => {
+    if (
+      e.target.closest(".customer-contact-actions") ||
+      e.target.closest(".customer-history-extra-actions") ||
+      e.target.closest(".customer-history-card__actions") ||
+      e.target.closest(".customer-history-download-invoice-btn")
+    ) {
+      return;
     }
 
-    const copyBtn = li.querySelector(".customer-contact-action--copy");
-    if (copyBtn && parsed.contact && parsed.contact !== "No contact") {
-      copyBtn.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        try {
-          await navigator.clipboard.writeText(parsed.contact);
-          toast("Contact copied.", "success");
-        } catch {
-          toast("Could not copy contact.", "error");
-        }
-      });
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!expanded));
+    detailsEl.classList.toggle("is-collapsed");
+    li.classList.toggle("is-open");
+
+    hintEl.textContent = expanded ? "Click to view more" : "Click to collapse";
+  };
+
+  toggle.addEventListener("click", toggleCard);
+
+  hintEl.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleCard(e);
+  });
+}
+
+const copyBtn = li.querySelector(".customer-contact-action--copy");
+if (copyBtn && parsed.contact && parsed.contact !== "No contact") {
+  copyBtn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(parsed.contact);
+      toast("Contact copied.", "success");
+    } catch {
+      toast("Could not copy contact.", "error");
     }
+  });
+}
 
 const invoiceBtn = li.querySelector(".invoice-btn");
 if (invoiceBtn) {

@@ -2476,10 +2476,27 @@ table thead th {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: grid;
   gap: 10px;
+
+  /* ✅ ADD animation behavior */
+  max-height: 2000px;
+  opacity: 1;
+  overflow: hidden;
+  transform: translateY(0);
+  transition:
+    max-height 0.32s ease,
+    opacity 0.22s ease,
+    transform 0.22s ease;
+  will-change: max-height, opacity, transform;
 }
 
-.customer-history-card__details.hidden {
-  display: none;
+/* ❌ REMOVE .hidden completely */
+
+/* ✅ NEW collapse state */
+.customer-history-card__details.is-collapsed {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
 }
 
 .customer-history-detail {
