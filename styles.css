@@ -2335,7 +2335,7 @@ table thead th {
   margin: 0;
   color: inherit;
   text-align: left;
-  cursor: default;
+  cursor: pointer;
   box-shadow: none;
 }
 

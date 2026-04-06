@@ -128,7 +128,7 @@ export function renderCustomerHistory({
             </div>
           </div>
 
-          <div class="customer-history-card__expandHint">Click to view more</div>
+          <div class="customer-history-card__expandHint">Show History</div>
         </button>
 
         ${buildContactActions(parsed.contact)}
@@ -215,7 +215,7 @@ if (toggle && detailsEl && hintEl) {
     detailsEl.classList.toggle("is-collapsed");
     li.classList.toggle("is-open");
 
-    hintEl.textContent = expanded ? "Click to view more" : "Click to collapse";
+    hintEl.textContent = expanded ? "Show History" : "Hide History";
   };
 
   toggle.addEventListener("click", toggleCard);
