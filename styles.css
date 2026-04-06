@@ -3784,6 +3784,11 @@ table thead th {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    padding 0.22s ease;
 }
 
 .lead-card:hover {
@@ -3851,10 +3856,20 @@ table thead th {
 
 /* Body */
 .lead-card-body {
-  display: flex;          /* ✅ switch to flex */
+  display: flex;
   flex-direction: column;
   gap: 10px;
-  flex: 1;                /* ✅ fills card evenly */
+  flex: 1;
+
+  max-height: 2200px;
+  opacity: 1;
+  overflow: hidden;
+  transform: translateY(0);
+  transition:
+    max-height 0.32s ease,
+    opacity 0.22s ease,
+    transform 0.22s ease;
+  will-change: max-height, opacity, transform;
 }
 
 /* Individual data row */
@@ -4090,7 +4105,11 @@ table thead th {
 /* ===== Collapsible Lead Cards ===== */
 
 .lead-card-wrapper.lead-collapsed .lead-card-body {
-  display: none;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-6px);
+  pointer-events: none;
 }
 
 /* Tighten collapsed card slightly */
