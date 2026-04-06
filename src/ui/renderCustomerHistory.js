@@ -132,7 +132,7 @@ export function renderCustomerHistory({
             </div>
           </div>
 
-          ${buildCustomerActionToolbar(parsed.contact, isAdminEnabled())}
+          ${buildCustomerActionToolbar(parsed.contact, true)}
         </div>
 
         <div id="${detailId}" class="customer-history-card__details is-collapsed">
