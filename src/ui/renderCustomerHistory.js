@@ -12,6 +12,7 @@ export function renderCustomerHistory({
   renderAll,
   createAndSendInvoice,
   downloadInvoicePdf,
+  deleteLead,
 }) {
   el.customerHistory.innerHTML = "";
 
@@ -303,6 +304,12 @@ if (deleteBtn) {
     e.stopPropagation();
 
     try {
+      if (typeof deleteLead !== "function") {
+        console.error("Customer history delete failed: deleteLead is not wired.");
+        toast("Delete action is not wired yet.", "error");
+        return;
+      }
+
       if (!repairs || !repairs.length) {
         toast("No leads found for this customer.", "warning");
         return;
@@ -315,7 +322,7 @@ if (deleteBtn) {
         await deleteLead(leadID);
       }
 
-      toast(`Customer history deleted.`, "success");
+      toast("Customer history deleted.", "success");
     } catch (err) {
       console.error("Customer history delete failed:", err);
       toast("Could not delete customer history.", "error");
