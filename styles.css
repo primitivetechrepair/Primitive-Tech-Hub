@@ -2515,14 +2515,14 @@ table thead th {
 }
 
 .customer-history-toolbar {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
   gap: 8px;
   margin-top: 12px;
+  flex-wrap: nowrap;
 }
 
 .customer-history-toolbar.has-delete {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: flex;
 }
 
 .customer-history-toolbar-btn,
@@ -2532,27 +2532,25 @@ table thead th {
   align-items: center !important;
   justify-content: center !important;
   box-sizing: border-box !important;
-  width: 100% !important;
-  min-width: 42px !important;
-  height: 36px !important;
-  min-height: 36px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border-radius: 10px !important;
+
+  flex: 1 1 0;
+  width: auto !important;
+  min-width: 36px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+
+  border-radius: 8px !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   background: rgba(255, 255, 255, 0.06) !important;
-  background-image: none !important;
-  box-shadow: none !important;
+
+  font-size: 14px !important;
   color: var(--text-color) !important;
-  text-decoration: none !important;
-  font-size: 16px !important;
-  line-height: 1 !important;
-  text-align: center !important;
+
   cursor: pointer !important;
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
-    transform 0.18s ease !important;
+    transform 0.18s ease;
 }
 
 .customer-history-toolbar-btn:hover,
@@ -2651,11 +2649,6 @@ table thead th {
   .customer-history-meta-row {
     grid-template-columns: 1fr;
     gap: 4px;
-  }
-
-  .customer-history-toolbar,
-  .customer-history-toolbar.has-delete {
-    grid-template-columns: repeat(auto-fit, minmax(36px, 1fr));
   }
 
   .customer-history-invoice-row {
