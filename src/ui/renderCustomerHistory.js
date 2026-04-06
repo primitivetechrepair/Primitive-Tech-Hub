@@ -299,24 +299,57 @@ li.querySelectorAll(".customer-history-download-invoice-btn").forEach((btn) => {
     const deleteBtn = li.querySelector(".customer-history-delete-btn");
     if (deleteBtn) {
       deleteBtn.onclick = async (e) => {
+        e.preventDefault();
         e.stopPropagation();
 
-        const ok = await verifyAdminPin();
-        if (!ok) return toast("Invalid Admin PIN.");
+        try {
+          const beforeLeads = Array.isArray(data.leads) ? [...data.leads] : [];
+          const beforeCount = beforeLeads.length;
 
-        data.leads = (data.leads || []).filter((lead) => {
-          const name = (lead.customerName || "").trim() || "Unknown";
-          const contact = (lead.contactNumber || lead.email || "").trim() || "No contact";
-          return `${name} (${contact})` !== customer;
-        });
+          const targetCustomerKey = customer;
+          const targetLeadIds = new Set(
+            repairs.map((lead) => String(lead?.leadID || "").trim()).filter(Boolean)
+          );
 
-        addAudit("customer_history_deleted", {
-          customer,
-          userAction: "admin_delete",
-        });
+          const remainingLeads = beforeLeads.filter((lead) => {
+            const leadId = String(lead?.leadID || "").trim();
+            const leadName = (lead?.customerName || "").trim() || "Unknown";
+            const leadContact = (lead?.contactNumber || lead?.email || "").trim() || "No contact";
+            const leadCustomerKey = `${leadName} (${leadContact})`;
 
-        await persist();
-        renderAll();
+            const matchesLeadId = leadId && targetLeadIds.has(leadId);
+            const matchesCustomerGroup = leadCustomerKey === targetCustomerKey;
+
+            return !(matchesLeadId || matchesCustomerGroup);
+          });
+
+          const removedCount = beforeCount - remainingLeads.length;
+
+          if (removedCount <= 0) {
+            toast("No matching customer history found to delete.", "warning");
+            return;
+          }
+
+          data.leads = remainingLeads;
+
+          addAudit("customer_history_deleted", {
+            customer: targetCustomerKey,
+            removedLeadIDs: Array.from(targetLeadIds),
+            removedCount,
+            userAction: "customer_history_delete",
+          });
+
+          await persist();
+          renderAll();
+
+          toast(
+            `Deleted ${removedCount} customer history entr${removedCount === 1 ? "y" : "ies"}.`,
+            "success"
+          );
+        } catch (err) {
+          console.error("Customer history delete failed:", err);
+          toast("Could not delete customer history.", "error");
+        }
       };
     }
 
