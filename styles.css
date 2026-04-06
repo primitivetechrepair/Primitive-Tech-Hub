@@ -2354,6 +2354,15 @@ table thead th {
   gap: 12px;
 }
 
+.customer-history-card {
+  min-width: 0;
+  align-self: start;
+}
+
+.customer-history-card__shell {
+  min-width: 0;
+}
+
 .customer-history-card__toggle {
   width: 100%;
   background: transparent;
@@ -2588,27 +2597,33 @@ table thead th {
   margin-top: 12px;
 }
 
-.customer-contact-action,
-.customer-history-extra-actions .invoice-btn {
-  display: inline-flex;
+.customer-history-card .customer-contact-action,
+.customer-history-card .customer-history-extra-actions .invoice-btn {
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
+
   flex: 1;
   width: auto !important;
-  min-width: 0;
+  min-width: 0 !important;
   min-height: 36px !important;
   padding: 8px 10px !important;
   margin: 0 !important;
 
   border-radius: 999px !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
+
   background: rgba(255, 255, 255, 0.06) !important;
   color: var(--text-color) !important;
-  text-decoration: none;
+
+  text-decoration: none !important;
   font-size: 12px;
   font-weight: 600;
-  cursor: pointer;
+
   box-shadow: none !important;
+  background-image: none !important;
+
+  cursor: pointer;
 }
 
 .customer-contact-action:hover,
