@@ -2385,9 +2385,7 @@ table thead th {
   gap: 10px;
 }
 
-.customer-history-card__body .customer-history-card__meta--stack,
-.customer-history-card__body .customer-contact-actions,
-.customer-history-card__body .customer-history-extra-actions {
+.customer-history-card__body .customer-history-card__meta--stack {
   margin-top: 0;
 }
 
@@ -2516,6 +2514,55 @@ table thead th {
   transform: translateX(2px);
 }
 
+.customer-history-toolbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.customer-history-toolbar.has-delete {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.customer-history-toolbar-btn,
+.customer-history-download-invoice-btn {
+  all: unset;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 42px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: var(--text-color) !important;
+  text-decoration: none !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease !important;
+}
+
+.customer-history-toolbar-btn:hover,
+.customer-history-download-invoice-btn:hover {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: var(--text-color) !important;
+  transform: translateY(-1px);
+}
+
 .customer-history-card__details {
   margin-top: 0;
   padding-top: 12px;
@@ -2573,102 +2620,11 @@ table thead th {
   line-height: 1.45;
 }
 
-/* ===== Action rows ===== */
-.customer-contact-actions,
-.customer-history-extra-actions,
-.customer-history-card__actions {
+.customer-history-invoice-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+  grid-template-columns: 1fr 42px;
   gap: 8px;
-  margin-top: 12px;
-  align-items: stretch;
-}
-
-/* ===== Icon-only action buttons ===== */
-.customer-history-card .customer-contact-actions a.customer-contact-action,
-.customer-history-card .customer-contact-actions button.customer-contact-action,
-.customer-history-card .customer-history-extra-actions button.invoice-btn,
-.customer-history-card button.customer-history-download-invoice-btn,
-.customer-history-card .customer-history-card__actions button.delete-btn {
-  all: unset;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  box-sizing: border-box !important;
-
-  width: 100% !important;
-  min-width: 0 !important;
-  height: 36px !important;
-  min-height: 36px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-
-  border-radius: 10px !important;
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  background-image: none !important;
-  box-shadow: none !important;
-
-  color: transparent !important;
-  font-size: 0 !important;
-  line-height: 1 !important;
-  text-align: center !important;
-  text-decoration: none !important;
-  cursor: pointer !important;
-  position: relative;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease !important;
-}
-
-.customer-history-card .customer-contact-actions a.customer-contact-action:hover,
-.customer-history-card .customer-contact-actions button.customer-contact-action:hover,
-.customer-history-card .customer-history-extra-actions button.invoice-btn:hover,
-.customer-history-card button.customer-history-download-invoice-btn:hover,
-.customer-history-card .customer-history-card__actions button.delete-btn:hover {
-  background: rgba(255, 255, 255, 0.10) !important;
-  border-color: rgba(255, 255, 255, 0.22) !important;
-  transform: translateY(-1px);
-}
-
-.customer-history-card .customer-contact-actions a.customer-contact-action::before,
-.customer-history-card .customer-contact-actions button.customer-contact-action::before,
-.customer-history-card .customer-history-extra-actions button.invoice-btn::before,
-.customer-history-card button.customer-history-download-invoice-btn::before,
-.customer-history-card .customer-history-card__actions button.delete-btn::before {
-  font-size: 16px !important;
-  line-height: 1 !important;
-  color: var(--text-color) !important;
-}
-
-.customer-history-card .customer-contact-actions a[href*="voice.google.com/u/0/r/calls"]::before {
-  content: "📞";
-}
-
-.customer-history-card .customer-contact-actions a[href*="voice.google.com/u/0/messages"]::before {
-  content: "💬";
-}
-
-.customer-history-card .customer-contact-actions .customer-contact-action--copy::before {
-  content: "📋";
-}
-
-.customer-history-card .customer-history-extra-actions .invoice-btn::before {
-  content: "🧾";
-}
-
-.customer-history-card .customer-history-download-invoice-btn::before {
-  content: "⬇️";
-}
-
-.customer-history-card .customer-history-card__actions .delete-btn::before {
-  content: "🗑️";
-}
-
-.customer-contact-action--copy {
-  font-family: inherit;
+  align-items: center;
 }
 
 .customer-history-empty {
@@ -2697,24 +2653,13 @@ table thead th {
     gap: 4px;
   }
 
-  .customer-contact-actions,
-  .customer-history-extra-actions,
-  .customer-history-card__actions {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
-    gap: 8px;
+  .customer-history-toolbar,
+  .customer-history-toolbar.has-delete {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .customer-history-card .customer-contact-actions a.customer-contact-action,
-  .customer-history-card .customer-contact-actions button.customer-contact-action,
-  .customer-history-card .customer-history-extra-actions button.invoice-btn,
-  .customer-history-card button.customer-history-download-invoice-btn,
-  .customer-history-card .customer-history-card__actions button.delete-btn {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: 36px !important;
-    min-height: 36px !important;
-    padding: 0 !important;
+  .customer-history-invoice-row {
+    grid-template-columns: 1fr 42px;
   }
 }
 

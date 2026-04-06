@@ -132,11 +132,7 @@ export function renderCustomerHistory({
             </div>
           </div>
 
-          ${buildContactActions(parsed.contact)}
-
-          <div class="customer-history-extra-actions">
-            <button type="button" class="tiny-btn invoice-btn">🧾 Invoice</button>
-          </div>
+          ${buildCustomerActionToolbar(parsed.contact, isAdminEnabled())}
         </div>
 
         <div id="${detailId}" class="customer-history-card__details is-collapsed">
@@ -183,10 +179,12 @@ export function renderCustomerHistory({
 
                     <button
                       type="button"
-                      class="tiny-btn customer-history-download-invoice-btn"
+                      class="customer-history-toolbar-btn customer-history-download-invoice-btn"
                       data-invoice-id="${escapeHtml(invoice.invoiceId || "")}"
+                      title="Download Invoice"
+                      aria-label="Download Invoice"
                     >
-                      ⬇️ Download
+                      ⬇️
                     </button>
                   </div>
                 `).join("")
@@ -204,9 +202,7 @@ export function renderCustomerHistory({
 if (toggle && detailsEl && hintEl) {
   const toggleCard = (e) => {
     if (
-      e.target.closest(".customer-contact-actions") ||
-      e.target.closest(".customer-history-extra-actions") ||
-      e.target.closest(".customer-history-card__actions") ||
+      e.target.closest(".customer-history-toolbar") ||
       e.target.closest(".customer-history-download-invoice-btn")
     ) {
       return;
@@ -296,16 +292,11 @@ li.querySelectorAll(".customer-history-download-invoice-btn").forEach((btn) => {
   });
 });
 
-    if (isAdminEnabled()) {
-      const actions = document.createElement("div");
-      actions.className = "customer-history-card__actions";
+    const deleteBtn = li.querySelector(".customer-history-delete-btn");
+    if (deleteBtn) {
+      deleteBtn.onclick = async (e) => {
+        e.stopPropagation();
 
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.textContent = "Delete";
-      btn.className = "tiny delete-btn";
-
-      btn.onclick = async () => {
         const ok = await verifyAdminPin();
         if (!ok) return toast("Invalid Admin PIN.");
 
@@ -323,9 +314,6 @@ li.querySelectorAll(".customer-history-download-invoice-btn").forEach((btn) => {
         await persist();
         renderAll();
       };
-
-      actions.appendChild(btn);
-      li.querySelector(".customer-history-card__shell").appendChild(actions);
     }
 
     el.customerHistory.appendChild(li);
@@ -381,58 +369,74 @@ function formatCustomerTitle(customer) {
   `;
 }
 
-function buildContactActions(contact) {
-  if (!contact || contact === "No contact") return "";
-
-  const trimmed = String(contact).trim();
+function buildCustomerActionToolbar(contact, showDelete = false) {
+  const trimmed = String(contact || "").trim();
   const cleanNumber = trimmed.replace(/[^\d]/g, "");
   const isEmail = trimmed.includes("@");
 
-  if (isEmail) {
-    return `
-      <div class="customer-contact-actions">
-        <button
-          type="button"
-          class="customer-contact-action customer-contact-action--copy"
-        >📋 Copy</button>
-      </div>
-    `;
-  }
+  const actions = [];
 
-  if (!cleanNumber) {
-    return `
-      <div class="customer-contact-actions">
-        <button
-          type="button"
-          class="customer-contact-action customer-contact-action--copy"
-        >📋 Copy</button>
-      </div>
-    `;
-  }
+  if (!isEmail && cleanNumber) {
+    const googleVoiceCallHref = `https://voice.google.com/u/0/r/calls?a=${cleanNumber}`;
+    const googleVoiceTextHref = `https://voice.google.com/u/0/messages?pli=1&text=${cleanNumber}`;
 
-  const googleVoiceCallHref = `https://voice.google.com/u/0/r/calls?a=${cleanNumber}`;
-  const googleVoiceTextHref = `https://voice.google.com/u/0/messages?pli=1&text=${cleanNumber}`;
-
-  return `
-    <div class="customer-contact-actions">
+    actions.push(`
       <a
         href="${googleVoiceCallHref}"
         target="_blank"
         rel="noopener noreferrer"
-        class="customer-contact-action"
-      >📞 Call</a>
+        class="customer-history-toolbar-btn customer-contact-action customer-contact-action--call"
+        title="Call"
+        aria-label="Call"
+      >📞</a>
+    `);
 
+    actions.push(`
       <a
         href="${googleVoiceTextHref}"
         target="_blank"
         rel="noopener noreferrer"
-        class="customer-contact-action"
-      >💬 Text</a>
+        class="customer-history-toolbar-btn customer-contact-action customer-contact-action--text"
+        title="Text"
+        aria-label="Text"
+      >💬</a>
+    `);
+  }
 
+  if (trimmed && trimmed !== "No contact") {
+    actions.push(`
       <button
         type="button"
-        class="customer-contact-action customer-contact-action--copy"
-      >📋 Copy</button>
+        class="customer-history-toolbar-btn customer-contact-action customer-contact-action--copy"
+        title="Copy"
+        aria-label="Copy"
+      >📋</button>
+    `);
+  }
+
+  actions.push(`
+    <button
+      type="button"
+      class="customer-history-toolbar-btn invoice-btn"
+      title="Invoice"
+      aria-label="Invoice"
+    >🧾</button>
+  `);
+
+  if (showDelete) {
+    actions.push(`
+      <button
+        type="button"
+        class="customer-history-toolbar-btn delete-btn customer-history-delete-btn"
+        title="Delete"
+        aria-label="Delete"
+      >🗑️</button>
+    `);
+  }
+
+  return `
+    <div class="customer-history-toolbar ${showDelete ? "has-delete" : ""}">
+      ${actions.join("")}
     </div>
   `;
 }
