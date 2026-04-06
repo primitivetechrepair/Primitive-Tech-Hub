@@ -2655,7 +2655,7 @@ table thead th {
 
   .customer-history-toolbar,
   .customer-history-toolbar.has-delete {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(36px, 1fr));
   }
 
   .customer-history-invoice-row {
