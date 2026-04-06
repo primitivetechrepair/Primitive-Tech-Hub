@@ -2299,7 +2299,24 @@ table thead th {
   padding: 0;
   margin: 0;
   display: grid;
+  grid-template-columns: 1fr;
   gap: 14px;
+
+  max-height: none;
+  overflow: visible;
+}
+
+@media (min-width: 901px) {
+  #customerHistory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+@media (min-width: 1280px) {
+  #customerHistory {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .customer-history-card {
@@ -2576,18 +2593,22 @@ table thead th {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1; /* 🔥 makes them equal width */
-  padding: 8px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-color);
+  flex: 1;
+  width: auto !important;
+  min-width: 0;
+  min-height: 36px !important;
+  padding: 8px 10px !important;
+  margin: 0 !important;
+
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--text-color) !important;
   text-decoration: none;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: none;
-  margin: 0;
+  box-shadow: none !important;
 }
 
 .customer-contact-action:hover,
