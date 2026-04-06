@@ -2450,16 +2450,16 @@ table thead th {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: auto;
-  min-height: unset;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
   color: var(--text-color);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: none;
 }
 
 .customer-history-card .chip.gold {
@@ -2577,8 +2577,8 @@ table thead th {
 .customer-contact-actions,
 .customer-history-extra-actions,
 .customer-history-card__actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
   gap: 8px;
   margin-top: 12px;
   align-items: stretch;
@@ -2596,8 +2596,8 @@ table thead th {
   justify-content: center !important;
   box-sizing: border-box !important;
 
-  width: 42px !important;
-  min-width: 42px !important;
+  width: 100% !important;
+  min-width: 0 !important;
   height: 36px !important;
   min-height: 36px !important;
   padding: 0 !important;
@@ -2700,8 +2700,8 @@ table thead th {
   .customer-contact-actions,
   .customer-history-extra-actions,
   .customer-history-card__actions {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
     gap: 8px;
   }
 
@@ -2710,8 +2710,8 @@ table thead th {
   .customer-history-card .customer-history-extra-actions button.invoice-btn,
   .customer-history-card button.customer-history-download-invoice-btn,
   .customer-history-card .customer-history-card__actions button.delete-btn {
-    width: 42px !important;
-    min-width: 42px !important;
+    width: 100% !important;
+    min-width: 0 !important;
     height: 36px !important;
     min-height: 36px !important;
     padding: 0 !important;
