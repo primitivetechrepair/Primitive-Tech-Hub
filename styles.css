@@ -2327,6 +2327,9 @@ table thead th {
   border: 1px solid rgba(255, 255, 255, 0.10);
   border-left: 4px solid rgba(102, 252, 241, 0.35);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.20);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
@@ -2380,15 +2383,6 @@ table thead th {
   filter: none;
 }
 
-.customer-history-card__body {
-  display: grid;
-  gap: 10px;
-}
-
-.customer-history-card__body .customer-history-card__meta--stack {
-  margin-top: 0;
-}
-
 .customer-history-card__top {
   display: flex;
   justify-content: space-between;
@@ -2417,38 +2411,42 @@ table thead th {
 }
 
 .customer-history-card__title {
-  font-size: 15px;
-  font-weight: 600;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text-color);
-  margin-bottom: 6px;
-  line-height: 1.35;
+  line-height: 1.2;
 }
 
 .customer-history-contact {
-  margin-left: 8px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: 0.4px;
-  cursor: pointer;
-  text-decoration: underline;
+  display: block;
+  margin-top: 5px;
+  margin-left: 0;
+  font-size: 11px;
+  color: var(--heading);
+  font-family: monospace;
+  letter-spacing: 0.04em;
+  word-break: break-word;
+  text-decoration: none;
 }
 
 .customer-history-contact:hover {
-  color: var(--accent-2);
+  color: #00ffff;
+  text-decoration: underline;
 }
 
 .customer-history-card__badges {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 10px 0 8px;
+  margin: 6px 0 0;
 }
 
 .customer-history-card .chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
+  min-height: 32px;
   padding: 0 12px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.06);
@@ -2466,40 +2464,8 @@ table thead th {
   border-color: rgba(234, 179, 8, 0.3);
 }
 
-.customer-history-card__meta {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-.customer-history-card__meta--stack {
-  display: grid;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.customer-history-meta-row {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 10px;
-  align-items: start;
-}
-
-.customer-history-meta-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--heading);
-}
-
-.customer-history-meta-value {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.45;
-  word-break: break-word;
-}
-
 .customer-history-card__expandHint {
-  margin-top: 8px;
+  margin-top: 2px;
   font-size: 11px;
   color: var(--primary);
   opacity: 0.8;
@@ -2514,16 +2480,51 @@ table thead th {
   transform: translateX(2px);
 }
 
-.customer-history-toolbar {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 12px;
-  width: 100%;
+/* ===== Body rows to mirror Leads ===== */
+.customer-history-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
 }
 
-.customer-history-toolbar.has-delete {
+.customer-history-card__row {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  min-width: 0;
+}
+
+.customer-history-card__row strong {
+  color: var(--heading);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.customer-history-card__row > div {
+  min-width: 0;
+  word-break: break-word;
+}
+
+.customer-history-card__row--actions {
+  gap: 8px;
+}
+
+.customer-history-card__row-actions {
+  min-width: 0;
+}
+
+/* ===== Unified toolbar ===== */
+.customer-history-toolbar {
+  display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
 }
 
 .customer-history-toolbar-btn,
@@ -2533,27 +2534,23 @@ table thead th {
   align-items: center !important;
   justify-content: center !important;
   box-sizing: border-box !important;
-
   width: 100% !important;
-  min-width: 0 !important;
-  height: 34px !important;
-  min-height: 34px !important;
+  min-width: 42px !important;
+  height: 36px !important;
+  min-height: 36px !important;
   padding: 0 !important;
   margin: 0 !important;
-
   border-radius: 10px !important;
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   background: rgba(255, 255, 255, 0.06) !important;
   background-image: none !important;
   box-shadow: none !important;
-
   color: var(--text-color) !important;
-  font-size: 14px !important;
+  text-decoration: none !important;
+  font-size: 16px !important;
   line-height: 1 !important;
   text-align: center !important;
-  text-decoration: none !important;
   cursor: pointer !important;
-
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
@@ -2568,6 +2565,7 @@ table thead th {
   transform: translateY(-1px);
 }
 
+/* ===== Expanded history/details ===== */
 .customer-history-card__details {
   margin-top: 0;
   padding-top: 12px;
@@ -2625,11 +2623,46 @@ table thead th {
   line-height: 1.45;
 }
 
+/* ===== Invoice history row ===== */
 .customer-history-invoice-row {
   display: grid;
   grid-template-columns: 1fr 42px;
   gap: 8px;
   align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.customer-history-invoice-row__id {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.customer-history-invoice-row__meta {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.customer-history-invoices__title {
+  color: var(--heading);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.customer-history-invoices__empty {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .customer-history-empty {
@@ -2653,9 +2686,8 @@ table thead th {
     white-space: normal;
   }
 
-  .customer-history-meta-row {
-    grid-template-columns: 1fr;
-    gap: 4px;
+  .customer-history-toolbar {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .customer-history-invoice-row {

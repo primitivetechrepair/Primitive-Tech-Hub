@@ -112,27 +112,31 @@ export function renderCustomerHistory({
             ${isHighValue ? `<span class="chip gold">💎 High Value</span>` : ``}
           </div>
 
-          <div class="customer-history-card__meta">
-            Latest: ${escapeHtml(buildLeadSummary(repairs[0], fmtDateShort))}
-          </div>
-
           <div class="customer-history-card__expandHint">Show History</div>
         </button>
 
         <div class="customer-history-card__body">
-          <div class="customer-history-card__meta customer-history-card__meta--stack">
-            <div class="customer-history-meta-row">
-              <span class="customer-history-meta-label">📍 Address</span>
-              <span class="customer-history-meta-value">${escapeHtml(address)}</span>
-            </div>
-
-            <div class="customer-history-meta-row">
-              <span class="customer-history-meta-label">🕒 Last Contact</span>
-              <span class="customer-history-meta-value">${escapeHtml(lastContactText)}</span>
-            </div>
+          <div class="customer-history-card__row">
+            <strong>Latest:</strong>
+            <div>${escapeHtml(buildLeadSummary(repairs[0], fmtDateShort))}</div>
           </div>
 
-          ${buildCustomerActionToolbar(parsed.contact, true)}
+          <div class="customer-history-card__row">
+            <strong>Address:</strong>
+            <div>${escapeHtml(address)}</div>
+          </div>
+
+          <div class="customer-history-card__row">
+            <strong>Last Contact:</strong>
+            <div>${escapeHtml(lastContactText)}</div>
+          </div>
+
+          <div class="customer-history-card__row customer-history-card__row--actions">
+            <strong>Actions:</strong>
+            <div class="customer-history-card__row-actions">
+              ${buildCustomerActionToolbar(parsed.contact, true)}
+            </div>
+          </div>
         </div>
 
         <div id="${detailId}" class="customer-history-card__details is-collapsed">
