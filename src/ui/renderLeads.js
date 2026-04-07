@@ -127,6 +127,19 @@ export function renderLeads(ctx) {
     const labor = Number(lead.laborAmount || 0);
     const profit = repairTotal - partsCost;
 
+    const repairDisplay = Array.isArray(lead.repairItems) && lead.repairItems.length
+      ? lead.repairItems
+          .map((item) => {
+            const type = String(item?.type || "").trim();
+            const amount = Number(item?.amount || 0);
+            return type ? `${type}${amount > 0 ? ` (${fmtMoney(amount)})` : ""}` : "";
+          })
+          .filter(Boolean)
+          .join(" • ")
+      : Array.isArray(lead.repairTypes) && lead.repairTypes.length
+        ? lead.repairTypes.filter(Boolean).join(" • ")
+        : (lead.repairType || "-");
+
     const files =
       (lead.files || [])
         .map(
@@ -184,9 +197,8 @@ if (isCollapsed(lead.leadID)) {
           </div>
 
           <div class="lead-card-row">
-            <strong>Repair:</strong> ${esc(lead.repairType || "-")}
+            <strong>Repair:</strong> ${esc(repairDisplay)}
           </div>
-
           <div class="lead-card-row">
             <strong>Phone:</strong> ${esc(lead.contactNumber || "-")}
           </div>
