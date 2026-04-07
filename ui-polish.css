@@ -486,8 +486,10 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
    Lead Repair Badges (Multi-Repair UI)
    ========================================================= */
 .lead-card-row-repairs {
+  display: flex;
+  flex-direction: column; /* ✅ KEY FIX */
   align-items: flex-start;
-  gap: 10px;
+  gap: 6px;
 }
 
 .lead-repair-badges {
@@ -541,4 +543,10 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   .lead-repair-badges {
     width: 100%;
   }
+}
+
+.lead-card-row-repairs strong {
+  font-size: 12px;
+  opacity: 0.7;
+  letter-spacing: 0.4px;
 }
