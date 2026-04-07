@@ -146,6 +146,44 @@ selectedInventory.forEach((itemID) => {
   inventoryUsedQty[itemID] = 1;
 });
 
+// ✅ Read dynamic repair rows from the new UI
+const repairRows = Array.from(document.querySelectorAll("#repairRowsContainer .repair-row"));
+
+const repairItems = repairRows
+  .map((row) => {
+    const type = String(
+      row.querySelector(".repairTypeSelect")?.value || ""
+    ).trim();
+
+    const amount = Number(
+      row.querySelector(".repairAmountInput")?.value || 0
+    );
+
+    return {
+      type,
+      amount,
+    };
+  })
+  .filter((item) => item.type);
+
+if (!repairItems.length) {
+  toast("Please add at least one repair type.", "error");
+  return;
+}
+
+const repairTypes = repairItems.map((item) => item.type);
+const totalRepairCost = repairItems.reduce(
+  (sum, item) => sum + Number(item.amount || 0),
+  0
+);
+
+// ✅ Keep hidden legacy fields synced for backward compatibility
+const repairTypeEl = document.getElementById("repairType");
+const repairCostEl = document.getElementById("repairCost");
+
+if (repairTypeEl) repairTypeEl.value = repairTypes[0] || "";
+if (repairCostEl) repairCostEl.value = String(totalRepairCost);
+
 const lead = {
   leadID,
   customerName,
@@ -154,10 +192,17 @@ const lead = {
   address: val("customerAddress"),
   device: val("deviceType"),
   series: val("leadSeries"),
-  repairType: val("repairType"),
+
+  // ✅ backward compatibility
+  repairType: repairTypes[0] || "",
+
+  // ✅ new fields
+  repairTypes,
+  repairItems,
+
   status: val("leadStatus") || "In Progress",
   dateReported: val("dateReported"),
-  repairCost: Number(val("repairCost") || 0),
+  repairCost: totalRepairCost,
   laborAmount: Number(val("laborOnly") || 0),
   notes: val("leadNotes"),
   inventoryUsed: selectedInventory,
@@ -198,6 +243,40 @@ if (el.leadForm) el.leadForm.reset();
 
 const statusEl = document.getElementById("leadStatus");
 if (statusEl) statusEl.value = "In Progress";
+
+// ✅ Reset dynamic repair rows back to one clean default row
+const repairRowsContainer = document.getElementById("repairRowsContainer");
+if (repairRowsContainer) {
+  repairRowsContainer.innerHTML = `
+    <div class="repair-row">
+      <select class="repairTypeSelect" required>
+        <option value="">Select Repair</option>
+        <option value="Screen">Screen</option>
+        <option value="Battery">Battery</option>
+        <option value="Charging Port">Charging Port</option>
+        <option value="Water Damage">Water Damage</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <input
+        type="number"
+        class="repairAmountInput"
+        min="0"
+        step="0.01"
+        placeholder="Amount ($)"
+      />
+
+      <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
+    </div>
+  `;
+}
+
+if (document.getElementById("repairType")) {
+  document.getElementById("repairType").value = "";
+}
+if (document.getElementById("repairCost")) {
+  document.getElementById("repairCost").value = "";
+}
 
 if (el.statusFilter) el.statusFilter.value = "all";
 if (el.deviceFilter) el.deviceFilter.value = "all";
