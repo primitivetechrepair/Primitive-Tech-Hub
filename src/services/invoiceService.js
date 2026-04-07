@@ -508,9 +508,29 @@ return await pdfDoc.save();
       };
     });
 
-    const repairDesc = [lead.device, lead.series, lead.repairType || lead.issueDescription]
-      .filter(Boolean)
-      .join(" ");
+    // ✅ Build repair line items (supports multi-repair)
+let repairLineItems = [];
+
+if (Array.isArray(lead.repairItems) && lead.repairItems.length) {
+  repairLineItems = lead.repairItems.map((r) => ({
+    desc: r.type || "Repair Service",
+    qty: 1,
+    amount: Number(r.amount || 0),
+  }));
+} else {
+  // ✅ fallback for old leads
+  const repairDesc = [lead.device, lead.series, lead.repairType || lead.issueDescription]
+    .filter(Boolean)
+    .join(" ");
+
+  repairLineItems = [
+    {
+      desc: repairDesc || "Repair Service",
+      qty: 1,
+      amount: repairAmount,
+    },
+  ];
+}
 
     const invoice = {
       invoiceId: `INV-${invoiceNumber}`,
@@ -522,7 +542,9 @@ return await pdfDoc.save();
       device: lead.device,
       series: lead.series,
       imeiSerial: lead.imeiSerial || lead.serialNumber || "",
-      repair: lead.repairType || lead.issueDescription || "",
+      repair: Array.isArray(lead.repairItems) && lead.repairItems.length
+  ? lead.repairItems.map((r) => r.type).join(" • ")
+  : (lead.repairType || lead.issueDescription || ""),
       inventoryUsed: lead.inventoryUsed,
       charged,
       partsCost,
@@ -535,13 +557,9 @@ return await pdfDoc.save();
     };
 
     invoice.lineItems = [
-      {
-        desc: repairDesc || "Repair Service",
-        qty: 1,
-        amount: repairAmount,
-      },
-      ...partLines,
-    ];
+  ...repairLineItems,
+  ...partLines,
+];
 
     if (laborAmount > 0) {
       invoice.lineItems.push({
