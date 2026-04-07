@@ -43,9 +43,56 @@ export function createEventsController({
       toggleTheme({ el, appDataStore, themeKey });
 
     el.inventoryForm.onsubmit = inventoryController.addInventory;
-    el.leadForm.onsubmit = leadsController.addLead;
+el.leadForm.onsubmit = leadsController.addLead;
 
-    el.statusFilter.onchange = () => renderAll();
+// ✅ Multi-repair row helpers
+function buildRepairRow() {
+  const row = document.createElement("div");
+  row.className = "repair-row";
+  row.innerHTML = `
+    <select class="repairTypeSelect" required>
+      <option value="">Select Repair</option>
+      <option value="Screen">Screen</option>
+      <option value="Battery">Battery</option>
+      <option value="Charging Port">Charging Port</option>
+      <option value="Water Damage">Water Damage</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <input
+      type="number"
+      class="repairAmountInput"
+      min="0"
+      step="0.01"
+      placeholder="Amount ($)"
+    />
+
+    <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
+  `;
+  return row;
+}
+
+const repairRowsContainer = document.getElementById("repairRowsContainer");
+const addRepairRowBtn = document.getElementById("addRepairRowBtn");
+
+if (addRepairRowBtn && repairRowsContainer) {
+  addRepairRowBtn.onclick = () => {
+    repairRowsContainer.appendChild(buildRepairRow());
+  };
+
+  repairRowsContainer.addEventListener("click", (e) => {
+    const removeBtn = e.target.closest(".removeRepairRowBtn");
+    if (!removeBtn) return;
+
+    const rows = repairRowsContainer.querySelectorAll(".repair-row");
+    if (rows.length <= 1) return;
+
+    const row = removeBtn.closest(".repair-row");
+    if (row) row.remove();
+  });
+}
+
+el.statusFilter.onchange = () => renderAll();
     el.deviceFilter.onchange = () => renderAll();
 
     el.deviceChartToggleBtn.onclick = () =>
