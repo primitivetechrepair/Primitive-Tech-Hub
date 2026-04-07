@@ -305,16 +305,47 @@
 
   <input id="leadSeries" placeholder="Series" aria-label="Device series" required />
 
-  <select id="repairType" name="repairType" required>
-    <option value="">Select Repair</option>
-    <option value="Screen">Screen</option>
-    <option value="Battery">Battery</option>
-    <option value="Charging Port">Charging Port</option>
-    <option value="Water Damage">Water Damage</option>
-    <option value="Other">Other</option>
-  </select>
+  <!-- ✅ MULTI-REPAIR SYSTEM -->
+<div class="span-full repair-multi-wrapper">
 
-  <select id="leadStatus" required>
+  <div class="repair-multi-header">
+    <strong>Repairs</strong>
+    <button type="button" id="addRepairRowBtn" class="mini-btn">+ Add Repair</button>
+  </div>
+
+  <div id="repairRowsContainer" class="repair-rows">
+
+    <!-- Default Row -->
+    <div class="repair-row">
+      <select class="repairTypeSelect" required>
+        <option value="">Select Repair</option>
+        <option value="Screen">Screen</option>
+        <option value="Battery">Battery</option>
+        <option value="Charging Port">Charging Port</option>
+        <option value="Water Damage">Water Damage</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <input
+        type="number"
+        class="repairAmountInput"
+        min="0"
+        step="0.01"
+        placeholder="Amount ($)"
+      />
+
+      <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- KEEP THIS FOR BACKWARD COMPATIBILITY (hidden) -->
+<input id="repairType" type="hidden" />
+<input id="repairCost" type="hidden" />
+
+<select id="leadStatus" required>
     <option selected>In Progress</option>
     <option>New</option>
     <option>Waiting for Parts</option>
