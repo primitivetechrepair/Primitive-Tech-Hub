@@ -127,18 +127,46 @@ export function renderLeads(ctx) {
     const labor = Number(lead.laborAmount || 0);
     const profit = repairTotal - partsCost;
 
-    const repairDisplay = Array.isArray(lead.repairItems) && lead.repairItems.length
-      ? lead.repairItems
-          .map((item) => {
-            const type = String(item?.type || "").trim();
-            const amount = Number(item?.amount || 0);
-            return type ? `${type}${amount > 0 ? ` (${fmtMoney(amount)})` : ""}` : "";
-          })
-          .filter(Boolean)
-          .join(" • ")
-      : Array.isArray(lead.repairTypes) && lead.repairTypes.length
-        ? lead.repairTypes.filter(Boolean).join(" • ")
-        : (lead.repairType || "-");
+    const repairItemsForDisplay =
+      Array.isArray(lead.repairItems) && lead.repairItems.length
+        ? lead.repairItems
+            .map((item) => ({
+              type: String(item?.type || "").trim(),
+              amount: Number(item?.amount || 0),
+            }))
+            .filter((item) => item.type)
+        : Array.isArray(lead.repairTypes) && lead.repairTypes.length
+          ? lead.repairTypes
+              .map((type) => ({
+                type: String(type || "").trim(),
+                amount: 0,
+              }))
+              .filter((item) => item.type)
+          : [{
+              type: String(lead.repairType || "-").trim() || "-",
+              amount: 0,
+            }];
+
+    const repairDisplayHtml = repairItemsForDisplay.length
+      ? `
+        <div class="lead-repair-badges">
+          ${repairItemsForDisplay
+            .map(
+              (item) => `
+                <span class="lead-repair-badge">
+                  <span class="lead-repair-badge-text">${esc(item.type)}</span>
+                  ${
+                    item.amount > 0
+                      ? `<span class="lead-repair-badge-amount">${esc(fmtMoney(item.amount))}</span>`
+                      : ""
+                  }
+                </span>
+              `
+            )
+            .join("")}
+        </div>
+      `
+      : `<span>-</span>`;
 
     const files =
       (lead.files || [])
@@ -196,8 +224,9 @@ if (isCollapsed(lead.leadID)) {
             <strong>Device:</strong> ${esc(lead.device || "-")} ${esc(lead.series || "")}
           </div>
 
-          <div class="lead-card-row">
-            <strong>Repair:</strong> ${esc(repairDisplay)}
+          <div class="lead-card-row lead-card-row-repairs">
+            <strong>Repair:</strong>
+            ${repairDisplayHtml}
           </div>
           <div class="lead-card-row">
             <strong>Phone:</strong> ${esc(lead.contactNumber || "-")}
