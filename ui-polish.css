@@ -550,3 +550,121 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   opacity: 0.7;
   letter-spacing: 0.4px;
 }
+
+/* =========================================================
+   Lead Form Premium Organization Polish
+   ========================================================= */
+
+#leadForm.form-grid {
+  gap: 12px;
+}
+
+.form-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+  padding-top: 4px;
+  margin-top: 4px;
+}
+
+.form-section-title:not(:first-child) {
+  border-top: 1px solid rgba(102, 252, 242, 0.12);
+  padding-top: 12px;
+  margin-top: 2px;
+}
+
+.repair-multi-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.repair-multi-header {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.88;
+  letter-spacing: 0.35px;
+}
+
+.repair-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.repair-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 130px 42px;
+  gap: 8px;
+  align-items: center;
+}
+
+.repair-row .repairTypeSelect,
+.repair-row .repairAmountInput {
+  margin: 0;
+}
+
+.repair-add-row {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 2px;
+}
+
+.repair-add-btn {
+  width: auto !important;
+  min-width: 0;
+  min-height: 34px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 9px;
+  border: 1px solid rgba(102, 252, 242, 0.24);
+  background: rgba(102, 252, 242, 0.10);
+}
+
+.repair-add-btn:hover {
+  filter: brightness(1.08);
+}
+
+.removeRepairRowBtn {
+  width: 42px;
+  min-width: 42px;
+  min-height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#leadForm .lead-notes-field {
+  min-height: 96px;
+}
+
+#leadForm .repair-leads-split-row {
+  margin-top: 2px;
+  padding-top: 0;
+}
+
+#leadForm .lead-submit-btn {
+  margin-top: 4px;
+}
+
+@media (max-width: 720px) {
+  .repair-row {
+    grid-template-columns: 1fr;
+  }
+
+  .removeRepairRowBtn {
+    width: 100%;
+  }
+
+  .repair-add-btn {
+    width: auto !important;
+  }
+}

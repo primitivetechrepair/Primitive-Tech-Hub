@@ -289,10 +289,14 @@
       <div class="row wrap lead-search-row"><div class="search-wrapper"><span class="search-icon">🔍</span><input id="leadSearch" placeholder="Search any lead field..." aria-label="Search leads" /></div></div>
 
 <form id="leadForm" class="form-grid">
-  <input id="customerName" placeholder="Name" aria-label="Customer name" required />
+  <div class="form-section-title span-full">Customer Details</div>
+
+  <input id="customerName" placeholder="Customer Name" aria-label="Customer name" required />
   <input id="contactNumber" placeholder="Contact Number" aria-label="Contact number" required />
   <input id="customerEmail" type="email" placeholder="Email" aria-label="Customer email" required />
   <input id="customerAddress" placeholder="Address" aria-label="Customer address" required />
+
+  <div class="form-section-title span-full">Repair Details</div>
 
   <select id="deviceType" required>
     <option value="">Device</option>
@@ -305,53 +309,47 @@
 
   <input id="leadSeries" placeholder="Series" aria-label="Device series" required />
 
-  <!-- ✅ MULTI-REPAIR SYSTEM -->
-<div class="span-full repair-multi-wrapper">
-
-  <div class="repair-multi-header">
-    <strong>Repairs</strong>
-  </div>
-
-  <div id="repairRowsContainer" class="repair-rows">
-
-    <!-- Default Row -->
-    <div class="repair-row">
-      <select class="repairTypeSelect" required>
-        <option value="">Select Repair</option>
-        <option value="Screen">Screen</option>
-        <option value="Battery">Battery</option>
-        <option value="Charging Port">Charging Port</option>
-        <option value="Water Damage">Water Damage</option>
-        <option value="Other">Other</option>
-      </select>
-
-      <input
-        type="number"
-        class="repairAmountInput"
-        min="0"
-        step="0.01"
-        placeholder="Amount ($)"
-      />
-
-      <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
+  <div class="span-full repair-multi-wrapper">
+    <div class="repair-multi-header">
+      <strong>Repairs</strong>
     </div>
 
+    <div id="repairRowsContainer" class="repair-rows">
+      <div class="repair-row">
+        <select class="repairTypeSelect" required>
+          <option value="">Select Repair</option>
+          <option value="Screen">Screen</option>
+          <option value="Battery">Battery</option>
+          <option value="Charging Port">Charging Port</option>
+          <option value="Water Damage">Water Damage</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <input
+          type="number"
+          class="repairAmountInput"
+          min="0"
+          step="0.01"
+          placeholder="Amount ($)"
+        />
+
+        <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
+      </div>
+    </div>
+
+    <div class="repair-add-row">
+      <button type="button" id="addRepairRowBtn" class="mini-btn repair-add-btn">
+        + Add Repair
+      </button>
+    </div>
   </div>
 
-  <!-- ✅ ADD BUTTON HERE -->
-  <div class="repair-add-row">
-    <button type="button" id="addRepairRowBtn" class="mini-btn repair-add-btn">
-      + Add Repair
-    </button>
-  </div>
+  <!-- Backward compatibility -->
+  <input id="repairType" type="hidden" />
 
-</div>
+  <div class="form-section-title span-full">Status & Pricing</div>
 
-<!-- KEEP THIS FOR BACKWARD COMPATIBILITY (hidden) -->
-<input id="repairType" type="hidden" />
-<input id="repairCost" type="hidden" />
-
-<select id="leadStatus" required>
+  <select id="leadStatus" required>
     <option selected>In Progress</option>
     <option>New</option>
     <option>Waiting for Parts</option>
@@ -360,10 +358,11 @@
   </select>
 
   <input id="dateReported" type="date" aria-label="Date reported" required />
-<input id="laborOnly" type="number" min="0" step="0.01" placeholder="Labor" aria-label="Labor amount" />
+  <input id="laborOnly" type="number" min="0" step="0.01" placeholder="Labor" aria-label="Labor amount" />
 
-<textarea id="leadNotes" class="span-full lead-notes-field" rows="3" placeholder="Notes (optional)" aria-label="Lead notes"></textarea>
+  <div class="form-section-title span-full">Notes & Attachments</div>
 
+  <textarea id="leadNotes" class="span-full lead-notes-field" rows="3" placeholder="Notes (optional)" aria-label="Lead notes"></textarea>
 
   <div class="repair-leads-split-row span-full">
     <label class="inventory-used-label">Inventory Used (auto linked)
