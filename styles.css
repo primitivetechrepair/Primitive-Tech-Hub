@@ -1181,34 +1181,90 @@ tbody tr:hover td {
   border-left-color: #ef4444;
 }
 
+/* ===============================
+   PREMIUM MODAL (CENTERED + SAFE)
+=============================== */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 23, 0.55);
-  display: grid;
-  place-items: center;
-  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    calc(20px + var(--safe-top))
+    16px
+    calc(110px + var(--safe-bottom)) /* 🔥 protects from bottom bar */
+    16px;
+
+  background: rgba(2, 6, 23, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  z-index: 3000;
+
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 
 .modal-overlay.open {
   opacity: 1;
 }
 
+/* ===============================
+   MODAL PANEL (PREMIUM STYLE)
+=============================== */
+
 .modal-panel {
-  width: min(92vw, 460px);
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: var(--space-3);
-  transform: scale(0.96);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: 100%;
+  max-width: 460px;
+
+  background: linear-gradient(
+    160deg,
+    rgba(31, 40, 51, 0.95),
+    rgba(15, 20, 30, 0.98)
+  );
+
+  border-radius: 18px;
+  padding: 18px;
+
+  border: 1px solid rgba(102,252,241,0.18);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(102,252,241,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+
+  transform: translateY(20px) scale(0.96);
   opacity: 0;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
 }
 
 .modal-overlay.open .modal-panel {
-  transform: scale(1);
+  transform: translateY(0) scale(1);
   opacity: 1;
+}
+
+/* ===============================
+   MODAL CONTENT POLISH
+=============================== */
+
+.modal-panel h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.modal-panel p {
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.modal-panel button {
+  margin-top: 12px;
 }
 
 .skeleton-card {
