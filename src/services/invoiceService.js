@@ -512,11 +512,15 @@ return await pdfDoc.save();
 let repairLineItems = [];
 
 if (Array.isArray(lead.repairItems) && lead.repairItems.length) {
-  repairLineItems = lead.repairItems.map((r) => ({
-    desc: r.type || "Repair Service",
+  repairLineItems = lead.repairItems.map((r) => {
+  const cleanType = String(r?.type || "").trim();
+
+  return {
+    desc: cleanType || "Repair Service",
     qty: 1,
-    amount: Number(r.amount || 0),
-  }));
+    amount: Number(r?.amount || 0),
+  };
+});
 } else {
   // ✅ fallback for old leads
   const repairDesc = [lead.device, lead.series, lead.repairType || lead.issueDescription]
@@ -543,7 +547,10 @@ if (Array.isArray(lead.repairItems) && lead.repairItems.length) {
       series: lead.series,
       imeiSerial: lead.imeiSerial || lead.serialNumber || "",
       repair: Array.isArray(lead.repairItems) && lead.repairItems.length
-  ? lead.repairItems.map((r) => r.type).join(" • ")
+  ? lead.repairItems
+      .map((r) => String(r?.type || "").trim())
+      .filter(Boolean)
+      .join(" • ")
   : (lead.repairType || lead.issueDescription || ""),
       inventoryUsed: lead.inventoryUsed,
       charged,
