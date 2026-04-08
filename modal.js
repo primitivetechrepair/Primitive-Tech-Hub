@@ -44,8 +44,8 @@
     if (!dom.wrap) init();
 
     dom.title.textContent = title;
-    dom.message.textContent = message;
-    dom.confirm.textContent = confirmText;
+dom.message.innerHTML = message;
+dom.confirm.textContent = confirmText;
 
     // Input behavior
     if (requireInput) {

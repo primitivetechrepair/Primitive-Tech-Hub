@@ -1,6 +1,6 @@
 export function maybeNotifyLowStock({
   getData,
-  showModal, // 👈 NEW
+  showModal,
 }) {
   const data = getData();
 
@@ -16,26 +16,38 @@ export function maybeNotifyLowStock({
 
   if (!out.length && !low.length) return;
 
-  const buildList = (items) =>
+  const buildList = (items, type) =>
     items
       .map(
-        (i) =>
-          `<div class="stock-row">
-            <span>${i.itemName}</span>
-            <span class="stock-qty">${i.quantity}</span>
-          </div>`
+        (i) => `
+          <div class="stock-item ${type}">
+            <div class="stock-item-main">
+              <div class="stock-item-name">${i.itemName || i.itemID || "Unknown Item"}</div>
+              <div class="stock-item-meta">
+                ${i.device ? `<span>${i.device}</span>` : ""}
+                ${i.brand ? `<span>${i.brand}</span>` : ""}
+                ${i.series ? `<span>${i.series}</span>` : ""}
+              </div>
+            </div>
+            <div class="stock-item-side">
+              <span class="stock-item-status">${type === "stock-out" ? "Out" : "Low"}</span>
+              <span class="stock-item-qty">Qty: ${Number(i.quantity || 0)}</span>
+            </div>
+          </div>
+        `
       )
       .join("");
 
   const message = `
     <div class="stock-alert">
-
       ${
         out.length
           ? `
         <div class="stock-section">
           <div class="stock-title danger">Out of Stock</div>
-          ${buildList(out)}
+          <div class="stock-list">
+            ${buildList(out, "stock-out")}
+          </div>
         </div>
       `
           : ""
@@ -46,12 +58,13 @@ export function maybeNotifyLowStock({
           ? `
         <div class="stock-section">
           <div class="stock-title warning">Low Stock</div>
-          ${buildList(low)}
+          <div class="stock-list">
+            ${buildList(low, "stock-low")}
+          </div>
         </div>
       `
           : ""
       }
-
     </div>
   `;
 

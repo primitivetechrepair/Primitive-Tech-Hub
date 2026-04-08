@@ -4313,3 +4313,213 @@ table thead th {
   background: rgba(102, 252, 241, 0.10) !important;
   border-color: rgba(102, 252, 241, 0.30) !important;
 }
+
+/* ===============================
+   MODAL CONTENT — PREMIUM LIST UI
+=============================== */
+
+.modal-message {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Each item row */
+.stock-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  font-size: 13px;
+  font-weight: 500;
+
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.stock-item:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.06);
+}
+
+/* LEFT SIDE (name) */
+.stock-item-name {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* RIGHT SIDE (status badge) */
+.stock-item-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+/* STATUS COLORS */
+.stock-out {
+  border-left: 3px solid #ff4d4d;
+}
+
+.stock-out .stock-item-status {
+  background: rgba(255, 0, 0, 0.15);
+  color: #ff4d4d;
+}
+
+.stock-low {
+  border-left: 3px solid #ffd500;
+}
+
+.stock-low .stock-item-status {
+  background: rgba(255, 213, 0, 0.15);
+  color: #ffd500;
+}
+
+/* Optional header inside modal */
+.stock-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+/* ===============================
+   Stock Alert Modal Content
+=============================== */
+
+.stock-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.stock-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stock-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.stock-title.danger {
+  color: #ff6b6b;
+}
+
+.stock-title.warning {
+  color: #ffd500;
+}
+
+.stock-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stock-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.stock-item.stock-out {
+  border-left: 4px solid #ff4d4d;
+}
+
+.stock-item.stock-low {
+  border-left: 4px solid #ffd500;
+}
+
+.stock-item-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stock-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.stock-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.stock-item-meta span {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+}
+
+.stock-item-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.stock-item-status {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.stock-item.stock-out .stock-item-status {
+  background: rgba(255, 77, 77, 0.14);
+  color: #ff6b6b;
+}
+
+.stock-item.stock-low .stock-item-status {
+  background: rgba(255, 213, 0, 0.14);
+  color: #ffd500;
+}
+
+.stock-item-qty {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .stock-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stock-item-side {
+    width: 100%;
+    align-items: flex-start;
+  }
+}
