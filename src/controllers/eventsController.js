@@ -90,9 +90,12 @@ export function createEventsController({
     });
 
     const newSelect = row.querySelector(".repairTypeSelect");
-    if (newSelect) {
-      setTimeout(() => newSelect.focus(), 100);
-    }
+if (newSelect) {
+  setTimeout(() => {
+    newSelect.focus();
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 100);
+}
   };
 
   repairRowsContainer.addEventListener("click", (e) => {
