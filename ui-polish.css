@@ -667,4 +667,34 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   .repair-add-btn {
     width: auto !important;
   }
+
+/* =========================================================
+   Repair Row Animation Polish
+   ========================================================= */
+
+.repair-row {
+  transform-origin: top left;
+}
+
+.repair-row-enter {
+  opacity: 0;
+  transform: translateY(8px) scale(0.985);
+}
+
+.repair-row-enter.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.repair-row-exit {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.985);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
 }

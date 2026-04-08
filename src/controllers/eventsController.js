@@ -77,7 +77,22 @@ const addRepairRowBtn = document.getElementById("addRepairRowBtn");
 
 if (addRepairRowBtn && repairRowsContainer) {
   addRepairRowBtn.onclick = () => {
-    repairRowsContainer.appendChild(buildRepairRow());
+    const row = buildRepairRow();
+    row.classList.add("repair-row-enter");
+    repairRowsContainer.appendChild(row);
+
+    requestAnimationFrame(() => {
+      row.classList.add("is-visible");
+    });
+
+    const newSelect = row.querySelector(".repairTypeSelect");
+    if (newSelect) {
+      setTimeout(() => newSelect.focus(), 120);
+    }
+
+    setTimeout(() => {
+      row.classList.remove("repair-row-enter", "is-visible");
+    }, 280);
   };
 
   repairRowsContainer.addEventListener("click", (e) => {
@@ -88,7 +103,13 @@ if (addRepairRowBtn && repairRowsContainer) {
     if (rows.length <= 1) return;
 
     const row = removeBtn.closest(".repair-row");
-    if (row) row.remove();
+    if (!row) return;
+
+    row.classList.add("repair-row-exit");
+
+    setTimeout(() => {
+      row.remove();
+    }, 180);
   });
 }
 
