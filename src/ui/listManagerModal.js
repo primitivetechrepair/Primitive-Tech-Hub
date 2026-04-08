@@ -251,7 +251,12 @@ export function createListManagerModal({
       await persist();
 
       if (saveAppSettingsToCloud) {
-        await saveAppSettingsToCloud();
+        try {
+          await saveAppSettingsToCloud();
+        } catch (err) {
+          console.error("ListManagerModal cloud sync failed:", err);
+          toast(el, "Saved locally, but cloud sync failed.", "warning");
+        }
       }
 
       setDirty(false);
