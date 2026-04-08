@@ -78,21 +78,27 @@ const addRepairRowBtn = document.getElementById("addRepairRowBtn");
 if (addRepairRowBtn && repairRowsContainer) {
   addRepairRowBtn.onclick = () => {
     const row = buildRepairRow();
-    row.classList.add("repair-row-enter");
-    repairRowsContainer.appendChild(row);
 
-    requestAnimationFrame(() => {
-      row.classList.add("is-visible");
-    });
+// start hidden state BEFORE inserting
+row.classList.add("repair-row-enter");
+repairRowsContainer.appendChild(row);
 
-    const newSelect = row.querySelector(".repairTypeSelect");
-    if (newSelect) {
-      setTimeout(() => newSelect.focus(), 120);
-    }
+// force browser to recognize initial state
+row.getBoundingClientRect(); // 🔥 forces reflow
 
-    setTimeout(() => {
-      row.classList.remove("repair-row-enter", "is-visible");
-    }, 280);
+// now trigger animation
+row.classList.add("repair-row-enter-active");
+
+// autofocus
+const newSelect = row.querySelector(".repairTypeSelect");
+if (newSelect) {
+  setTimeout(() => newSelect.focus(), 150);
+}
+
+// cleanup after animation
+setTimeout(() => {
+  row.classList.remove("repair-row-enter", "repair-row-enter-active");
+}, 220);
   };
 
   repairRowsContainer.addEventListener("click", (e) => {
