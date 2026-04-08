@@ -46,30 +46,35 @@ export function createEventsController({
     el.leadForm.onsubmit = leadsController.addLead;
 
     function buildRepairRow() {
-      const row = document.createElement("div");
-      row.className = "repair-row";
-      row.innerHTML = `
-        <select class="repairTypeSelect" required>
-          <option value="">Select Repair</option>
-          <option value="Screen">Screen</option>
-          <option value="Battery">Battery</option>
-          <option value="Charging Port">Charging Port</option>
-          <option value="Water Damage">Water Damage</option>
-          <option value="Other">Other</option>
-        </select>
+  const savedRepairs =
+    Array.isArray(window.__PTH_REPAIRS__) && window.__PTH_REPAIRS__.length
+      ? window.__PTH_REPAIRS__
+      : ["Screen", "Battery", "Charging Port", "Water Damage", "Other"];
 
-        <input
-          type="number"
-          class="repairAmountInput"
-          min="0"
-          step="0.01"
-          placeholder="Amount ($)"
-        />
+  const repairOptions = [
+    '<option value="">Select Repair</option>',
+    ...savedRepairs.map((repair) => `<option value="${repair}">${repair}</option>`),
+  ].join("");
 
-        <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
-      `;
-      return row;
-    }
+  const row = document.createElement("div");
+  row.className = "repair-row";
+  row.innerHTML = `
+    <select class="repairTypeSelect" required>
+      ${repairOptions}
+    </select>
+
+    <input
+      type="number"
+      class="repairAmountInput"
+      min="0"
+      step="0.01"
+      placeholder="Amount ($)"
+    />
+
+    <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
+  `;
+  return row;
+}
 
     const repairRowsContainer = document.getElementById("repairRowsContainer");
     const addRepairRowBtn = document.getElementById("addRepairRowBtn");

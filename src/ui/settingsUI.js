@@ -102,6 +102,7 @@ export function createSettingsUI({ el, getData, esc }) {
 
     const categories = Array.isArray(s.categories) ? s.categories : [];
     const repairs = Array.isArray(s.repairs) ? s.repairs : [];
+window.__PTH_REPAIRS__ = [...repairs];
 
     const leadDevice = document.getElementById("deviceType");
     const repairSelects = Array.from(document.querySelectorAll(".repairTypeSelect"));
