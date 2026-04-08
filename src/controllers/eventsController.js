@@ -75,29 +75,45 @@ export function createEventsController({
     const addRepairRowBtn = document.getElementById("addRepairRowBtn");
 
     if (addRepairRowBtn && repairRowsContainer) {
-      addRepairRowBtn.onclick = () => {
-        const row = buildRepairRow();
-        repairRowsContainer.appendChild(row);
+  addRepairRowBtn.onclick = () => {
+    const row = buildRepairRow();
 
-        const newSelect = row.querySelector(".repairTypeSelect");
-        if (newSelect) {
-          setTimeout(() => newSelect.focus(), 100);
-        }
-      };
+    row.style.opacity = "0";
+    row.style.transform = "translateY(10px)";
+    row.style.transition = "opacity 220ms ease, transform 220ms ease";
 
-      repairRowsContainer.addEventListener("click", (e) => {
-        const removeBtn = e.target.closest(".removeRepairRowBtn");
-        if (!removeBtn) return;
+    repairRowsContainer.appendChild(row);
 
-        const rows = repairRowsContainer.querySelectorAll(".repair-row");
-        if (rows.length <= 1) return;
+    requestAnimationFrame(() => {
+      row.style.opacity = "1";
+      row.style.transform = "translateY(0)";
+    });
 
-        const row = removeBtn.closest(".repair-row");
-        if (!row) return;
-
-        row.remove();
-      });
+    const newSelect = row.querySelector(".repairTypeSelect");
+    if (newSelect) {
+      setTimeout(() => newSelect.focus(), 100);
     }
+  };
+
+  repairRowsContainer.addEventListener("click", (e) => {
+    const removeBtn = e.target.closest(".removeRepairRowBtn");
+    if (!removeBtn) return;
+
+    const rows = repairRowsContainer.querySelectorAll(".repair-row");
+    if (rows.length <= 1) return;
+
+    const row = removeBtn.closest(".repair-row");
+    if (!row) return;
+
+    row.style.opacity = "0";
+    row.style.transform = "translateY(-8px)";
+    row.style.transition = "opacity 180ms ease, transform 180ms ease";
+
+    setTimeout(() => {
+      row.remove();
+    }, 180);
+  });
+}
 
     el.statusFilter.onchange = () => renderAll();
     el.deviceFilter.onchange = () => renderAll();
