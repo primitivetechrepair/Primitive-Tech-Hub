@@ -104,7 +104,7 @@ export function createSettingsUI({ el, getData, esc }) {
     const repairs = Array.isArray(s.repairs) ? s.repairs : [];
 
     const leadDevice = document.getElementById("deviceType");
-    const leadRepair = document.getElementById("repairType");
+    const repairSelects = Array.from(document.querySelectorAll(".repairTypeSelect"));
 
     if (leadDevice) {
       const current = leadDevice.value;
@@ -118,17 +118,17 @@ export function createSettingsUI({ el, getData, esc }) {
       leadDevice.dispatchEvent(new Event("change", { bubbles: true }));
     }
 
-    if (leadRepair) {
-      const current = leadRepair.value;
+    repairSelects.forEach((select) => {
+      const current = select.value;
 
-      leadRepair.innerHTML = [
-        '<option value="">Repair</option>',
+      select.innerHTML = [
+        '<option value="">Select Repair</option>',
         ...repairs.map((r) => `<option>${esc(r)}</option>`),
       ].join("");
 
-      if (repairs.includes(current)) leadRepair.value = current;
-      leadRepair.dispatchEvent(new Event("change", { bubbles: true }));
-    }
+      if (repairs.includes(current)) select.value = current;
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    });
   }
 
   return {
