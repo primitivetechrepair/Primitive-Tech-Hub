@@ -127,25 +127,37 @@ export function renderLeads(ctx) {
     const labor = Number(lead.laborAmount || 0);
     const profit = repairTotal - partsCost;
 
-    const repairItemsForDisplay =
-      Array.isArray(lead.repairItems) && lead.repairItems.length
-        ? lead.repairItems
-            .map((item) => ({
-              type: String(item?.type || "").trim(),
-              amount: Number(item?.amount || 0),
-            }))
-            .filter((item) => item.type)
-        : Array.isArray(lead.repairTypes) && lead.repairTypes.length
-          ? lead.repairTypes
-              .map((type) => ({
-                type: String(type || "").trim(),
-                amount: 0,
-              }))
-              .filter((item) => item.type)
-          : [{
-              type: String(lead.repairType || "-").trim() || "-",
-              amount: 0,
-            }];
+const formatRepairLabel = (type) => {
+  const clean = String(type || "").trim();
+  if (!clean) return "-";
+
+  // Prevent double "Replacement"
+  if (/replacement$/i.test(clean)) return clean;
+
+  return `${clean} Replacement`;
+};
+
+const repairItemsForDisplay =
+  Array.isArray(lead.repairItems) && lead.repairItems.length
+    ? lead.repairItems
+        .map((item) => ({
+          type: formatRepairLabel(item?.type),
+          amount: Number(item?.amount || 0),
+        }))
+        .filter((item) => item.type)
+    : Array.isArray(lead.repairTypes) && lead.repairTypes.length
+      ? lead.repairTypes
+          .map((type) => ({
+            type: formatRepairLabel(type),
+            amount: 0,
+          }))
+          .filter((item) => item.type)
+      : [
+          {
+            type: formatRepairLabel(lead.repairType || "-") || "-",
+            amount: 0,
+          },
+        ];
 
     const repairDisplayHtml = repairItemsForDisplay.length
       ? `
