@@ -43,83 +43,63 @@ export function createEventsController({
       toggleTheme({ el, appDataStore, themeKey });
 
     el.inventoryForm.onsubmit = inventoryController.addInventory;
-el.leadForm.onsubmit = leadsController.addLead;
+    el.leadForm.onsubmit = leadsController.addLead;
 
-// ✅ Multi-repair row helpers
-function buildRepairRow() {
-  const row = document.createElement("div");
-  row.className = "repair-row";
-  row.innerHTML = `
-    <select class="repairTypeSelect" required>
-      <option value="">Select Repair</option>
-      <option value="Screen">Screen</option>
-      <option value="Battery">Battery</option>
-      <option value="Charging Port">Charging Port</option>
-      <option value="Water Damage">Water Damage</option>
-      <option value="Other">Other</option>
-    </select>
+    function buildRepairRow() {
+      const row = document.createElement("div");
+      row.className = "repair-row";
+      row.innerHTML = `
+        <select class="repairTypeSelect" required>
+          <option value="">Select Repair</option>
+          <option value="Screen">Screen</option>
+          <option value="Battery">Battery</option>
+          <option value="Charging Port">Charging Port</option>
+          <option value="Water Damage">Water Damage</option>
+          <option value="Other">Other</option>
+        </select>
 
-    <input
-      type="number"
-      class="repairAmountInput"
-      min="0"
-      step="0.01"
-      placeholder="Amount ($)"
-    />
+        <input
+          type="number"
+          class="repairAmountInput"
+          min="0"
+          step="0.01"
+          placeholder="Amount ($)"
+        />
 
-    <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
-  `;
-  return row;
-}
+        <button type="button" class="removeRepairRowBtn mini-btn">✖</button>
+      `;
+      return row;
+    }
 
-const repairRowsContainer = document.getElementById("repairRowsContainer");
-const addRepairRowBtn = document.getElementById("addRepairRowBtn");
+    const repairRowsContainer = document.getElementById("repairRowsContainer");
+    const addRepairRowBtn = document.getElementById("addRepairRowBtn");
 
-if (addRepairRowBtn && repairRowsContainer) {
-  addRepairRowBtn.onclick = () => {
-    const row = buildRepairRow();
+    if (addRepairRowBtn && repairRowsContainer) {
+      addRepairRowBtn.onclick = () => {
+        const row = buildRepairRow();
+        repairRowsContainer.appendChild(row);
 
-// start hidden state BEFORE inserting
-row.classList.add("repair-row-enter");
-repairRowsContainer.appendChild(row);
+        const newSelect = row.querySelector(".repairTypeSelect");
+        if (newSelect) {
+          setTimeout(() => newSelect.focus(), 100);
+        }
+      };
 
-// force browser to recognize initial state
-row.getBoundingClientRect(); // 🔥 forces reflow
+      repairRowsContainer.addEventListener("click", (e) => {
+        const removeBtn = e.target.closest(".removeRepairRowBtn");
+        if (!removeBtn) return;
 
-// now trigger animation
-row.classList.add("repair-row-enter-active");
+        const rows = repairRowsContainer.querySelectorAll(".repair-row");
+        if (rows.length <= 1) return;
 
-// autofocus
-const newSelect = row.querySelector(".repairTypeSelect");
-if (newSelect) {
-  setTimeout(() => newSelect.focus(), 150);
-}
+        const row = removeBtn.closest(".repair-row");
+        if (!row) return;
 
-// cleanup after animation
-setTimeout(() => {
-  row.classList.remove("repair-row-enter", "repair-row-enter-active");
-}, 220);
-  };
+        row.remove();
+      });
+    }
 
-  repairRowsContainer.addEventListener("click", (e) => {
-    const removeBtn = e.target.closest(".removeRepairRowBtn");
-    if (!removeBtn) return;
-
-    const rows = repairRowsContainer.querySelectorAll(".repair-row");
-    if (rows.length <= 1) return;
-
-    const row = removeBtn.closest(".repair-row");
-    if (!row) return;
-
-    row.classList.add("repair-row-exit");
-
-    setTimeout(() => {
-      row.remove();
-    }, 180);
-  });
-}
-
-el.statusFilter.onchange = () => renderAll();
+    el.statusFilter.onchange = () => renderAll();
     el.deviceFilter.onchange = () => renderAll();
 
     el.deviceChartToggleBtn.onclick = () =>
