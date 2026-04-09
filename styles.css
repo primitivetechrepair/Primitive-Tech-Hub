@@ -4405,7 +4405,7 @@ table thead th {
 .stock-alert {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   margin-top: 8px;
 }
 
@@ -4416,11 +4416,27 @@ table thead th {
 }
 
 .stock-title {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding-bottom: 6px;
+
+  padding: 8px 0 6px;
+  margin-bottom: 2px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(31, 40, 51, 0.98),
+    rgba(31, 40, 51, 0.92)
+  );
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -4514,8 +4530,23 @@ table thead th {
 
 .stock-item-qty {
   font-size: 11px;
-  font-weight: 600;
-  color: var(--muted);
+  font-weight: 700;
+}
+
+.stock-item-qty.qty-out {
+  color: #ff6b6b;
+}
+
+.stock-item-qty.qty-critical {
+  color: #ff9f43;
+}
+
+.stock-item-qty.qty-warning {
+  color: #ffd500;
+}
+
+.stock-item-qty.qty-ok {
+  color: #66fcf1;
 }
 
 @media (max-width: 700px) {
@@ -4533,13 +4564,12 @@ table thead th {
 .modal-message {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
 
   padding-right: 4px;
   margin-top: 10px;
 
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: block;
 }
 
 .stock-item {
