@@ -32,6 +32,7 @@ export function maybeNotifyLowStock({
     items
       .map((i) => {
         const qty = Number(i.quantity || 0);
+        const itemID = String(i.itemID || "").trim();
 
         return `
           <div class="stock-item ${type}">
@@ -47,6 +48,13 @@ export function maybeNotifyLowStock({
             <div class="stock-item-side">
               <span class="stock-item-status">${type === "stock-out" ? "Out" : "Low"}</span>
               <span class="stock-item-qty ${getQtySeverityClass(qty)}">Qty: ${qty}</span>
+              <button
+                type="button"
+                class="stock-restock-btn"
+                data-itemid="${itemID}"
+              >
+                Tap to Restock
+              </button>
             </div>
           </div>
         `;
@@ -88,4 +96,47 @@ export function maybeNotifyLowStock({
     message,
     confirmText: "Got it",
   });
+
+  setTimeout(() => {
+    const buttons = document.querySelectorAll(".stock-restock-btn");
+    if (!buttons.length) return;
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const itemID = String(btn.dataset.itemid || "").trim();
+        if (!itemID) return;
+
+        const modal = document.getElementById("appModal");
+        if (modal) {
+          modal.classList.remove("open");
+          modal.classList.add("hidden");
+          modal.setAttribute("aria-hidden", "true");
+        }
+
+        const inventorySearch = document.getElementById("inventorySearch");
+        if (inventorySearch) {
+          inventorySearch.value = itemID;
+          inventorySearch.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+
+        const inventorySection =
+          inventorySearch?.closest(".card") ||
+          document.querySelector(".inventory-card") ||
+          document.querySelector(".table-wrap") ||
+          document.getElementById("inventoryBody");
+
+        if (inventorySection) {
+          setTimeout(() => {
+            inventorySection.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }, 120);
+        }
+      });
+    });
+  }, 60);
 }

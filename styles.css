@@ -4579,3 +4579,34 @@ table thead th {
 .stock-item:active {
   transform: scale(0.985);
 }
+
+.stock-restock-btn {
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 30px !important;
+  margin: 0 !important;
+  padding: 6px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(102,252,241,0.28) !important;
+  background: rgba(102,252,241,0.10) !important;
+  color: var(--text-color) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  box-shadow: none !important;
+}
+
+.stock-restock-btn:hover {
+  background: rgba(102,252,241,0.18) !important;
+  border-color: rgba(102,252,241,0.42) !important;
+}
+
+.stock-item-side {
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  .stock-restock-btn {
+    align-self: flex-start;
+  }
+}
