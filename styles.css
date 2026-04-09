@@ -1220,6 +1220,12 @@ tbody tr:hover td {
   width: 100%;
   max-width: 460px;
 
+  max-height: 72vh; /* 🔥 controls modal height */
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden; /* prevents bleed */
+
   background: linear-gradient(
     160deg,
     rgba(31, 40, 51, 0.95),
@@ -4522,4 +4528,16 @@ table thead th {
     width: 100%;
     align-items: flex-start;
   }
+}
+
+.modal-message {
+  flex: 1;
+  overflow-y: auto;
+
+  padding-right: 4px;
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
