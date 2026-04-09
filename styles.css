@@ -4541,3 +4541,11 @@ table thead th {
   flex-direction: column;
   gap: 12px;
 }
+
+.stock-item {
+  cursor: pointer;
+}
+
+.stock-item:active {
+  transform: scale(0.985);
+}
