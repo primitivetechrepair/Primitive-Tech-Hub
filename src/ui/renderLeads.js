@@ -639,56 +639,64 @@ if (notesPreviewBtn) {
     const modalPromise = window.Modal?.open({
       title: "Add / Update Notes",
       message: `
-        <div class="notes-modal">
-          <div id="leadNotesExisting" class="notes-existing">
-            ${
-              Array.isArray(lead.notes)
-                ? lead.notes.length
-                  ? lead.notes
-                      .slice()
-                      .reverse()
-                      .map(
-                        (note) => `
-                          <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
-                            <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-                              <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
-                              <div style="display:flex;gap:6px;">
-                                <button
-                                  type="button"
-                                  class="tiny lead-action-btn editLeadNoteBtn"
-                                  data-note-id="${esc(String(note.id || ""))}"
-                                  title="Edit note"
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  type="button"
-                                  class="tiny lead-action-btn deleteLeadNoteBtn"
-                                  data-note-id="${esc(String(note.id || ""))}"
-                                  title="Delete note"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </div>
-                            <pre>${esc(note.text || "")}</pre>
-                          </div>
-                        `
-                      )
-                      .join("")
-                  : "<div class='muted'>No notes yet.</div>"
-                : lead.notes
-                  ? `<pre>${esc(lead.notes)}</pre>`
-                  : "<div class='muted'>No notes yet.</div>"
-            }
-          </div>
+        <div class="notes-modal" style="display:flex;flex-direction:column;height:100%;max-height:60vh;">
+  
+  <div
+    id="leadNotesExisting"
+    class="notes-existing"
+    style="flex:1;overflow-y:auto;padding-right:6px;margin-bottom:10px;"
+  >
+    ${
+      Array.isArray(lead.notes)
+        ? lead.notes.length
+          ? lead.notes
+              .slice()
+              .reverse()
+              .map(
+                (note) => `
+                  <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
+                    <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                      <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                      <div style="display:flex;gap:6px;">
+                        <button
+                          type="button"
+                          class="tiny lead-action-btn editLeadNoteBtn"
+                          data-note-id="${esc(String(note.id || ""))}"
+                          title="Edit note"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          class="tiny lead-action-btn deleteLeadNoteBtn"
+                          data-note-id="${esc(String(note.id || ""))}"
+                          title="Delete note"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                    <pre>${esc(note.text || "")}</pre>
+                  </div>
+                `
+              )
+              .join("")
+          : "<div class='muted'>No notes yet.</div>"
+        : lead.notes
+          ? `<pre>${esc(lead.notes)}</pre>`
+          : "<div class='muted'>No notes yet.</div>"
+    }
+  </div>
 
-          <textarea
-            id="leadNoteInput"
-            placeholder="Add a new note..."
-            style="width:100%;min-height:100px;margin-top:10px;"
-          ></textarea>
-        </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;">
+    <textarea
+      id="leadNoteInput"
+      placeholder="Add a new note..."
+      style="width:100%;min-height:70px;resize:none;"
+    ></textarea>
+  </div>
+
+</div>
       `,
       confirmText: "Save Note",
       requireInput: false,
