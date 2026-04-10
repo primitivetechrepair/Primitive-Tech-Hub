@@ -50,26 +50,28 @@ export function maybeNotifyLowStock({
 
   <div class="stock-qty-controls">
   <button
-    type="button"
-    class="stock-restock-btn minus"
-    aria-label="Decrease quantity"
-    title="Decrease quantity"
-    onclick="window.handleStockAdjust('${itemID}', 1)"
-  >
-    -
-  </button>
+  type="button"
+  class="stock-restock-btn minus"
+  data-item-id="${itemID}"
+  data-delta="1"
+  aria-label="Decrease quantity"
+  title="Decrease quantity"
+>
+  -
+</button>
 
-  <span class="stock-item-qty ${getQtySeverityClass(qty)}">Qty: ${qty}</span>
+<span class="stock-item-qty ${getQtySeverityClass(qty)}">Qty: ${qty}</span>
 
-  <button
-    type="button"
-    class="stock-restock-btn plus"
-    aria-label="Increase quantity"
-    title="Increase quantity"
-    onclick="window.handleStockAdjust('${itemID}', -1)"
-  >
-    +
-  </button>
+<button
+  type="button"
+  class="stock-restock-btn plus"
+  data-item-id="${itemID}"
+  data-delta="-1"
+  aria-label="Increase quantity"
+  title="Increase quantity"
+>
+  +
+</button>
 </div>
 </div>
           </div>
@@ -108,11 +110,27 @@ export function maybeNotifyLowStock({
   `;
 
   showModal({
-    title: "Inventory Alert",
-    message,
-    confirmText: "Got it",
-  });
+  title: "Inventory Alert",
+  message,
+  confirmText: "Got it",
+});
 
-  // buttons use window.handleStockAdjust(...) directly
+// ✅ Delegated click handler (safe for dynamic modal content)
+setTimeout(() => {
+  const modal = document.querySelector("#appModal");
+  if (!modal) return;
+
+  modal.onclick = (e) => {
+    const btn = e.target.closest(".stock-restock-btn");
+    if (!btn) return;
+
+    const itemID = btn.dataset.itemId;
+    const delta = Number(btn.dataset.delta);
+
+    if (!itemID || isNaN(delta)) return;
+
+    window.handleStockAdjust(itemID, delta);
+  };
+}, 50);
 
 }
