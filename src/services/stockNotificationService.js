@@ -35,45 +35,48 @@ export function maybeNotifyLowStock({
         const itemID = String(i.itemID || "").trim();
 
         return `
-          <div class="stock-item ${type}">
+          <div class="stock-item ${type}" data-item-id="${itemID}" data-base-qty="${qty}">
             <div class="stock-item-main">
               <div class="stock-item-name">${i.itemName || i.itemID || "Unknown Item"}</div>
               <div class="stock-item-meta">
-                ${i.device ? `<span>${i.device}</span>` : ""}
+                ${i.category ? `<span>${i.category}</span>` : ""}
                 ${i.brand ? `<span>${i.brand}</span>` : ""}
                 ${i.series ? `<span>${i.series}</span>` : ""}
               </div>
             </div>
 
             <div class="stock-item-side">
-  <span class="stock-item-status">${type === "stock-out" ? "Out" : "Low"}</span>
+              <span class="stock-item-status">${type === "stock-out" ? "Out" : "Low"}</span>
 
-  <div class="stock-qty-controls">
- <button
-  type="button"
-  class="stock-restock-btn minus"
-  data-item-id="${itemID}"
-  data-delta="1"
-  aria-label="Decrease quantity"
-  title="Decrease quantity"
->
-  -
-</button>
+              <div class="stock-qty-controls">
+                <button
+                  type="button"
+                  class="stock-restock-btn minus"
+                  data-item-id="${itemID}"
+                  data-delta="1"
+                  aria-label="Decrease quantity"
+                  title="Decrease quantity"
+                >
+                  -
+                </button>
 
-<span class="stock-item-qty ${getQtySeverityClass(qty)}">Qty: ${qty}</span>
+                <span
+                  class="stock-item-qty ${getQtySeverityClass(qty)}"
+                  data-item-id="${itemID}"
+                >Qty: ${qty}</span>
 
-<button
-  type="button"
-  class="stock-restock-btn plus"
-  data-item-id="${itemID}"
-  data-delta="-1"
-  aria-label="Increase quantity"
-  title="Increase quantity"
->
-  +
-</button>
-</div>
-</div>
+                <button
+                  type="button"
+                  class="stock-restock-btn plus"
+                  data-item-id="${itemID}"
+                  data-delta="-1"
+                  aria-label="Increase quantity"
+                  title="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
+            </div>
           </div>
         `;
       })
@@ -109,28 +112,60 @@ export function maybeNotifyLowStock({
     </div>
   `;
 
-  showModal({
-  title: "Inventory Alert",
-  message,
-  confirmText: "Got it",
-});
+  const pending = new Map();
 
-// ✅ Delegated click handler (safe for dynamic modal content)
-setTimeout(() => {
-  const modal = document.querySelector("#appModal");
-  if (!modal) return;
+  const updateQtyPreview = (row) => {
+    const itemID = String(row.dataset.itemId || "").trim();
+    const baseQty = Number(row.dataset.baseQty || 0);
+    const pendingDelta = Number(pending.get(itemID) || 0);
+    const previewQty = Math.max(0, baseQty - pendingDelta);
 
-  modal.onclick = (e) => {
-    const btn = e.target.closest(".stock-restock-btn");
-    if (!btn) return;
+    const qtyEl = row.querySelector('.stock-item-qty');
+    if (!qtyEl) return;
 
-    const itemID = btn.dataset.itemId;
-    const delta = Number(btn.dataset.delta);
-
-    if (!itemID || isNaN(delta)) return;
-
-    window.handleStockAdjust(itemID, delta);
+    qtyEl.textContent = `Qty: ${previewQty}`;
+    qtyEl.classList.remove("qty-out", "qty-critical", "qty-warning", "qty-ok");
+    qtyEl.classList.add(getQtySeverityClass(previewQty));
   };
-}, 50);
 
+  showModal({
+    title: "Inventory Alert",
+    message,
+    confirmText: "Apply Changes",
+    cancelText: "Close",
+    showCancel: true,
+    confirmDisabled: true,
+    onRender: ({ el }) => {
+      const hasPendingChanges = () =>
+        Array.from(pending.values()).some((v) => Number(v || 0) !== 0);
+
+      el.modalMessage.onclick = (e) => {
+        const btn = e.target.closest(".stock-restock-btn");
+        if (!btn) return;
+
+        const itemID = String(btn.dataset.itemId || "").trim();
+        const delta = Number(btn.dataset.delta);
+
+        if (!itemID || Number.isNaN(delta)) return;
+
+        const nextDelta = Number(pending.get(itemID) || 0) + delta;
+
+        if (nextDelta === 0) pending.delete(itemID);
+        else pending.set(itemID, nextDelta);
+
+        const row = el.modalMessage.querySelector(`.stock-item[data-item-id="${itemID}"]`);
+        if (row) updateQtyPreview(row);
+
+        el.modalConfirmBtn.disabled = !hasPendingChanges();
+      };
+    },
+  }).then((confirmed) => {
+    if (!confirmed) return;
+    if (!window.handleStockAdjust) return;
+
+    for (const [itemID, delta] of pending.entries()) {
+      if (!delta) continue;
+      window.handleStockAdjust(itemID, delta);
+    }
+  });
 }

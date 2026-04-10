@@ -1,6 +1,15 @@
 export function showModal(
   el,
-  { title = 'Confirm', message = '', requireInput = false, confirmText = 'Confirm' } = {}
+  {
+    title = "Confirm",
+    message = "",
+    requireInput = false,
+    confirmText = "Confirm",
+    cancelText = "Cancel",
+    showCancel = false,
+    confirmDisabled = false,
+    onRender = null,
+  } = {}
 ) {
   return new Promise((resolve) => {
     const prevFocus = document.activeElement;
@@ -14,32 +23,22 @@ export function showModal(
       el.modalMessage.textContent = message;
     }
 
-    // ✅ bind dynamic stock modal buttons safely after message injection
-    el.modalMessage.onclick = (e) => {
-      const btn = e.target.closest(".stock-restock-btn");
-      if (!btn) return;
-
-      const itemID = String(btn.dataset.itemId || "").trim();
-      const delta = Number(btn.dataset.delta);
-
-      if (!itemID || Number.isNaN(delta)) return;
-      if (!window.handleStockAdjust) return;
-
-      window.handleStockAdjust(itemID, delta);
-    };
-
     el.modalConfirmBtn.textContent = confirmText;
+    el.modalConfirmBtn.disabled = !!confirmDisabled;
 
-    el.modalInput.value = '';
-    el.modalInput.classList.toggle('hidden', !requireInput);
+    el.modalCancelBtn.textContent = cancelText;
+    el.modalCancelBtn.style.display = showCancel ? "" : "none";
 
-    el.appModal.classList.remove('hidden');
-    requestAnimationFrame(() => el.appModal.classList.add('open'));
+    el.modalInput.value = "";
+    el.modalInput.classList.toggle("hidden", !requireInput);
 
-    // focus inside modal (timer so it can be cancelled on close)
+    el.appModal.classList.remove("hidden");
+    requestAnimationFrame(() => el.appModal.classList.add("open"));
+
     focusTimer = setTimeout(() => {
       if (requireInput) el.modalInput.focus();
-      else el.modalConfirmBtn.focus();
+      else if (!el.modalConfirmBtn.disabled) el.modalConfirmBtn.focus();
+      else if (showCancel) el.modalCancelBtn.focus();
     }, 0);
 
     const close = (result) => {
@@ -52,12 +51,12 @@ export function showModal(
         document.activeElement.blur();
       }
 
-      el.appModal.classList.remove('open');
+      el.appModal.classList.remove("open");
 
       setTimeout(() => {
-        el.appModal.classList.add('hidden');
+        el.appModal.classList.add("hidden");
 
-        if (prevFocus && typeof prevFocus.focus === 'function') {
+        if (prevFocus && typeof prevFocus.focus === "function") {
           try { prevFocus.focus(); } catch {}
         }
       }, 220);
@@ -68,7 +67,17 @@ export function showModal(
       resolve(result);
     };
 
-    el.modalCancelBtn.style.display = "none";
-    el.modalConfirmBtn.onclick = () => close(requireInput ? el.modalInput.value : true);
+    el.modalCancelBtn.onclick = () => close(false);
+    el.modalConfirmBtn.onclick = () => {
+      if (el.modalConfirmBtn.disabled) return;
+      close(requireInput ? el.modalInput.value : true);
+    };
+
+    if (typeof onRender === "function") {
+      onRender({
+        el,
+        close,
+      });
+    }
   });
 }
