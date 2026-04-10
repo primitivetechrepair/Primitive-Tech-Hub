@@ -212,6 +212,8 @@ export function initAppModules(ctx) {
     });
   }
 
+  window.inventoryController = out.inventoryController;
+
   if (!out.leadsController) {
     out.leadsController = createLeadsController({
       el,
