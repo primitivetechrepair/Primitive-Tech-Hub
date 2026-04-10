@@ -622,7 +622,7 @@ if (notesPreviewBtn) {
       return;
     }
 
-    const newNote = await window.Modal?.open({
+    const confirmed = await window.Modal?.open({
       title: "Add / Update Notes",
       message: `
         <div class="notes-modal">
@@ -636,21 +636,16 @@ if (notesPreviewBtn) {
       requireInput: false,
     });
 
-    // 🔒 User cancelled
-    if (newNote === false || newNote === undefined) return;
+    if (!confirmed) return;
 
     const inputEl = document.getElementById("leadNoteInput");
     const noteText = inputEl?.value?.trim();
-
     if (!noteText) return;
 
     const timestamp = new Date().toLocaleString();
-
     const formattedNote = `[${timestamp}]\n${noteText}\n\n`;
 
-    // ✅ Append (NOT overwrite)
     lead.notes = (lead.notes || "") + formattedNote;
-
     lead.lastUpdated = new Date().toISOString();
 
     addAudit("lead_note_added", {
@@ -676,7 +671,6 @@ if (notesPreviewBtn) {
 
       renderAll();
       toast(el, "Note added.", "success");
-
     } catch (err) {
       console.error("Notes persist failed:", err);
       toast(el, "Failed to save note.", "error");
