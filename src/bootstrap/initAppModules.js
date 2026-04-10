@@ -205,9 +205,9 @@ export function initAppModules(ctx) {
       renderAll,
       maybeNotifyLowStock: () =>
         maybeNotifyLowStockService({
-  getData,
-  showModal,
-}),
+          getData,
+          showModal: (opts) => showModal(el, opts),
+        }),
       inventoryService,
     });
   }
@@ -236,7 +236,7 @@ export function initAppModules(ctx) {
       maybeNotifyLowStock: () =>
         maybeNotifyLowStockService({
           getData,
-          showModal,
+          showModal: (opts) => showModal(el, opts),
         }),
     });
   }
@@ -321,9 +321,9 @@ export function initAppModules(ctx) {
       el,
       maybeNotifyLowStock: () =>
         maybeNotifyLowStockService({
-  getData,
-  showModal,
-}),
+          getData,
+          showModal: (opts) => showModal(el, opts),
+        }),
     });
   }
 
@@ -405,11 +405,11 @@ export function initAppModules(ctx) {
       ensureLeadPartsShape,
 
       queueCloudSync: (...args) => out.cloudSyncQueueService.queueCloudSync(...args),
-      maybeNotifyLowStock: () =>
+       maybeNotifyLowStock: () =>
         maybeNotifyLowStockService({
-  getData,
-  showModal,
-}),
+          getData,
+          showModal: (opts) => showModal(el, opts),
+        }),
 
       isAdminEnabled: out.adminGate.isAdminEnabled,
       verifyAdminPin: out.adminGate.verifyAdminPin,

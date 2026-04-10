@@ -49,7 +49,7 @@ export function maybeNotifyLowStock({
   <span class="stock-item-status">${type === "stock-out" ? "Out" : "Low"}</span>
 
   <div class="stock-qty-controls">
-  <button
+ <button
   type="button"
   class="stock-restock-btn minus"
   data-item-id="${itemID}"

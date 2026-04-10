@@ -7,11 +7,27 @@ export function showModal(
     let focusTimer = null;
 
     el.modalTitle.textContent = title;
+
     if (typeof message === "string" && message.includes("<")) {
-  el.modalMessage.innerHTML = message;
-} else {
-  el.modalMessage.textContent = message;
-}
+      el.modalMessage.innerHTML = message;
+    } else {
+      el.modalMessage.textContent = message;
+    }
+
+    // ✅ bind dynamic stock modal buttons safely after message injection
+    el.modalMessage.onclick = (e) => {
+      const btn = e.target.closest(".stock-restock-btn");
+      if (!btn) return;
+
+      const itemID = String(btn.dataset.itemId || "").trim();
+      const delta = Number(btn.dataset.delta);
+
+      if (!itemID || Number.isNaN(delta)) return;
+      if (!window.handleStockAdjust) return;
+
+      window.handleStockAdjust(itemID, delta);
+    };
+
     el.modalConfirmBtn.textContent = confirmText;
 
     el.modalInput.value = '';
@@ -27,13 +43,11 @@ export function showModal(
     }, 0);
 
     const close = (result) => {
-      // cancel any pending focus
       if (focusTimer) {
         clearTimeout(focusTimer);
         focusTimer = null;
       }
 
-      // force focus out of modal BEFORE hiding
       if (document.activeElement && document.activeElement.blur) {
         document.activeElement.blur();
       }
@@ -43,7 +57,6 @@ export function showModal(
       setTimeout(() => {
         el.appModal.classList.add('hidden');
 
-        // restore focus to what opened the modal
         if (prevFocus && typeof prevFocus.focus === 'function') {
           try { prevFocus.focus(); } catch {}
         }
@@ -51,6 +64,7 @@ export function showModal(
 
       el.modalCancelBtn.onclick = null;
       el.modalConfirmBtn.onclick = null;
+      el.modalMessage.onclick = null;
       resolve(result);
     };
 
