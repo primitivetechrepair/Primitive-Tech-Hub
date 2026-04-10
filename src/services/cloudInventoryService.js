@@ -283,7 +283,9 @@ export async function upsertLeadToCloud(lead) {
     payment_method: lead.paymentMethod || "Cash",
     payment_status: lead.paymentStatus || "Unpaid",
 
-    notes: lead.notes || "",
+    notes: Array.isArray(lead.notes)
+  ? JSON.stringify(lead.notes)
+  : (lead.notes || ""),
     inventory_used: Array.isArray(lead.inventoryUsed) ? lead.inventoryUsed : [],
     inventory_used_qty:
       lead.inventoryUsedQty && typeof lead.inventoryUsedQty === "object"
@@ -334,7 +336,14 @@ export async function fetchLeadsFromCloud() {
     paymentMethod: row.payment_method || "Cash",
     paymentStatus: row.payment_status || "Unpaid",
 
-    notes: row.notes || "",
+    notes: (() => {
+  try {
+    const parsed = JSON.parse(row.notes);
+    return Array.isArray(parsed) ? parsed : row.notes || "";
+  } catch {
+    return row.notes || "";
+  }
+})(),
     inventoryUsed: Array.isArray(row.inventory_used) ? row.inventory_used : [],
     inventoryUsedQty:
       row.inventory_used_qty && typeof row.inventory_used_qty === "object"
