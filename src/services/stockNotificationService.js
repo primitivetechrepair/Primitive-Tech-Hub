@@ -49,28 +49,28 @@ export function maybeNotifyLowStock({
   <span class="stock-item-status">${type === "stock-out" ? "Out" : "Low"}</span>
 
   <div class="stock-qty-controls">
-    <button
-      type="button"
-      class="stock-restock-btn minus"
-      data-itemid="${itemID}"
-      aria-label="Decrease quantity"
-      title="Decrease quantity"
-    >
-      -
-    </button>
+  <button
+    type="button"
+    class="stock-restock-btn minus"
+    aria-label="Decrease quantity"
+    title="Decrease quantity"
+    onclick="window.handleStockAdjust('${itemID}', 1)"
+  >
+    -
+  </button>
 
-    <span class="stock-item-qty ${getQtySeverityClass(qty)}">Qty: ${qty}</span>
+  <span class="stock-item-qty ${getQtySeverityClass(qty)}">Qty: ${qty}</span>
 
-    <button
-      type="button"
-      class="stock-restock-btn plus"
-      data-itemid="${itemID}"
-      aria-label="Increase quantity"
-      title="Increase quantity"
-    >
-      +
-    </button>
-  </div>
+  <button
+    type="button"
+    class="stock-restock-btn plus"
+    aria-label="Increase quantity"
+    title="Increase quantity"
+    onclick="window.handleStockAdjust('${itemID}', -1)"
+  >
+    +
+  </button>
+</div>
 </div>
           </div>
         `;
@@ -113,36 +113,6 @@ export function maybeNotifyLowStock({
     confirmText: "Got it",
   });
 
-  setTimeout(() => {
-  const buttons = document.querySelectorAll(".stock-restock-btn");
-  if (!buttons.length) return;
-
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const itemID = String(btn.dataset.itemid || "").trim();
-      if (!itemID) return;
-      if (!window.inventoryController?.quickUseItem) return;
-
-      const isPlus = btn.classList.contains("plus");
-      const isMinus = btn.classList.contains("minus");
-
-      if (isPlus) {
-        // add 1 back into stock
-        window.inventoryController.quickUseItem(itemID, -1);
-      }
-
-      if (isMinus) {
-        // remove 1 from stock
-        window.inventoryController.quickUseItem(itemID, 1);
-      }
-
-      btn.classList.add("restocked");
-      setTimeout(() => btn.classList.remove("restocked"), 220);
-    });
-  });
-}, 60);
+  // buttons use window.handleStockAdjust(...) directly
 
 }

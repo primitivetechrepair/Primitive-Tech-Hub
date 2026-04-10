@@ -214,6 +214,12 @@ export function initAppModules(ctx) {
 
   window.inventoryController = out.inventoryController;
 
+  window.handleStockAdjust = (itemID, delta) => {
+    if (!itemID) return;
+    if (!window.inventoryController?.quickUseItem) return;
+    window.inventoryController.quickUseItem(itemID, delta);
+  };
+
   if (!out.leadsController) {
     out.leadsController = createLeadsController({
       el,
