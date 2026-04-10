@@ -639,12 +639,14 @@ if (notesPreviewBtn) {
     const modalPromise = window.Modal?.open({
       title: "Add / Update Notes",
       message: `
-        <div class="notes-modal" style="display:flex;flex-direction:column;height:60vh;overflow:hidden;">
-  
+       <div
+  class="notes-modal"
+  style="display:grid;grid-template-rows:minmax(0,1fr) auto;height:60vh;min-height:0;overflow:hidden;"
+>
   <div
     id="leadNotesExisting"
     class="notes-existing"
-    style="flex:1;overflow-y:auto;padding-right:6px;margin-bottom:10px;"
+    style="min-height:0;overflow-y:auto;padding-right:6px;padding-bottom:10px;"
   >
     ${
       Array.isArray(lead.notes)
@@ -688,14 +690,15 @@ if (notesPreviewBtn) {
     }
   </div>
 
-  <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;">
+  <div
+    style="position:sticky;bottom:0;background:inherit;border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;z-index:2;"
+  >
     <textarea
       id="leadNoteInput"
       placeholder="Add a new note..."
-      style="width:100%;min-height:70px;resize:none;overflow:hidden;"
+      style="display:block;width:100%;min-height:70px;max-height:70px;resize:none;overflow-y:auto;margin:0;"
     ></textarea>
   </div>
-
 </div>
       `,
       confirmText: "Save Note",
