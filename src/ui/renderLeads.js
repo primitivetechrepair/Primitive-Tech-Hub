@@ -649,8 +649,18 @@ if (notesPreviewBtn) {
                   .reverse()
                   .map(
                     (note) => `
-                      <div class="lead-note-entry">
-                        <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                      <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
+                        <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                          <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                          <button
+                            type="button"
+                            class="tiny lead-action-btn deleteLeadNoteBtn"
+                            data-note-id="${esc(String(note.id || ""))}"
+                            title="Delete note"
+                          >
+                            Delete
+                          </button>
+                        </div>
                         <pre>${esc(note.text || "")}</pre>
                       </div>
                     `
@@ -688,6 +698,75 @@ if (confirmBtn && cancelBtn) {
   cancelBtn.textContent = "Close";
   cancelBtn.style.background = "#1f2937"; // dark
   cancelBtn.style.color = "#fff";
+
+  const renderNotesExisting = () => {
+    if (!existingEl) return;
+
+    existingEl.innerHTML = Array.isArray(lead.notes) && lead.notes.length
+      ? lead.notes
+          .slice()
+          .reverse()
+          .map(
+            (note) => `
+              <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
+                <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                  <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                  <button
+                    type="button"
+                    class="tiny lead-action-btn deleteLeadNoteBtn"
+                    data-note-id="${esc(String(note.id || ""))}"
+                    title="Delete note"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <pre>${esc(note.text || "")}</pre>
+              </div>
+            `
+          )
+          .join("")
+      : "<div class='muted'>No notes yet.</div>";
+  };
+
+  existingEl.onclick = async (e) => {
+    const deleteBtn = e.target.closest(".deleteLeadNoteBtn");
+    if (!deleteBtn) return;
+
+    const noteID = String(deleteBtn.dataset.noteId || "").trim();
+    if (!noteID || !Array.isArray(lead.notes)) return;
+
+    const nextNotes = lead.notes.filter((note) => String(note.id || "") !== noteID);
+    if (nextNotes.length === lead.notes.length) return;
+
+    const prevNotes = [...lead.notes];
+    lead.notes = nextNotes;
+    lead.lastUpdated = new Date().toISOString();
+
+    addAudit("lead_note_deleted", {
+      leadID: lead.leadID,
+      noteID,
+      userAction: "note_deleted",
+    });
+
+    try {
+      await persist();
+
+      queueCloudSync("lead_note_update", {
+        leadID: lead.leadID,
+        notes: lead.notes,
+      });
+
+      await upsertLeadToCloud(lead);
+
+      renderNotesExisting();
+      toast(el, "Note deleted.", "success");
+      renderAll();
+    } catch (err) {
+      console.error(err);
+      lead.notes = prevNotes;
+      toast(el, "Failed to delete note.", "error");
+    }
+  };
 
   confirmBtn.onclick = async () => {
     const inputEl = document.getElementById("leadNoteInput");
@@ -741,21 +820,7 @@ if (confirmBtn && cancelBtn) {
 
       await upsertLeadToCloud(lead);
 
-      existingEl.innerHTML = lead.notes.length
-        ? lead.notes
-            .slice()
-            .reverse()
-            .map(
-              (note) => `
-                <div class="lead-note-entry">
-                  <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
-                  <pre>${esc(note.text || "")}</pre>
-                </div>
-              `
-            )
-            .join("")
-        : "<div class='muted'>No notes yet.</div>";
-
+      renderNotesExisting();
       inputEl.value = "";
 
       toast(el, "Note added.", "success");
