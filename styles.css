@@ -4610,3 +4610,31 @@ table thead th {
     align-self: flex-start;
   }
 }
+
+.stock-restock-btn.plus {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  background: rgba(102,252,241,0.15) !important;
+  border: 1px solid rgba(102,252,241,0.35) !important;
+  color: #66fcf1 !important;
+
+  transition: all 0.15s ease;
+}
+
+.stock-restock-btn.plus:active {
+  transform: scale(0.9);
+}
+
+.stock-restock-btn.plus.restocked {
+  background: rgba(0,255,100,0.25) !important;
+  color: #00ff88 !important;
+}

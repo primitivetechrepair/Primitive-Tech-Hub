@@ -50,10 +50,10 @@ export function maybeNotifyLowStock({
               <span class="stock-item-qty ${getQtySeverityClass(qty)}">Qty: ${qty}</span>
               <button
                 type="button"
-                class="stock-restock-btn"
+                class="stock-restock-btn plus"
                 data-itemid="${itemID}"
               >
-                Tap to Restock
+                +
               </button>
             </div>
           </div>
@@ -98,45 +98,25 @@ export function maybeNotifyLowStock({
   });
 
   setTimeout(() => {
-    const buttons = document.querySelectorAll(".stock-restock-btn");
-    if (!buttons.length) return;
+  const buttons = document.querySelectorAll(".stock-restock-btn");
+  if (!buttons.length) return;
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-        const itemID = String(btn.dataset.itemid || "").trim();
-        if (!itemID) return;
+      const itemID = String(btn.dataset.itemid || "").trim();
+      if (!itemID) return;
 
-        const modal = document.getElementById("appModal");
-        if (modal) {
-          modal.classList.remove("open");
-          modal.classList.add("hidden");
-          modal.setAttribute("aria-hidden", "true");
-        }
+      if (window.inventoryController?.quickUseItem) {
+        window.inventoryController.quickUseItem(itemID, -1);
+      }
 
-        const inventorySearch = document.getElementById("inventorySearch");
-        if (inventorySearch) {
-          inventorySearch.value = itemID;
-          inventorySearch.dispatchEvent(new Event("input", { bubbles: true }));
-        }
-
-        const inventorySection =
-          inventorySearch?.closest(".card") ||
-          document.querySelector(".inventory-card") ||
-          document.querySelector(".table-wrap") ||
-          document.getElementById("inventoryBody");
-
-        if (inventorySection) {
-          setTimeout(() => {
-            inventorySection.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }, 120);
-        }
-      });
+      btn.classList.add("restocked");
+      setTimeout(() => btn.classList.remove("restocked"), 300);
     });
-  }, 60);
+  });
+}, 60);
+
 }
