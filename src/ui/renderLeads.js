@@ -69,7 +69,9 @@ export function renderLeads(ctx) {
       lead.series,
       lead.repairType,
       lead.status,
-      lead.notes,
+      Array.isArray(lead.notes)
+        ? lead.notes.map((n) => `${n.text || ""} ${n.tag || ""}`).join(" ")
+        : lead.notes,
       parts,
     ]
       .filter(Boolean)
@@ -347,7 +349,19 @@ if (isCollapsed(lead.leadID)) {
             </div>
 
             <div class="lead-notes-snippet">
-              ${esc(lead.notes || "No notes added")}
+              ${
+                Array.isArray(lead.notes)
+                  ? esc(
+                      lead.notes.length
+                        ? lead.notes
+                            .slice()
+                            .reverse()
+                            .map((n) => `[${n.at || ""}] ${n.text || ""}`)
+                            .join(" | ")
+                        : "No notes added"
+                    )
+                  : esc(lead.notes || "No notes added")
+              }
             </div>
 
             <div class="muted">Updated: ${fmtDateShort(lead.lastUpdated || lead.dateReported)}</div>
@@ -627,7 +641,26 @@ if (notesPreviewBtn) {
   message: `
     <div class="notes-modal">
       <div id="leadNotesExisting" class="notes-existing">
-        ${lead.notes ? `<pre>${esc(lead.notes)}</pre>` : "<div class='muted'>No notes yet.</div>"}
+        ${
+          Array.isArray(lead.notes)
+            ? lead.notes.length
+              ? lead.notes
+                  .slice()
+                  .reverse()
+                  .map(
+                    (note) => `
+                      <div class="lead-note-entry">
+                        <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                        <pre>${esc(note.text || "")}</pre>
+                      </div>
+                    `
+                  )
+                  .join("")
+              : "<div class='muted'>No notes yet.</div>"
+            : lead.notes
+              ? `<pre>${esc(lead.notes)}</pre>`
+              : "<div class='muted'>No notes yet.</div>"
+        }
       </div>
 
       <textarea
@@ -667,9 +700,29 @@ if (confirmBtn && cancelBtn) {
     }
 
     const timestamp = new Date().toLocaleString();
-    const formattedNote = `[${timestamp}]\n${noteText}\n\n`;
 
-    lead.notes = (lead.notes || "") + formattedNote;
+    if (!Array.isArray(lead.notes)) {
+      lead.notes = lead.notes
+        ? [
+            {
+              id: `legacy-${Date.now()}`,
+              text: String(lead.notes),
+              at: timestamp,
+              tag: "general",
+              files: [],
+            },
+          ]
+        : [];
+    }
+
+    lead.notes.push({
+      id: `note-${Date.now()}`,
+      text: noteText,
+      at: timestamp,
+      tag: "general",
+      files: [],
+    });
+
     lead.lastUpdated = new Date().toISOString();
 
     addAudit("lead_note_added", {
@@ -688,12 +741,25 @@ if (confirmBtn && cancelBtn) {
 
       await upsertLeadToCloud(lead);
 
-      existingEl.innerHTML = `<pre>${esc(lead.notes)}</pre>`;
+      existingEl.innerHTML = lead.notes.length
+        ? lead.notes
+            .slice()
+            .reverse()
+            .map(
+              (note) => `
+                <div class="lead-note-entry">
+                  <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                  <pre>${esc(note.text || "")}</pre>
+                </div>
+              `
+            )
+            .join("")
+        : "<div class='muted'>No notes yet.</div>";
+
       inputEl.value = "";
 
       toast(el, "Note added.", "success");
       renderAll();
-
     } catch (err) {
       console.error(err);
       toast(el, "Failed to save note.", "error");
