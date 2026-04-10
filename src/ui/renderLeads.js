@@ -650,7 +650,27 @@ if (notesPreviewBtn) {
                       .map(
                         (note) => `
                           <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
-                            <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                            <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                              <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                              <div style="display:flex;gap:6px;">
+                                <button
+                                  type="button"
+                                  class="tiny lead-action-btn editLeadNoteBtn"
+                                  data-note-id="${esc(String(note.id || ""))}"
+                                  title="Edit note"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  class="tiny lead-action-btn deleteLeadNoteBtn"
+                                  data-note-id="${esc(String(note.id || ""))}"
+                                  title="Delete note"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
                             <pre>${esc(note.text || "")}</pre>
                           </div>
                         `
@@ -701,7 +721,27 @@ if (notesPreviewBtn) {
                 .map(
                   (note) => `
                     <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
-                      <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                      <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                        <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                        <div style="display:flex;gap:6px;">
+                          <button
+                            type="button"
+                            class="tiny lead-action-btn editLeadNoteBtn"
+                            data-note-id="${esc(String(note.id || ""))}"
+                            title="Edit note"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            class="tiny lead-action-btn deleteLeadNoteBtn"
+                            data-note-id="${esc(String(note.id || ""))}"
+                            title="Delete note"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
                       <pre>${esc(note.text || "")}</pre>
                     </div>
                   `
@@ -718,6 +758,7 @@ if (notesPreviewBtn) {
         }
 
         const timestamp = new Date().toLocaleString();
+        const editNoteId = String(inputEl?.dataset.editNoteId || "").trim();
 
         if (!Array.isArray(lead.notes)) {
           lead.notes = lead.notes
@@ -733,21 +774,42 @@ if (notesPreviewBtn) {
             : [];
         }
 
-        lead.notes.push({
-          id: `note-${Date.now()}`,
-          text: noteText,
-          at: timestamp,
-          tag: "general",
-          files: [],
-        });
+        const prevNotes = lead.notes.map((note) => ({ ...note }));
+
+        if (editNoteId) {
+          const target = lead.notes.find(
+            (note) => String(note.id || "") === editNoteId
+          );
+          if (!target) {
+            toast(el, "Note not found.", "error");
+            return;
+          }
+
+          target.text = noteText;
+          target.editedAt = timestamp;
+
+          addAudit("lead_note_edited", {
+            leadID: lead.leadID,
+            noteID: editNoteId,
+            userAction: "note_edited",
+          });
+        } else {
+          lead.notes.push({
+            id: `note-${Date.now()}`,
+            text: noteText,
+            at: timestamp,
+            tag: "general",
+            files: [],
+          });
+
+          addAudit("lead_note_added", {
+            leadID: lead.leadID,
+            note: noteText,
+            userAction: "note_added",
+          });
+        }
 
         lead.lastUpdated = new Date().toISOString();
-
-        addAudit("lead_note_added", {
-          leadID: lead.leadID,
-          note: noteText,
-          userAction: "note_added",
-        });
 
         try {
           await persist();
@@ -760,13 +822,19 @@ if (notesPreviewBtn) {
           await upsertLeadToCloud(lead);
 
           renderNotesExisting();
-          if (inputEl) inputEl.value = "";
 
-          toast(el, "Note added.", "success");
+          if (inputEl) {
+            inputEl.value = "";
+            delete inputEl.dataset.editNoteId;
+          }
+
+          confirmBtn.textContent = "Save Note";
+          toast(el, editNoteId ? "Note updated." : "Note added.", "success");
           renderAll();
         } catch (err) {
           console.error(err);
-          toast(el, "Failed to save note.", "error");
+          lead.notes = prevNotes;
+          toast(el, editNoteId ? "Failed to update note." : "Failed to save note.", "error");
         }
       };
     }
