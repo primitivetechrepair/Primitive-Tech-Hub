@@ -47,16 +47,23 @@
 dom.message.innerHTML = message;
 dom.confirm.textContent = confirmText;
 
-    // Input behavior
-    if (requireInput) {
-      dom.input.classList.remove('hidden');
-      dom.input.type = inputType || 'text';
-      dom.input.value = '';
-      dom.input.placeholder = placeholder || dom.input.placeholder || '';
-    } else {
-      dom.input.classList.add('hidden');
-      dom.input.value = '';
-    }
+// ✅ Reset shared modal button/input state every open
+dom.confirm.disabled = false;
+dom.cancel.disabled = false;
+dom.cancel.style.display = "";
+dom.confirm.style.display = "";
+dom.input.disabled = false;
+
+// Input behavior
+if (requireInput) {
+  dom.input.classList.remove('hidden');
+  dom.input.type = inputType || 'text';
+  dom.input.value = '';
+  dom.input.placeholder = placeholder || dom.input.placeholder || '';
+} else {
+  dom.input.classList.add('hidden');
+  dom.input.value = '';
+}
 
     // Show modal (support both hidden + open patterns)
     dom.wrap.classList.remove('hidden');
