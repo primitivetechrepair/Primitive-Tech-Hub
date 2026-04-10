@@ -637,200 +637,139 @@ if (notesPreviewBtn) {
     }
 
     const modalPromise = window.Modal?.open({
-  title: "Add / Update Notes",
-  message: `
-    <div class="notes-modal">
-      <div id="leadNotesExisting" class="notes-existing">
-        ${
-          Array.isArray(lead.notes)
-            ? lead.notes.length
-              ? lead.notes
-                  .slice()
-                  .reverse()
-                  .map(
-                    (note) => `
-                      <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
-                        <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-                          <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
-                          <button
-                            type="button"
-                            class="tiny lead-action-btn deleteLeadNoteBtn"
-                            data-note-id="${esc(String(note.id || ""))}"
-                            title="Delete note"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                        <pre>${esc(note.text || "")}</pre>
-                      </div>
-                    `
-                  )
-                  .join("")
-              : "<div class='muted'>No notes yet.</div>"
-            : lead.notes
-              ? `<pre>${esc(lead.notes)}</pre>`
-              : "<div class='muted'>No notes yet.</div>"
-        }
-      </div>
+      title: "Add / Update Notes",
+      message: `
+        <div class="notes-modal">
+          <div id="leadNotesExisting" class="notes-existing">
+            ${
+              Array.isArray(lead.notes)
+                ? lead.notes.length
+                  ? lead.notes
+                      .slice()
+                      .reverse()
+                      .map(
+                        (note) => `
+                          <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
+                            <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                            <pre>${esc(note.text || "")}</pre>
+                          </div>
+                        `
+                      )
+                      .join("")
+                  : "<div class='muted'>No notes yet.</div>"
+                : lead.notes
+                  ? `<pre>${esc(lead.notes)}</pre>`
+                  : "<div class='muted'>No notes yet.</div>"
+            }
+          </div>
 
-      <textarea
-        id="leadNoteInput"
-        placeholder="Add a new note..."
-        style="width:100%;min-height:100px;margin-top:10px;"
-      ></textarea>
-    </div>
-  `,
-  confirmText: "Save Note",
-  requireInput: false,
-});
+          <textarea
+            id="leadNoteInput"
+            placeholder="Add a new note..."
+            style="width:100%;min-height:100px;margin-top:10px;"
+          ></textarea>
+        </div>
+      `,
+      confirmText: "Save Note",
+      requireInput: false,
+    });
 
     const confirmBtn = document.getElementById("modalConfirmBtn");
-const cancelBtn = document.getElementById("modalCancelBtn");
-
-// style + behavior
-if (confirmBtn && cancelBtn) {
-  confirmBtn.dataset.keepOpen = "true";
-
-  confirmBtn.style.background = "#00c853"; // green
-  confirmBtn.style.color = "#fff";
-
-  cancelBtn.style.display = "";
-  cancelBtn.textContent = "Close";
-  cancelBtn.style.background = "#1f2937"; // dark
-  cancelBtn.style.color = "#fff";
-
-  const renderNotesExisting = () => {
-    if (!existingEl) return;
-
-    existingEl.innerHTML = Array.isArray(lead.notes) && lead.notes.length
-      ? lead.notes
-          .slice()
-          .reverse()
-          .map(
-            (note) => `
-              <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
-                <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-                  <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
-                  <button
-                    type="button"
-                    class="tiny lead-action-btn deleteLeadNoteBtn"
-                    data-note-id="${esc(String(note.id || ""))}"
-                    title="Delete note"
-                  >
-                    Delete
-                  </button>
-                </div>
-                <pre>${esc(note.text || "")}</pre>
-              </div>
-            `
-          )
-          .join("")
-      : "<div class='muted'>No notes yet.</div>";
-  };
-
-  existingEl.onclick = async (e) => {
-    const deleteBtn = e.target.closest(".deleteLeadNoteBtn");
-    if (!deleteBtn) return;
-
-    const noteID = String(deleteBtn.dataset.noteId || "").trim();
-    if (!noteID || !Array.isArray(lead.notes)) return;
-
-    const nextNotes = lead.notes.filter((note) => String(note.id || "") !== noteID);
-    if (nextNotes.length === lead.notes.length) return;
-
-    const prevNotes = [...lead.notes];
-    lead.notes = nextNotes;
-    lead.lastUpdated = new Date().toISOString();
-
-    addAudit("lead_note_deleted", {
-      leadID: lead.leadID,
-      noteID,
-      userAction: "note_deleted",
-    });
-
-    try {
-      await persist();
-
-      queueCloudSync("lead_note_update", {
-        leadID: lead.leadID,
-        notes: lead.notes,
-      });
-
-      await upsertLeadToCloud(lead);
-
-      renderNotesExisting();
-      toast(el, "Note deleted.", "success");
-      renderAll();
-    } catch (err) {
-      console.error(err);
-      lead.notes = prevNotes;
-      toast(el, "Failed to delete note.", "error");
-    }
-  };
-
-  confirmBtn.onclick = async () => {
-    const inputEl = document.getElementById("leadNoteInput");
+    const cancelBtn = document.getElementById("modalCancelBtn");
     const existingEl = document.getElementById("leadNotesExisting");
+    const inputEl = document.getElementById("leadNoteInput");
 
-    const noteText = inputEl?.value?.trim();
-    if (!noteText) {
-      toast(el, "Enter a note first.", "warning");
-      return;
+    if (confirmBtn && cancelBtn) {
+      confirmBtn.dataset.keepOpen = "true";
+
+      confirmBtn.style.background = "#00c853";
+      confirmBtn.style.color = "#fff";
+
+      cancelBtn.style.display = "";
+      cancelBtn.textContent = "Close";
+      cancelBtn.style.background = "#1f2937";
+      cancelBtn.style.color = "#fff";
+
+      const renderNotesExisting = () => {
+        if (!existingEl) return;
+
+        existingEl.innerHTML =
+          Array.isArray(lead.notes) && lead.notes.length
+            ? lead.notes
+                .slice()
+                .reverse()
+                .map(
+                  (note) => `
+                    <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
+                      <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                      <pre>${esc(note.text || "")}</pre>
+                    </div>
+                  `
+                )
+                .join("")
+            : "<div class='muted'>No notes yet.</div>";
+      };
+
+      confirmBtn.onclick = async () => {
+        const noteText = inputEl?.value?.trim();
+        if (!noteText) {
+          toast(el, "Enter a note first.", "warning");
+          return;
+        }
+
+        const timestamp = new Date().toLocaleString();
+
+        if (!Array.isArray(lead.notes)) {
+          lead.notes = lead.notes
+            ? [
+                {
+                  id: `legacy-${Date.now()}`,
+                  text: String(lead.notes),
+                  at: timestamp,
+                  tag: "general",
+                  files: [],
+                },
+              ]
+            : [];
+        }
+
+        lead.notes.push({
+          id: `note-${Date.now()}`,
+          text: noteText,
+          at: timestamp,
+          tag: "general",
+          files: [],
+        });
+
+        lead.lastUpdated = new Date().toISOString();
+
+        addAudit("lead_note_added", {
+          leadID: lead.leadID,
+          note: noteText,
+          userAction: "note_added",
+        });
+
+        try {
+          await persist();
+
+          queueCloudSync("lead_note_update", {
+            leadID: lead.leadID,
+            notes: lead.notes,
+          });
+
+          await upsertLeadToCloud(lead);
+
+          renderNotesExisting();
+          if (inputEl) inputEl.value = "";
+
+          toast(el, "Note added.", "success");
+          renderAll();
+        } catch (err) {
+          console.error(err);
+          toast(el, "Failed to save note.", "error");
+        }
+      };
     }
-
-    const timestamp = new Date().toLocaleString();
-
-    if (!Array.isArray(lead.notes)) {
-      lead.notes = lead.notes
-        ? [
-            {
-              id: `legacy-${Date.now()}`,
-              text: String(lead.notes),
-              at: timestamp,
-              tag: "general",
-              files: [],
-            },
-          ]
-        : [];
-    }
-
-    lead.notes.push({
-      id: `note-${Date.now()}`,
-      text: noteText,
-      at: timestamp,
-      tag: "general",
-      files: [],
-    });
-
-    lead.lastUpdated = new Date().toISOString();
-
-    addAudit("lead_note_added", {
-      leadID: lead.leadID,
-      note: noteText,
-      userAction: "note_added",
-    });
-
-    try {
-      await persist();
-
-      queueCloudSync("lead_note_update", {
-        leadID: lead.leadID,
-        notes: lead.notes,
-      });
-
-      await upsertLeadToCloud(lead);
-
-      renderNotesExisting();
-      inputEl.value = "";
-
-      toast(el, "Note added.", "success");
-      renderAll();
-    } catch (err) {
-      console.error(err);
-      toast(el, "Failed to save note.", "error");
-    }
-  };
-}
 
     await modalPromise;
   };
