@@ -750,6 +750,73 @@ if (notesPreviewBtn) {
             : "<div class='muted'>No notes yet.</div>";
       };
 
+      if (existingEl) {
+  existingEl.onclick = async (e) => {
+    const editBtn = e.target.closest(".editLeadNoteBtn");
+    const deleteBtn = e.target.closest(".deleteLeadNoteBtn");
+
+    // ===== EDIT =====
+    if (editBtn) {
+      const noteID = String(editBtn.dataset.noteId || "").trim();
+      if (!noteID || !Array.isArray(lead.notes)) return;
+
+      const note = lead.notes.find(
+        (n) => String(n.id || "") === noteID
+      );
+      if (!note || !inputEl) return;
+
+      inputEl.value = String(note.text || "");
+      inputEl.dataset.editNoteId = noteID;
+      inputEl.focus();
+
+      confirmBtn.textContent = "Update Note";
+      return;
+    }
+
+    // ===== DELETE =====
+    if (deleteBtn) {
+      const noteID = String(deleteBtn.dataset.noteId || "").trim();
+      if (!noteID || !Array.isArray(lead.notes)) return;
+
+      const prevNotes = [...lead.notes];
+
+      const nextNotes = lead.notes.filter(
+        (note) => String(note.id || "") !== noteID
+      );
+
+      if (nextNotes.length === prevNotes.length) return;
+
+      lead.notes = nextNotes;
+      lead.lastUpdated = new Date().toISOString();
+
+      addAudit("lead_note_deleted", {
+        leadID: lead.leadID,
+        noteID,
+        userAction: "note_deleted",
+      });
+
+      try {
+        await persist();
+
+        queueCloudSync("lead_note_update", {
+          leadID: lead.leadID,
+          notes: lead.notes,
+        });
+
+        await upsertLeadToCloud(lead);
+
+        renderNotesExisting();
+        toast(el, "Note deleted.", "success");
+        renderAll();
+      } catch (err) {
+        console.error(err);
+        lead.notes = prevNotes;
+        toast(el, "Failed to delete note.", "error");
+      }
+    }
+  };
+}
+
       confirmBtn.onclick = async () => {
         const noteText = inputEl?.value?.trim();
         if (!noteText) {
