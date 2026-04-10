@@ -615,16 +615,74 @@ if (header) {
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
 
     const notesPreviewBtn = tr.querySelector(".lead-notes-preview");
-    if (notesPreviewBtn) {
-      notesPreviewBtn.onclick = async () => {
-        await window.Modal?.open({
-          title: "Lead Notes",
-          message: String(lead.notes || "No notes for this lead."),
-          confirmText: "Close",
-          requireInput: false,
-        });
-      };
+if (notesPreviewBtn) {
+  notesPreviewBtn.onclick = async () => {
+    if (!isUnlocked()) {
+      toast(el, "Locked: log in to update notes.", "error");
+      return;
     }
+
+    const newNote = await window.Modal?.open({
+      title: "Add / Update Notes",
+      message: `
+        <div class="notes-modal">
+          <div class="notes-existing">
+            ${lead.notes ? `<pre>${esc(lead.notes)}</pre>` : "<div class='muted'>No notes yet.</div>"}
+          </div>
+          <textarea id="leadNoteInput" placeholder="Add a new note..." style="width:100%;min-height:100px;margin-top:10px;"></textarea>
+        </div>
+      `,
+      confirmText: "Save Note",
+      requireInput: false,
+    });
+
+    // 🔒 User cancelled
+    if (newNote === false || newNote === undefined) return;
+
+    const inputEl = document.getElementById("leadNoteInput");
+    const noteText = inputEl?.value?.trim();
+
+    if (!noteText) return;
+
+    const timestamp = new Date().toLocaleString();
+
+    const formattedNote = `[${timestamp}]\n${noteText}\n\n`;
+
+    // ✅ Append (NOT overwrite)
+    lead.notes = (lead.notes || "") + formattedNote;
+
+    lead.lastUpdated = new Date().toISOString();
+
+    addAudit("lead_note_added", {
+      leadID: lead.leadID,
+      note: noteText,
+      userAction: "note_added",
+    });
+
+    try {
+      await persist();
+
+      queueCloudSync("lead_note_update", {
+        leadID: lead.leadID,
+        notes: lead.notes,
+      });
+
+      try {
+        await upsertLeadToCloud(lead);
+      } catch (err) {
+        console.error("Lead notes cloud sync failed:", err);
+        toast(el, "Notes saved locally, but cloud sync failed.", "warning");
+      }
+
+      renderAll();
+      toast(el, "Note added.", "success");
+
+    } catch (err) {
+      console.error("Notes persist failed:", err);
+      toast(el, "Failed to save note.", "error");
+    }
+  };
+}
 
     tr.querySelector(".copyCustomerBtn").onclick = async (e) => {
       e.stopPropagation();
