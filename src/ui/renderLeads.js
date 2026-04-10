@@ -639,7 +639,7 @@ if (notesPreviewBtn) {
     const modalPromise = window.Modal?.open({
       title: "Add / Update Notes",
       message: `
-        <div class="notes-modal" style="display:flex;flex-direction:column;height:100%;max-height:60vh;">
+        <div class="notes-modal" style="display:flex;flex-direction:column;height:60vh;overflow:hidden;">
   
   <div
     id="leadNotesExisting"
@@ -692,7 +692,7 @@ if (notesPreviewBtn) {
     <textarea
       id="leadNoteInput"
       placeholder="Add a new note..."
-      style="width:100%;min-height:70px;resize:none;"
+      style="width:100%;min-height:70px;resize:none;overflow:hidden;"
     ></textarea>
   </div>
 
