@@ -77,6 +77,9 @@ if (requireInput) {
     }, 0);
 
     return new Promise((resolve) => {
+
+  // allow external control without closing
+  dom.confirm.dataset.resolve = (val) => resolve(val);
       const cleanup = (result) => {
         dom.wrap.classList.remove('open');
         dom.wrap.classList.add('hidden');
@@ -101,7 +104,15 @@ if (requireInput) {
       window.addEventListener('keydown', onKey);
 
       dom.cancel.onclick = () => cleanup(null);
-      dom.confirm.onclick = () => cleanup(requireInput ? dom.input.value : true);
+
+// ✅ Intercept confirm (do NOT auto close)
+dom.confirm.onclick = () => {
+  if (dom.confirm.dataset.keepOpen === "true") {
+    dom.confirm.dataset.resolve?.("true");
+    return;
+  }
+  cleanup(requireInput ? dom.input.value : true);
+};
 
       // click outside panel closes (overlay click)
       dom.wrap.onclick = (e) => {

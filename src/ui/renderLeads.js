@@ -623,83 +623,83 @@ if (notesPreviewBtn) {
     }
 
     const modalPromise = window.Modal?.open({
-      title: "Add / Update Notes",
-      message: `
-        <div class="notes-modal">
-          <div id="leadNotesExisting" class="notes-existing">
-            ${lead.notes ? `<pre>${esc(lead.notes)}</pre>` : "<div class='muted'>No notes yet.</div>"}
-          </div>
+  title: "Add / Update Notes",
+  message: `
+    <div class="notes-modal">
+      <div id="leadNotesExisting" class="notes-existing">
+        ${lead.notes ? `<pre>${esc(lead.notes)}</pre>` : "<div class='muted'>No notes yet.</div>"}
+      </div>
 
-          <textarea
-            id="leadNoteInput"
-            placeholder="Add a new note..."
-            style="width:100%;min-height:100px;margin-top:10px;"
-          ></textarea>
+      <textarea
+        id="leadNoteInput"
+        placeholder="Add a new note..."
+        style="width:100%;min-height:100px;margin-top:10px;"
+      ></textarea>
+    </div>
+  `,
+  confirmText: "Save Note",
+  requireInput: false,
+});
 
-          <div style="margin-top:10px;display:flex;justify-content:flex-end;">
-            <button
-              type="button"
-              id="saveLeadNoteBtn"
-              class="tiny lead-action-btn"
-            >
-              Save Note
-            </button>
-          </div>
-        </div>
-      `,
-      confirmText: "Close",
-      requireInput: false,
-    });
+    const confirmBtn = document.getElementById("modalConfirmBtn");
+const cancelBtn = document.getElementById("modalCancelBtn");
 
-    const saveBtn = document.getElementById("saveLeadNoteBtn");
+// style + behavior
+if (confirmBtn && cancelBtn) {
+  confirmBtn.dataset.keepOpen = "true";
+
+  confirmBtn.style.background = "#00c853"; // green
+  confirmBtn.style.color = "#fff";
+
+  cancelBtn.style.display = "";
+  cancelBtn.textContent = "Close";
+  cancelBtn.style.background = "#1f2937"; // dark
+  cancelBtn.style.color = "#fff";
+
+  confirmBtn.onclick = async () => {
     const inputEl = document.getElementById("leadNoteInput");
     const existingEl = document.getElementById("leadNotesExisting");
 
-    if (saveBtn && inputEl && existingEl) {
-      saveBtn.onclick = async () => {
-        const noteText = inputEl.value.trim();
-        if (!noteText) {
-          toast(el, "Enter a note first.", "warning");
-          return;
-        }
-
-        const timestamp = new Date().toLocaleString();
-        const formattedNote = `[${timestamp}]\n${noteText}\n\n`;
-
-        lead.notes = (lead.notes || "") + formattedNote;
-        lead.lastUpdated = new Date().toISOString();
-
-        addAudit("lead_note_added", {
-          leadID: lead.leadID,
-          note: noteText,
-          userAction: "note_added",
-        });
-
-        try {
-          await persist();
-
-          queueCloudSync("lead_note_update", {
-            leadID: lead.leadID,
-            notes: lead.notes,
-          });
-
-          try {
-            await upsertLeadToCloud(lead);
-          } catch (err) {
-            console.error("Lead notes cloud sync failed:", err);
-            toast(el, "Notes saved locally, but cloud sync failed.", "warning");
-          }
-
-          existingEl.innerHTML = `<pre>${esc(lead.notes)}</pre>`;
-          inputEl.value = "";
-          toast(el, "Note added.", "success");
-          renderAll();
-        } catch (err) {
-          console.error("Notes persist failed:", err);
-          toast(el, "Failed to save note.", "error");
-        }
-      };
+    const noteText = inputEl?.value?.trim();
+    if (!noteText) {
+      toast(el, "Enter a note first.", "warning");
+      return;
     }
+
+    const timestamp = new Date().toLocaleString();
+    const formattedNote = `[${timestamp}]\n${noteText}\n\n`;
+
+    lead.notes = (lead.notes || "") + formattedNote;
+    lead.lastUpdated = new Date().toISOString();
+
+    addAudit("lead_note_added", {
+      leadID: lead.leadID,
+      note: noteText,
+      userAction: "note_added",
+    });
+
+    try {
+      await persist();
+
+      queueCloudSync("lead_note_update", {
+        leadID: lead.leadID,
+        notes: lead.notes,
+      });
+
+      await upsertLeadToCloud(lead);
+
+      existingEl.innerHTML = `<pre>${esc(lead.notes)}</pre>`;
+      inputEl.value = "";
+
+      toast(el, "Note added.", "success");
+      renderAll();
+
+    } catch (err) {
+      console.error(err);
+      toast(el, "Failed to save note.", "error");
+    }
+  };
+}
 
     await modalPromise;
   };
