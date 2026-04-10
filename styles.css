@@ -4611,30 +4611,65 @@ table thead th {
   }
 }
 
+.stock-qty-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stock-restock-btn.minus,
 .stock-restock-btn.plus {
   width: 32px !important;
   height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  margin: 0 !important;
+  padding: 0 !important;
   border-radius: 50% !important;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   font-size: 18px;
   font-weight: 700;
+  line-height: 1;
 
-  background: rgba(102,252,241,0.15) !important;
+  box-shadow: none !important;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.stock-restock-btn.plus {
+  background: rgba(102,252,241,0.14) !important;
   border: 1px solid rgba(102,252,241,0.35) !important;
   color: #66fcf1 !important;
-
-  transition: all 0.15s ease;
 }
 
-.stock-restock-btn.plus:active {
-  transform: scale(0.9);
+.stock-restock-btn.minus {
+  background: rgba(255,107,107,0.14) !important;
+  border: 1px solid rgba(255,107,107,0.35) !important;
+  color: #ff6b6b !important;
 }
 
-.stock-restock-btn.plus.restocked {
-  background: rgba(0,255,100,0.25) !important;
-  color: #00ff88 !important;
+.stock-restock-btn.plus:hover {
+  background: rgba(102,252,241,0.22) !important;
+}
+
+.stock-restock-btn.minus:hover {
+  background: rgba(255,107,107,0.22) !important;
+}
+
+.stock-restock-btn.plus:active,
+.stock-restock-btn.minus:active {
+  transform: scale(0.92);
+}
+
+.stock-restock-btn.restocked {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.08) !important;
+}
+
+@media (max-width: 700px) {
+  .stock-qty-controls {
+    align-self: flex-start;
+  }
 }
