@@ -258,8 +258,14 @@ function buildInventoryRow(item, ctx, q) {
   } = ctx;
 
   const rule = inventoryStatusByColorRule(item.quantity);
-  const tr = document.createElement("tr");
+  const isDesktop = window.innerWidth > 900;
+
+const tr = document.createElement(isDesktop ? "div" : "tr");
   tr.classList.add(rule.className);
+
+if (isDesktop) {
+  tr.classList.add("inventory-card");
+}
 
   const deviceOptions = [
     ...new Set(
@@ -294,26 +300,113 @@ function buildInventoryRow(item, ctx, q) {
     "Other",
   ];
 
+  if (isDesktop) {
   tr.innerHTML = `
-    <td>
-  <div class="inv-item-header">
-
-    <div class="inv-item-text">
-      <input
-        class="inline-edit inline-itemName"
-        type="text"
-        value="${esc(item.itemName || "")}"
-      />
-
-      <div class="muted inv-item-id">
-        ${highlightMatch(item.itemID, q, esc)}
+    <div class="inv-card-header">
+      <div class="inv-card-title">
+        <input class="inline-edit inline-itemName" type="text" value="${esc(item.itemName || "")}" />
+        <div class="muted inv-item-id">
+          ${highlightMatch(item.itemID, q, esc)}
+        </div>
       </div>
+
+      <button class="tiny historyBtn">History</button>
     </div>
 
-    <button class="tiny historyBtn">History</button>
+    <div class="inv-card-grid">
 
-  </div>
-</td>
+      <div class="inv-field">
+        <span>Device</span>
+        <select class="inline-edit inline-category">
+          ${deviceOptions.map(option =>
+            `<option value="${esc(option)}" ${
+              String(item.category || "") === option ? "selected" : ""
+            }>${esc(option)}</option>`
+          ).join("")}
+        </select>
+      </div>
+
+      <div class="inv-field">
+        <span>Brand</span>
+        <select class="inline-edit inline-brand">
+          ${brandOptions.map(option =>
+            `<option value="${esc(option)}" ${
+              String(item.brand || "") === option ? "selected" : ""
+            }>${esc(option)}</option>`
+          ).join("")}
+        </select>
+      </div>
+
+      <div class="inv-field">
+        <span>Series</span>
+        <input class="inline-edit inline-series" type="text" value="${esc(item.series || "Standard")}" />
+      </div>
+
+      <div class="inv-field">
+        <span>Qty</span>
+        <input class="inline-edit inline-quantity" type="number" min="0" value="${Number(item.quantity || 0)}" />
+      </div>
+
+      <div class="inv-field">
+        <span>Cost</span>
+        <input class="inline-edit inline-cost" type="number" min="0" step="0.01" value="${Number(item.costPerItem || 0)}" />
+      </div>
+
+      <div class="inv-field">
+        <span>Supplier</span>
+        <input class="inline-edit inline-supplier" type="text" value="${esc(item.supplier || "")}" />
+      </div>
+
+      <div class="inv-field inv-field--full">
+        <span>Part Type</span>
+        <select class="inline-edit inline-partType">
+          ${partTypeOptions.map(option =>
+            `<option value="${esc(option)}" ${
+              String(item.partType || "Other") === option ? "selected" : ""
+            }>${esc(option)}</option>`
+          ).join("")}
+        </select>
+      </div>
+
+      <div class="inv-field">
+        <span>Color</span>
+        <input class="inline-edit inline-color" type="text" value="${esc(item.color || "")}" />
+      </div>
+
+      <div class="inv-field inv-field--full">
+        <span>Notes</span>
+        <input class="inline-edit inline-notes" type="text" value="${esc(item.notes || "")}" />
+      </div>
+
+    </div>
+
+    <div class="inv-card-footer">
+      <div class="inv-status muted">${rule.status} (${rule.color})</div>
+      <div class="inv-card-meta muted">${fmtDateShort(item.lastUpdated)}</div>
+      <button class="tiny delete-btn deleteInventoryBtn">Delete</button>
+    </div>
+  `;
+} else {
+  tr.innerHTML = `
+    <td>
+      <div class="inv-item-header">
+
+        <div class="inv-item-text">
+          <input
+            class="inline-edit inline-itemName"
+            type="text"
+            value="${esc(item.itemName || "")}"
+          />
+
+          <div class="muted inv-item-id">
+            ${highlightMatch(item.itemID, q, esc)}
+          </div>
+        </div>
+
+        <button class="tiny historyBtn">History</button>
+
+      </div>
+    </td>
 
     <td>
       <select class="inline-edit inline-category">
@@ -410,6 +503,7 @@ function buildInventoryRow(item, ctx, q) {
 
     <td><button class="tiny delete-btn deleteInventoryBtn">Delete</button></td>
   `;
+}
 
   async function savePatch(patch, auditMeta = {}) {
     if (!isUnlocked()) {
