@@ -762,7 +762,7 @@ ${
       requireInput: false,
     });
 
-    const confirmBtn = document.getElementById("modalConfirmBtn");
+const confirmBtn = document.getElementById("modalConfirmBtn");
 const cancelBtn = document.getElementById("modalCancelBtn");
 const existingEl = document.getElementById("leadNotesExisting");
 const inputEl = document.getElementById("leadNoteInput");
@@ -770,6 +770,35 @@ const tagEl = document.getElementById("leadNoteTag");
 const fileEl = document.getElementById("leadNoteFile");
 let pendingFiles = [];
 let highlightedNoteId = "";
+
+if (fileEl) {
+  fileEl.onchange = async () => {
+    const files = Array.from(fileEl.files || []);
+    if (!files.length) return;
+
+    for (const f of files) {
+      try {
+        const reader = new FileReader();
+
+        await new Promise((resolve, reject) => {
+          reader.onload = () => {
+            pendingFiles.push({
+              name: f.name,
+              data: reader.result,
+            });
+            resolve();
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(f);
+        });
+      } catch (err) {
+        console.error("File read error:", err);
+      }
+    }
+
+    fileEl.value = "";
+  };
+}
 
 if (fileEl) {
   fileEl.onchange = async () => {
@@ -850,6 +879,23 @@ if (fileEl) {
                         </div>
                       </div>
                       <pre>${esc(note.text || "")}</pre>
+
+${
+  Array.isArray(note.files) && note.files.length
+    ? `
+      <div class="lead-note-files">
+        ${note.files
+          .map((fname) => {
+            const file = (lead.files || []).find((f) => f.name === fname);
+            return file
+              ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
+              : "";
+          })
+          .join("<br/>")}
+      </div>
+    `
+    : ""
+}
                     </div>
                   `
                 )
