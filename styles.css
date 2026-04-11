@@ -3528,7 +3528,7 @@ table thead th {
 }
 
 @media (max-width: 700px) {
-
+  /* Let inventory become true mobile cards */
   .inventory-table {
     width: 100% !important;
     min-width: 100% !important;
@@ -3552,6 +3552,7 @@ table thead th {
     width: 100%;
   }
 
+  /* Keep part-type group headers looking like section headers */
   .inventory-table tr.inventory-group-row {
     margin: 0 0 10px 0;
   }
@@ -3571,38 +3572,32 @@ table thead th {
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* 🔥 TECH CARD STYLE (UPGRADED) */
+  /* Each inventory row becomes a card */
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) {
     display: block;
     margin: 0 0 14px 0;
     padding: 12px;
     border-radius: 18px;
-
     background:
       linear-gradient(
         180deg,
         rgba(20, 28, 40, 0.98),
         rgba(10, 15, 24, 0.99)
       ) !important;
-
     border: 1px solid rgba(102,252,241,0.18) !important;
-
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.04),
       0 0 0 1px rgba(102,252,241,0.04),
       0 14px 30px rgba(0,0,0,0.34) !important;
-
     overflow: hidden;
     position: relative;
   }
 
-  /* subtle tech glow overlay */
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row)::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-
     background:
       linear-gradient(
         135deg,
@@ -3611,19 +3606,19 @@ table thead th {
         transparent 72%,
         rgba(69,162,158,0.05)
       );
+    opacity: 0.9;
   }
 
-  /* STOCK COLORS (kept but refined) */
-  #inventoryBody tr.stock-low {
-    border-color: rgba(255,213,0,0.28) !important;
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row).stock-out {
+    border-color: rgba(255, 82, 82, 0.28) !important;
   }
 
-  #inventoryBody tr.stock-out {
-    border-color: rgba(255,82,82,0.28) !important;
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row).stock-low {
+    border-color: rgba(255, 213, 0, 0.28) !important;
   }
 
-  #inventoryBody tr.stock-healthy {
-    border-color: rgba(34,197,94,0.22) !important;
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row).stock-healthy {
+    border-color: rgba(34, 197, 94, 0.22) !important;
   }
 
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td {
@@ -3637,6 +3632,7 @@ table thead th {
     border-bottom: 1px solid rgba(255,255,255,0.08);
     white-space: normal;
     overflow: visible;
+    text-overflow: unset;
     background: transparent !important;
     position: relative;
     z-index: 1;
@@ -3644,6 +3640,7 @@ table thead th {
 
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:last-child {
     border-bottom: 0;
+    padding-bottom: 0;
   }
 
   #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td::before {
@@ -3657,12 +3654,131 @@ table thead th {
     padding-top: 10px;
   }
 
-  /* INPUT UPGRADE */
+  /* Column labels */
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1)::before { content: "Item Name"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(2)::before { content: "Device"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(3)::before { content: "Part Type"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(4)::before { content: "Brand"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(5)::before { content: "Series"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(6)::before { content: "Color"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(7)::before { content: "Quantity"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(8)::before { content: "Cost"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(9)::before { content: "Supplier"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(10)::before { content: "Updated"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(11)::before { content: "Notes"; }
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(12)::before { content: "Actions"; }
+
+  /* Item cell: stronger visual hierarchy */
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) {
+    padding-top: 0;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1)::before {
+    padding-top: 12px;
+  }
+
+  /* First inventory cell: keep text readable and prevent compression */
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inv-item-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inv-item-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inline-itemName,
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inline-edit.inline-itemName {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    outline: none;
+    box-shadow: none;
+    color: var(--text-color);
+    -webkit-text-fill-color: var(--text-color);
+    opacity: 1;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .inv-item-id {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    margin-top: 4px;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    color: var(--heading) !important;
+    opacity: 0.85 !important;
+    font-family: monospace;
+    letter-spacing: 0.05em;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .historyBtn {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  /* CRITICAL FIX: make Item Name input visible on mobile */
+  #inventoryBody td:nth-child(1) .inline-itemName,
+  #inventoryBody td:nth-child(1) .inline-edit.inline-itemName {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--text-color) !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+    opacity: 1 !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+  }
+
+  #inventoryBody td:nth-child(1) .inline-itemName::placeholder,
+  #inventoryBody td:nth-child(1) .inline-edit.inline-itemName::placeholder {
+    color: rgba(255,255,255,0.45);
+    -webkit-text-fill-color: rgba(255,255,255,0.45);
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .muted {
+    margin-top: 4px;
+  }
+
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .row {
+    margin-top: 8px;
+  }
+
+  /* Inputs/selects feel better inside cards */
   #inventoryBody .inline-edit,
   #inventoryBody .qty-input {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 14px;
     background: rgba(255,255,255,0.05) !important;
     border: 1px solid rgba(255,255,255,0.10) !important;
-    border-radius: 14px !important;
     box-shadow: none !important;
   }
 
@@ -3672,7 +3788,25 @@ table thead th {
     box-shadow: 0 0 0 3px rgba(102,252,241,0.12) !important;
   }
 
-  /* BUTTON STYLE MATCH (same as desktop) */
+  /* Keep item name from being re-overridden by generic inline-edit rules */
+  #inventoryBody td:nth-child(1) .inline-edit.inline-itemName {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  #inventoryBody td:nth-child(11) .inline-edit {
+    min-height: 42px;
+  }
+
+  /* Buttons stack cleanly on mobile cards */
+  #inventoryBody .historyBtn,
+  #inventoryBody .deleteInventoryBtn {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+
   #inventoryBody .historyBtn {
     background: linear-gradient(
       180deg,
@@ -3680,6 +3814,7 @@ table thead th {
       rgba(11, 16, 24, 0.98)
     ) !important;
     border: 1px solid rgba(102,252,241,0.18) !important;
+    color: var(--text-color) !important;
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.03),
       0 0 0 1px rgba(102,252,241,0.04),
@@ -3694,16 +3829,141 @@ table thead th {
     ) !important;
     border: 1px solid rgba(255,82,82,0.28) !important;
     color: #ffd7d7 !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      0 8px 18px rgba(0,0,0,0.18) !important;
   }
 
-  /* ITEM ID GLOW */
-  #inventoryBody .inv-item-id {
-    color: var(--heading) !important;
-    opacity: 0.85;
-    font-family: monospace;
-    letter-spacing: 0.05em;
+  #inventoryBody td:nth-child(12) {
+    grid-template-columns: 1fr;
   }
 
+  #inventoryBody td:nth-child(12)::before {
+    margin-bottom: 2px;
+  }
+
+  /* Make updated date and notes easier to scan */
+  #inventoryBody td:nth-child(10),
+  #inventoryBody td:nth-child(11) {
+    align-items: center;
+  }
+
+  .inventory-toolbar {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 12px;
+  }
+
+  .table-wrap:has(.inventory-table) {
+    max-height: none;
+    overflow: visible;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* =========================================================
+   INVENTORY SECTION — PREMIUM TABS + EVEN FILTER SPACING
+========================================================= */
+
+/* Toolbar container spacing */
+.inventory-toolbar {
+  margin-bottom: 16px;
+}
+
+/* =========================================================
+   PREMIUM INVENTORY TABS (MOBILE FIRST)
+========================================================= */
+
+/* Mobile → always 3 per row */
+.inventory-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.inv-tab {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  margin: 0 !important;
+  padding: 8px 10px !important;
+
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.03) !important;
+  color: #ccc !important;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+
+  box-shadow: none !important;
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inv-tab:hover {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.inv-tab.active {
+  background: linear-gradient(135deg, #00e5ff, #00bcd4) !important;
+  color: #000 !important;
+  border-color: transparent !important;
+  box-shadow:
+    0 0 0 1px rgba(0,229,255,0.4),
+    0 6px 16px rgba(0,229,255,0.25) !important;
+  transform: translateY(-1px);
+}
+
+.inv-tab:active {
+  transform: scale(0.96);
+}
+
+/* =========================================================
+   INVENTORY TOOLBAR CONTROLS — EVEN SPACING
+========================================================= */
+
+.inventory-toolbar-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.inventory-toolbar-controls > label {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.inventory-toolbar-controls > label span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.inventory-toolbar-controls select {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
 }
 
 /* =========================================================
