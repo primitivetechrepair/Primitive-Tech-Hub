@@ -643,52 +643,56 @@ if (notesPreviewBtn) {
   class="notes-modal"
   style="display:grid;grid-template-rows:minmax(0,1fr) auto;height:60vh;min-height:0;overflow:hidden;"
 >
-  <div
-    id="leadNotesExisting"
-    class="notes-existing"
-    style="min-height:0;overflow-y:auto;padding-right:6px;padding-bottom:10px;"
-  >
-    ${
-      Array.isArray(lead.notes)
-        ? lead.notes.length
-          ? lead.notes
-              .slice()
-              .reverse()
-              .map(
-                (note) => `
-                  <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
-                    <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-                      <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
-                      <div style="display:flex;gap:6px;">
-                        <button
-                          type="button"
-                          class="tiny lead-action-btn editLeadNoteBtn"
-                          data-note-id="${esc(String(note.id || ""))}"
-                          title="Edit note"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          class="tiny lead-action-btn deleteLeadNoteBtn"
-                          data-note-id="${esc(String(note.id || ""))}"
-                          title="Delete note"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                    <pre>${esc(note.text || "")}</pre>
-                  </div>
-                `
-              )
-              .join("")
-          : "<div class='muted'>No notes yet.</div>"
-        : lead.notes
-          ? `<pre>${esc(lead.notes)}</pre>`
-          : "<div class='muted'>No notes yet.</div>"
-    }
-  </div>
+            <div
+            id="leadNotesExisting"
+            class="notes-existing"
+            style="min-height:0;overflow-y:auto;padding-right:6px;padding-bottom:10px;"
+          >
+            ${
+              Array.isArray(lead.notes)
+                ? lead.notes.length
+                  ? lead.notes
+                      .slice()
+                      .reverse()
+                      .map(
+                        (note) => `
+                          <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
+                            <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                              <div class="lead-note-meta">
+                                <span class="muted">[${esc(note.at || "")}]</span>
+                                <span class="lead-note-tag-badge">${esc(note.tag || "general")}</span>
+                                ${note.editedAt ? `<span class="lead-note-edited-badge">Edited</span>` : ""}
+                              </div>
+                              <div style="display:flex;gap:6px;">
+                                <button
+                                  type="button"
+                                  class="tiny lead-action-btn editLeadNoteBtn"
+                                  data-note-id="${esc(String(note.id || ""))}"
+                                  title="Edit note"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  class="tiny lead-action-btn deleteLeadNoteBtn"
+                                  data-note-id="${esc(String(note.id || ""))}"
+                                  title="Delete note"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                            <pre>${esc(note.text || "")}</pre>
+                          </div>
+                        `
+                      )
+                      .join("")
+                  : "<div class='muted'>No notes yet.</div>"
+                : lead.notes
+                  ? `<pre>${esc(lead.notes)}</pre>`
+                  : "<div class='muted'>No notes yet.</div>"
+            }
+          </div>
 
   <div
     class="notes-input-section"
@@ -697,6 +701,23 @@ if (notesPreviewBtn) {
       padding-top:10px;
     "
   >
+    <div style="margin-bottom:8px;">
+      <select
+        id="leadNoteTag"
+        style="
+          width:100%;
+          margin:0 0 8px 0;
+        "
+      >
+        <option value="general">General</option>
+        <option value="repair">Repair</option>
+        <option value="payment">Payment</option>
+        <option value="issue">Issue</option>
+        <option value="customer">Customer</option>
+        <option value="internal">Internal</option>
+      </select>
+    </div>
+
     <textarea
       id="leadNoteInput"
       placeholder="Add a new note..."
@@ -721,6 +742,8 @@ if (notesPreviewBtn) {
     const cancelBtn = document.getElementById("modalCancelBtn");
     const existingEl = document.getElementById("leadNotesExisting");
     const inputEl = document.getElementById("leadNoteInput");
+    const tagEl = document.getElementById("leadNoteTag");
+    let highlightedNoteId = "";
 
     if (confirmBtn && cancelBtn) {
       confirmBtn.dataset.keepOpen = "true";
@@ -743,9 +766,13 @@ if (notesPreviewBtn) {
                 .reverse()
                 .map(
                   (note) => `
-                    <div class="lead-note-entry" data-note-id="${esc(String(note.id || ""))}">
+                    <div class="lead-note-entry${String(note.id || "") === highlightedNoteId ? " lead-note-entry--flash" : ""}" data-note-id="${esc(String(note.id || ""))}">
                       <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-                        <div class="muted">[${esc(note.at || "")}]${note.tag ? ` ${esc(note.tag)}` : ""}</div>
+                        <div class="lead-note-meta">
+                          <span class="muted">[${esc(note.at || "")}]</span>
+                          <span class="lead-note-tag-badge">${esc(note.tag || "general")}</span>
+                          ${note.editedAt ? `<span class="lead-note-edited-badge">Edited</span>` : ""}
+                        </div>
                         <div style="display:flex;gap:6px;">
                           <button
                             type="button"
@@ -790,8 +817,12 @@ if (notesPreviewBtn) {
 
       inputEl.value = String(note.text || "");
       inputEl.dataset.editNoteId = noteID;
-      inputEl.focus();
 
+      if (tagEl) {
+        tagEl.value = String(note.tag || "general");
+      }
+
+      inputEl.focus();
       confirmBtn.textContent = "Update Note";
       return;
     }
@@ -849,6 +880,7 @@ if (notesPreviewBtn) {
 
         const timestamp = new Date().toLocaleString();
         const editNoteId = String(inputEl?.dataset.editNoteId || "").trim();
+        const selectedTag = String(tagEl?.value || "general").trim();
 
         if (!Array.isArray(lead.notes)) {
           lead.notes = lead.notes
@@ -876,7 +908,9 @@ if (notesPreviewBtn) {
           }
 
           target.text = noteText;
+          target.tag = selectedTag;
           target.editedAt = timestamp;
+          highlightedNoteId = String(target.id || "");
 
           addAudit("lead_note_edited", {
             leadID: lead.leadID,
@@ -884,13 +918,16 @@ if (notesPreviewBtn) {
             userAction: "note_edited",
           });
         } else {
-          lead.notes.push({
+          const newNote = {
             id: `note-${Date.now()}`,
             text: noteText,
             at: timestamp,
-            tag: "general",
+            tag: selectedTag,
             files: [],
-          });
+          };
+
+          lead.notes.push(newNote);
+          highlightedNoteId = String(newNote.id || "");
 
           addAudit("lead_note_added", {
             leadID: lead.leadID,
@@ -918,9 +955,17 @@ if (notesPreviewBtn) {
             delete inputEl.dataset.editNoteId;
           }
 
+          if (tagEl) {
+            tagEl.value = "general";
+          }
+
           confirmBtn.textContent = "Save Note";
           toast(el, editNoteId ? "Note updated." : "Note added.", "success");
           renderAll();
+
+          setTimeout(() => {
+            highlightedNoteId = "";
+          }, 900);
         } catch (err) {
           console.error(err);
           lead.notes = prevNotes;

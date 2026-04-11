@@ -1324,6 +1324,56 @@ tbody tr:hover td {
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
+#modalMessage .lead-note-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#modalMessage .lead-note-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(102,252,241,0.12);
+  color: var(--heading);
+  border: 1px solid rgba(102,252,241,0.22);
+}
+
+#modalMessage .lead-note-edited-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.08);
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+#modalMessage .lead-note-entry--flash {
+  animation: leadNoteFlash 0.9s ease;
+}
+
+@keyframes leadNoteFlash {
+  0% {
+    background: rgba(102,252,241,0.20);
+    box-shadow: 0 0 0 1px rgba(102,252,241,0.25);
+  }
+  100% {
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
 /* ===============================
    MODAL ACTIONS (LOCK BUTTON ROW)
 =============================== */
