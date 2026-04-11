@@ -784,6 +784,7 @@ if (fileEl) {
 
         await new Promise((resolve, reject) => {
           reader.onload = () => {
+            console.log("[DEBUG] file loaded:", f.name);
             pendingFiles.push({
               name: f.name,
               size: f.size,
