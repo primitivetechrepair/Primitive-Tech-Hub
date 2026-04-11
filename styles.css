@@ -4830,9 +4830,10 @@ table thead th {
   display: flex;
   width: calc(100% - 8px);
   min-width: 0;
-  margin: 4px;
+  margin: 4px 4px 12px 4px; /* 🔥 bottom spacing increased */
   align-self: start;
 }
+
 }
 
 /* ===============================
