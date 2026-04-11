@@ -1,8 +1,11 @@
 // src/ui/renderLeads.js
+import { uploadLeadFileToStorage } from "../services/cloudInventoryService.js";
+
 export function renderLeads(ctx) {
   // ===== UI Collapse State (local only) =====
   const COLLAPSE_KEY = "primitiveTechHub_leadCollapseState";
   const collapseState = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || "{}");
+  
 
   function isCollapsed(id) {
     return collapseState[id] === true;
@@ -691,9 +694,9 @@ ${
         ${note.files
           .map((fname) => {
             const file = (lead.files || []).find((f) => f.name === fname);
-            return file
-              ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
-              : "";
+return file
+  ? `<a href="${file.url || "#"}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
+  : "";
           })
           .join("<br/>")}
       </div>
@@ -778,28 +781,7 @@ if (fileEl) {
     const files = Array.from(fileEl.files || []);
     if (!files.length) return;
 
-    for (const f of files) {
-      try {
-        const reader = new FileReader();
-
-        await new Promise((resolve, reject) => {
-          reader.onload = () => {
-            console.log("[DEBUG] file loaded:", f.name);
-            pendingFiles.push({
-              name: f.name,
-              size: f.size,
-              type: f.type,
-              data: reader.result,
-            });
-            resolve();
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(f);
-        });
-      } catch (err) {
-        console.error("File read error:", err);
-      }
-    }
+    pendingFiles.push(...files);
 
     const selectedFilesEl = document.getElementById(selectedFilesLabelId);
     if (selectedFilesEl) {
@@ -1019,26 +1001,24 @@ lead.files = Array.isArray(lead.files) ? lead.files : [];
 const attachedFiles = [];
 
 if (pendingFiles.length) {
-  console.log("[DEBUG] pendingFiles before save:", pendingFiles);
+  for (const file of pendingFiles) {
+    const uploaded = await uploadLeadFileToStorage({
+      leadID: lead.leadID,
+      file,
+    });
 
-  pendingFiles.forEach((f) => {
     const exists = lead.files.some(
       (existing) =>
-        existing.name === f.name &&
-        existing.size === f.size &&
-        existing.type === f.type &&
-        existing.data === f.data
+        existing.path === uploaded.path ||
+        (existing.name === uploaded.name && existing.url === uploaded.url)
     );
 
     if (!exists) {
-      lead.files.push(f);
+      lead.files.push(uploaded);
     }
 
-    attachedFiles.push(f.name);
-  });
-
-  console.log("[DEBUG] attachedFiles for note:", attachedFiles);
-  console.log("[DEBUG] lead.files after merge:", lead.files);
+    attachedFiles.push(uploaded.name);
+  }
 }
 
 if (editNoteId) {

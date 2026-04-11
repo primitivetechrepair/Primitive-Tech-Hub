@@ -2,6 +2,36 @@ import { supabase } from "./supabaseClient.js";
 
 const INVENTORY_SYNC_QUEUE_KEY = "primitiveTechHubInventorySyncQueue";
 
+export async function uploadLeadFileToStorage({ leadID, file }) {
+  const safeLeadID = String(leadID || "unknown").replace(/[^a-zA-Z0-9_-]/g, "_");
+  const safeName = String(file.name || "file").replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `${safeLeadID}/${Date.now()}-${safeName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("lead-files")
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (uploadError) {
+    console.error("uploadLeadFileToStorage error:", uploadError);
+    throw uploadError;
+  }
+
+  const { data: publicData } = supabase.storage
+    .from("lead-files")
+    .getPublicUrl(path);
+
+  return {
+    name: file.name,
+    size: file.size,
+    type: file.type,
+    path,
+    url: publicData?.publicUrl || "",
+  };
+}
+
 function readInventorySyncQueue() {
   try {
     const raw = localStorage.getItem(INVENTORY_SYNC_QUEUE_KEY);
