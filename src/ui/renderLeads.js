@@ -165,40 +165,193 @@ const repairItemsForDisplay =
         ];
 
     const repairDisplayHtml = repairItemsForDisplay.length
-      ? `
-        <div class="lead-repair-badges">
-          ${repairItemsForDisplay
-            .map(
-              (item) => `
-                <span class="lead-repair-badge">
-                  <span class="lead-repair-badge-text">${esc(item.type)}</span>
-                  ${
-                    item.amount > 0
-                      ? `<span class="lead-repair-badge-amount">${esc(fmtMoney(item.amount))}</span>`
-                      : ""
-                  }
-                </span>
-              `
-            )
-            .join("")}
-        </div>
-      `
-      : `<span>-</span>`;
+  ? `
+    <div class="lead-repair-badges">
+      ${repairItemsForDisplay
+        .map(
+          (item) => `
+            <span class="lead-repair-badge">
+              <span class="lead-repair-badge-text">${esc(item.type)}</span>
+              ${
+                item.amount > 0
+                  ? `<span class="lead-repair-badge-amount">${esc(fmtMoney(item.amount))}</span>`
+                  : ""
+              }
+            </span>
+          `
+        )
+        .join("")}
+    </div>
+  `
+  : `<span>-</span>`;
 
-    const leadFilesList = Array.isArray(lead.files) ? lead.files : [];
+const leadFilesList = Array.isArray(lead.files) ? lead.files : [];
+
+const getFileHref = (file) => String(file?.url || file?.data || "").trim();
+
+const isImageFile = (file) => {
+  const type = String(file?.type || "").toLowerCase();
+  const name = String(file?.name || "").toLowerCase();
+  return (
+    type.startsWith("image/") ||
+    /\.(png|jpe?g|gif|webp|bmp|svg|avif)$/i.test(name)
+  );
+};
+
+const getFileIcon = (file) => {
+  const type = String(file?.type || "").toLowerCase();
+  const name = String(file?.name || "").toLowerCase();
+
+  if (isImageFile(file)) return "📷";
+  if (type.includes("pdf") || /\.pdf$/i.test(name)) return "📄";
+  if (type.includes("sheet") || /\.(xls|xlsx|csv)$/i.test(name)) return "📊";
+  if (type.includes("word") || /\.(doc|docx|txt|rtf)$/i.test(name)) return "📝";
+  if (type.includes("zip") || /\.(zip|rar|7z)$/i.test(name)) return "🗜️";
+  return "📎";
+};
+
+const renderLeadFileItem = (file) => {
+  const href = getFileHref(file);
+  if (!href) return "";
+
+  const fileName = String(file?.name || "File");
+  const escapedName = esc(fileName);
+  const icon = getFileIcon(file);
+
+  return `
+    <div class="lead-file-item" data-file-name="${escapedName}">
+      <button
+        type="button"
+        class="lead-file-open-btn"
+        data-file-name="${escapedName}"
+        title="Open file"
+      >
+        <span class="lead-file-icon">${icon}</span>
+        <span class="lead-file-name">${escapedName}</span>
+      </button>
+
+      <button
+        type="button"
+        class="tiny lead-action-btn deleteLeadFileBtn"
+        data-file-name="${escapedName}"
+        title="Delete file"
+      >
+        Delete
+      </button>
+    </div>
+  `;
+};
+
+const renderNoteFileItems = (fileNames = []) =>
+  (Array.isArray(fileNames) ? fileNames : [])
+    .map((fname) => {
+      const file = leadFilesList.find((f) => String(f?.name || "") === String(fname || ""));
+      return file ? renderLeadFileItem(file) : "";
+    })
+    .filter(Boolean)
+    .join("");
+
+const openImagePreview = async (file) => {
+  const href = getFileHref(file);
+  if (!href) return;
+
+  const modalPromise = window.Modal?.open({
+    title: String(file?.name || "Image Preview"),
+    message: `
+      <div class="lead-file-preview-wrap">
+        <img
+          class="lead-file-preview-image"
+          src="${href}"
+          alt="${esc(String(file?.name || "Preview"))}"
+        />
+      </div>
+    `,
+    confirmText: "Close",
+    requireInput: false,
+  });
+
+  const cancelBtn = document.getElementById("modalCancelBtn");
+  const confirmBtn = document.getElementById("modalConfirmBtn");
+
+  if (cancelBtn) cancelBtn.style.display = "none";
+  if (confirmBtn) {
+    confirmBtn.style.background = "#1f2937";
+    confirmBtn.style.color = "#fff";
+  }
+
+  await modalPromise;
+};
+
+const removeLeadFile = async (fileName) => {
+  const safeName = String(fileName || "").trim();
+  if (!safeName) return;
+
+  const ok = await window.Modal?.open({
+    title: "Delete File",
+    message: `Delete <strong>${esc(safeName)}</strong> from this lead and remove it from all note references?`,
+    confirmText: "Delete File",
+    requireInput: false,
+  });
+
+  if (!ok) return;
+
+  const prevFiles = Array.isArray(lead.files) ? lead.files.map((f) => ({ ...f })) : [];
+  const prevNotes = Array.isArray(lead.notes)
+    ? lead.notes.map((note) => ({
+        ...note,
+        files: Array.isArray(note.files) ? [...note.files] : [],
+      }))
+    : lead.notes;
+
+  lead.files = (Array.isArray(lead.files) ? lead.files : []).filter(
+    (f) => String(f?.name || "") !== safeName
+  );
+
+  if (Array.isArray(lead.notes)) {
+    lead.notes = lead.notes.map((note) => ({
+      ...note,
+      files: Array.isArray(note.files)
+        ? note.files.filter((name) => String(name || "") !== safeName)
+        : [],
+    }));
+  }
+
+  lead.lastUpdated = new Date().toISOString();
+
+  addAudit("lead_file_deleted", {
+    leadID: lead.leadID,
+    fileName: safeName,
+    userAction: "file_deleted",
+  });
+
+  try {
+    await persist();
+
+    queueCloudSync("lead_note_update", {
+      leadID: lead.leadID,
+      notes: lead.notes,
+      files: lead.files,
+    });
+
+    await upsertLeadToCloud(lead);
+
+    toast(el, "File deleted.", "success");
+    renderAll();
+  } catch (err) {
+    console.error(err);
+    lead.files = prevFiles;
+    lead.notes = prevNotes;
+    toast(el, "Failed to delete file.", "error");
+  }
+};
 
 const files =
   leadFilesList.length
     ? leadFilesList
-        .map((fmeta) => {
-          const href = String(fmeta?.url || fmeta?.data || "").trim();
-          if (!href) return "";
-
-          return `<a href="${href}" target="_blank" rel="noopener">${esc(fmeta?.name || "File")}</a>`;
-        })
+        .map((file) => renderLeadFileItem(file))
         .filter(Boolean)
-        .join("<br/>")
-    : "-";
+        .join("")
+    : `<div class="muted">No files</div>`;
 
     const mapAddress = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
       lead.address || ""
@@ -638,6 +791,33 @@ if (header) {
 
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
 
+    const leadFilesContainerEl = tr.querySelector(".lead-files-container");
+if (leadFilesContainerEl) {
+  leadFilesContainerEl.onclick = async (e) => {
+    const openBtn = e.target.closest(".lead-file-open-btn");
+    const deleteBtn = e.target.closest(".deleteLeadFileBtn");
+
+    if (openBtn) {
+      const fileName = String(openBtn.dataset.fileName || "").trim();
+      const file = leadFilesList.find((f) => String(f?.name || "") === fileName);
+      if (!file) return;
+
+      if (isImageFile(file)) {
+        await openImagePreview(file);
+      } else {
+        const href = getFileHref(file);
+        if (href) window.open(href, "_blank", "noopener");
+      }
+      return;
+    }
+
+    if (deleteBtn) {
+      const fileName = String(deleteBtn.dataset.fileName || "").trim();
+      await removeLeadFile(fileName);
+    }
+  };
+}
+
     const notesPreviewBtn = tr.querySelector(".lead-notes-preview");
 if (notesPreviewBtn) {
   notesPreviewBtn.onclick = async () => {
@@ -698,15 +878,7 @@ ${
   Array.isArray(note.files) && note.files.length
     ? `
       <div class="lead-note-files">
-        ${note.files
-          .map((fname) => {
-            const file = (lead.files || []).find((f) => f.name === fname);
-const href = String(file?.url || file?.data || "").trim();
-return href
-  ? `<a href="${href}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
-  : "";
-          })
-          .join("<br/>")}
+        ${renderNoteFileItems(note.files)}
       </div>
     `
     : ""
@@ -857,15 +1029,15 @@ if (fileEl) {
                   Array.isArray(note.files) && note.files.length
                     ? `
                       <div class="lead-note-files">
-                        ${note.files
-                          .map((fname) => {
-                            const file = (lead.files || []).find((f) => f.name === fname);
-const href = String(file?.url || file?.data || "").trim();
-return href
-  ? `<a href="${href}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
-  : "";
-                          })
-                          .join("<br/>")}
+                        ${
+  Array.isArray(note.files) && note.files.length
+    ? `
+      <div class="lead-note-files">
+        ${renderNoteFileItems(note.files)}
+      </div>
+    `
+    : ""
+}
                       </div>
                     `
                     : ""
@@ -889,36 +1061,60 @@ return href
 
       if (existingEl) {
   existingEl.onclick = async (e) => {
-    const editBtn = e.target.closest(".editLeadNoteBtn");
-    const deleteBtn = e.target.closest(".deleteLeadNoteBtn");
+  const openBtn = e.target.closest(".lead-file-open-btn");
+  const deleteFileBtn = e.target.closest(".deleteLeadFileBtn");
+  const editBtn = e.target.closest(".editLeadNoteBtn");
+  const deleteBtn = e.target.closest(".deleteLeadNoteBtn");
 
-    // ===== EDIT =====
-    if (editBtn) {
-      const noteID = String(editBtn.dataset.noteId || "").trim();
-      if (!noteID || !Array.isArray(lead.notes)) return;
+  if (openBtn) {
+    const fileName = String(openBtn.dataset.fileName || "").trim();
+    const file = leadFilesList.find((f) => String(f?.name || "") === fileName);
+    if (!file) return;
 
-      const note = lead.notes.find(
-        (n) => String(n.id || "") === noteID
-      );
-      if (!note || !inputEl) return;
-
-      inputEl.value = String(note.text || "");
-      inputEl.dataset.editNoteId = noteID;
-
-      if (tagEl) {
-  tagEl.value = String(note.tag || "general");
-}
-
-const selectedFilesEl = document.getElementById(selectedFilesLabelId);
-if (selectedFilesEl) {
-  selectedFilesEl.textContent = "No files selected";
-}
-pendingFiles = [];
-
-inputEl.focus();
-confirmBtn.textContent = "Update Note";
-return;
+    if (isImageFile(file)) {
+      await openImagePreview(file);
+    } else {
+      const href = getFileHref(file);
+      if (href) window.open(href, "_blank", "noopener");
     }
+    return;
+  }
+
+  if (deleteFileBtn) {
+    const fileName = String(deleteFileBtn.dataset.fileName || "").trim();
+    await removeLeadFile(fileName);
+    renderNotesExisting();
+    return;
+  }
+
+  // ===== EDIT =====
+if (editBtn) {
+  const noteID = String(editBtn.dataset.noteId || "").trim();
+  if (!noteID || !Array.isArray(lead.notes)) return;
+
+  const note = lead.notes.find(
+    (n) => String(n.id || "") === noteID
+  );
+  if (!note || !inputEl) return;
+
+  inputEl.value = String(note.text || "");
+  inputEl.dataset.editNoteId = noteID;
+
+  if (tagEl) {
+    tagEl.value = String(note.tag || "general");
+  }
+
+  const selectedFilesEl = document.getElementById(selectedFilesLabelId);
+  if (selectedFilesEl) {
+    selectedFilesEl.textContent = "No files selected";
+  }
+
+  pendingFiles = [];
+
+  inputEl.focus();
+  confirmBtn.textContent = "Update Note";
+  return;
+}
 
     // ===== DELETE =====
     if (deleteBtn) {
