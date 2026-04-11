@@ -186,12 +186,12 @@ const repairItemsForDisplay =
       : `<span>-</span>`;
 
     const files =
-      (lead.files || [])
-        .map(
-          (fmeta) =>
-            `<a href="${fmeta.data}" download="${esc(fmeta.name)}">${esc(fmeta.name)}</a>`
-        )
-        .join("<br/>") || "-";
+  (lead.files || [])
+    .map(
+      (fmeta) =>
+        `<a href="${fmeta.url || "#"}" target="_blank" rel="noopener">${esc(fmeta.name)}</a>`
+    )
+    .join("<br/>") || "-";
 
     const mapAddress = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
       lead.address || ""
