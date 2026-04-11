@@ -19,21 +19,18 @@ export async function uploadLeadFileToStorage({ leadID, file }) {
     throw uploadError;
   }
 
-  const { data: signedData, error: signedError } =
-  await supabase.storage
-    .from("lead-files")
-    .createSignedUrl(path, 60 * 60 * 24 * 365); // 1 year
+  const { data: publicData } = supabase.storage
+  .from("lead-files")
+  .getPublicUrl(path);
 
-if (signedError) {
-  console.error("Signed URL error:", signedError);
-}
+console.log("[DEBUG] public URL:", publicData?.publicUrl);
 
 return {
   name: file.name,
   size: file.size,
   type: file.type,
   path,
-  url: signedData?.signedUrl || "",
+  url: publicData?.publicUrl || "",
 };
 }
 
