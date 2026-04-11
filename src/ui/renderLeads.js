@@ -691,14 +691,27 @@ if (notesPreviewBtn) {
   </div>
 
   <div
-    style="position:sticky;bottom:0;background:inherit;border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;z-index:2;"
-  >
-    <textarea
-      id="leadNoteInput"
-      placeholder="Add a new note..."
-      style="display:block;width:100%;min-height:70px;max-height:70px;resize:none;overflow-y:auto;margin:0;"
-    ></textarea>
-  </div>
+    <div
+  style="
+    border-top:1px solid rgba(255,255,255,0.08);
+    padding-top:10px;
+  "
+>
+  <textarea
+    id="leadNoteInput"
+    placeholder="Add a new note..."
+    style="
+      display:block;
+      width:100%;
+      height:70px;
+      min-height:70px;
+      max-height:70px;
+      resize:none;
+      overflow-y:auto;
+      margin:0;
+    "
+  ></textarea>
+</div>
 </div>
       `,
       confirmText: "Save Note",
