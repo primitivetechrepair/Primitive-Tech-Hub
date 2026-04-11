@@ -2280,6 +2280,15 @@ tbody tr:hover td {
   z-index: 1;
 }
 
+/* real settings layout */
+#settingsSection .form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* keep legacy support if used elsewhere */
 .form-grid-row {
   display: flex;
   gap: 12px;
@@ -2288,24 +2297,63 @@ tbody tr:hover td {
   flex-wrap: wrap;
 }
 
-/* ===============================
-   SETTINGS ACTION BUTTON ROW FIX
-=============================== */
-
-/* Target only rows that are button-only */
-.form-grid-row:has(button):not(:has(label)) {
+/* top 3 manage controls */
+#settingsSection .settings-manage-row {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
 
-/* Make buttons evenly distribute */
-.form-grid-row:has(button):not(:has(label)) button {
+#settingsSection .settings-manage-label {
+  min-width: 0;
   flex: 1;
-  width: 100%;
+  text-align: left;
+  color: var(--muted);
 }
 
-/* Field cards */
+#settingsSection .settings-manage-label strong {
+  display: block;
+  color: var(--heading);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+#settingsSection .settings-manage-row button {
+  width: auto;
+  min-width: 110px;
+  margin: 0;
+}
+
+/* bottom 3 settings fields */
+#settingsSection .form-grid > label {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 6px;
+  text-align: left;
+  margin-bottom: 0;
+
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* legacy support */
 .form-grid-row label {
   flex: 1 1 30%;
   display: flex;
@@ -2323,56 +2371,20 @@ tbody tr:hover td {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
 
-/* Button Styling */
-.form-grid-row button {
-  flex: 1 1 30%;
-  min-height: 38px;
-  margin-top: 0;
-  padding: 10px 12px;
-  border-radius: 12px;
+/* ===============================
+   SETTINGS ACTION BUTTON ROW FIX
+=============================== */
 
-  background: linear-gradient(
-    180deg,
-    rgba(18, 24, 34, 0.96),
-    rgba(11, 16, 24, 0.98)
-  );
-  border: 1px solid rgba(102,252,241,0.18);
-  color: var(--text-color);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.03),
-    0 0 0 1px rgba(102,252,241,0.04),
-    0 8px 18px rgba(0,0,0,0.22);
-
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.12s ease;
+#settingsSection > .row.wrap {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
 }
 
-/* Button hover effect */
-.form-grid-row button:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(24, 34, 46, 0.98),
-    rgba(13, 21, 30, 1)
-  );
-  border-color: rgba(102,252,241,0.30);
-  color: #fff;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 0 1px rgba(102,252,241,0.08),
-    0 0 18px rgba(102,252,241,0.10),
-    0 10px 22px rgba(0,0,0,0.28);
-}
-
-.form-grid-row button:active {
-  transform: scale(0.97);
+#settingsSection > .row.wrap button {
+  width: 100%;
+  margin: 0;
 }
 
 /* Line separator */
@@ -2408,7 +2420,21 @@ tbody tr:hover td {
   text-align: left;
 }
 
+@media (max-width: 900px) {
+  #settingsSection .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #settingsSection > .row.wrap {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 720px) {
+  #settingsSection .form-grid {
+    grid-template-columns: 1fr;
+  }
+
   .form-grid-row {
     gap: 10px;
   }
@@ -2416,6 +2442,17 @@ tbody tr:hover td {
   .form-grid-row label,
   .form-grid-row button {
     flex: 1 1 100%;
+  }
+
+  #settingsSection .settings-manage-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 640px) {
+  #settingsSection > .row.wrap {
+    grid-template-columns: 1fr;
   }
 }
 
