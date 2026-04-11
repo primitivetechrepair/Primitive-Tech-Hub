@@ -1213,18 +1213,52 @@ tbody tr:hover td {
 }
 
 /* ===============================
+   NOTES MODAL STRUCTURE FIX
+=============================== */
+
+/* Make modal content behave like a vertical layout */
+#modalMessage .notes-modal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 60vh;
+}
+
+/* ONLY notes list scrolls */
+#modalMessage .notes-existing {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Input section stays fixed */
+#modalMessage .notes-input-section {
+  flex-shrink: 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+}
+
+/* Buttons row fixed under input */
+#modalMessage .notes-input-section .row {
+  flex-shrink: 0;
+}
+
+/* ===============================
    MODAL PANEL (PREMIUM STYLE)
 =============================== */
 
 .modal-panel {
-  width: 100%;
-  max-width: 460px;
+  position: relative;
+  z-index: 1;
 
-  max-height: 72vh; /* 🔥 controls modal height */
+  width: min(520px, calc(100% - 24px));
+  max-height: 72vh;
+
   display: flex;
   flex-direction: column;
 
-  overflow: hidden; /* prevents bleed */
+  overflow: hidden;
 
   background: linear-gradient(
     160deg,
@@ -1253,6 +1287,63 @@ tbody tr:hover td {
 .modal-overlay.open .modal-panel {
   transform: translateY(0) scale(1);
   opacity: 1;
+}
+
+/* ===============================
+   FIX MODAL MESSAGE LAYOUT
+=============================== */
+
+#modalMessage {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ===============================
+   NOTES MODAL FINAL FIX
+=============================== */
+
+#modalMessage .notes-modal {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+#modalMessage .notes-existing {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+#modalMessage .notes-input-section {
+  flex-shrink: 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ===============================
+   MODAL ACTIONS (LOCK BUTTON ROW)
+=============================== */
+
+.modal-message {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-top: 12px;
+}
+
+.modal-actions button {
+  flex: 1;
+  margin: 0;
 }
 
 /* ===============================
