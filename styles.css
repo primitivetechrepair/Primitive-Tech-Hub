@@ -976,13 +976,26 @@ tbody tr:hover td {
 =============================== */
 
 .lead-files-container {
-  max-height: 100px;
+  display: block;
+  width: 100%;
+  max-height: 96px;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 6px;
+  margin-top: 2px;
+}
 
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.lead-files-container a {
+  display: block;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lead-files-container a:last-child {
+  margin-bottom: 0;
 }
 
 .lead-files-container::-webkit-scrollbar {
@@ -991,6 +1004,11 @@ tbody tr:hover td {
 
 .lead-files-container::-webkit-scrollbar-thumb {
   background: rgba(102, 252, 241, 0.35);
+  border-radius: 6px;
+}
+
+.lead-files-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 6px;
 }
 
