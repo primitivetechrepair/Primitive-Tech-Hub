@@ -2252,13 +2252,29 @@ tbody tr:hover td {
   z-index: 1;
 }
 
-/* Flexbox grid for rows */
 .form-grid-row {
   display: flex;
   gap: 12px;
   justify-content: space-between;
   margin-bottom: 16px;
   flex-wrap: wrap;
+}
+
+/* ===============================
+   SETTINGS ACTION BUTTON ROW FIX
+=============================== */
+
+/* Target only rows that are button-only */
+.form-grid-row:has(button):not(:has(label)) {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+}
+
+/* Make buttons evenly distribute */
+.form-grid-row:has(button):not(:has(label)) button {
+  flex: 1;
+  width: 100%;
 }
 
 /* Field cards */
