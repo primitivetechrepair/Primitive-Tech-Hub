@@ -2163,18 +2163,53 @@ tbody tr:hover td {
 
 /* Button styling */
 #settingsSection button {
-  padding: var(--space-1) var(--space-3);
-  background: #66fcf1;
-  color: #001517;
-  border: none;
-  border-radius: var(--radius);
+  min-height: 38px;
+  padding: 10px 12px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  );
+  border: 1px solid rgba(102,252,241,0.18);
+  border-radius: 12px;
+
+  color: var(--text-color);
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.3s ease;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.22);
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
 }
 
 #settingsSection button:hover {
-  background: #45a29e;
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.98),
+    rgba(13, 21, 30, 1)
+  );
+  border-color: rgba(102,252,241,0.30);
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 18px rgba(102,252,241,0.10),
+    0 10px 22px rgba(0,0,0,0.28);
+}
+
+#settingsSection button:active {
+  transform: scale(0.97);
 }
 
 /* =============================== 1. Settings & Utilities Section =============================== */
