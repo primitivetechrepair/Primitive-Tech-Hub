@@ -187,10 +187,13 @@ const repairItemsForDisplay =
 
     const files =
   (lead.files || [])
-    .map(
-      (fmeta) =>
-        `<a href="${fmeta.url || "#"}" target="_blank" rel="noopener">${esc(fmeta.name)}</a>`
-    )
+    .map((fmeta) => {
+      const href = String(fmeta?.url || fmeta?.data || "").trim();
+      if (!href) return "";
+
+      return `<a href="${href}" target="_blank" rel="noopener">${esc(fmeta.name || "File")}</a>`;
+    })
+    .filter(Boolean)
     .join("<br/>") || "-";
 
     const mapAddress = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -695,7 +698,7 @@ ${
           .map((fname) => {
             const file = (lead.files || []).find((f) => f.name === fname);
 return file
-  ? `<a href="${file.url || "#"}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
+  ? `<a href="${file.url || file.data || "#"}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
   : "";
           })
           .join("<br/>")}
