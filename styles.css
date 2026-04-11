@@ -4800,8 +4800,9 @@ table thead th {
   .inventory-table tbody {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px; /* 🔥 increased spacing between cards */
-  padding: 4px 6px; /* 🔥 subtle outer breathing room */
+  column-gap: 12px;
+  row-gap: 12px;
+  padding: 6px;
   width: 100% !important;
   align-items: start;
 }
@@ -4826,12 +4827,12 @@ table thead th {
   }
 
   #inventoryBody .inventory-card {
-    display: flex;
-    width: 100%;
-    min-width: 0;
-    margin: 0;
-    align-self: start;
-  }
+  display: flex;
+  width: calc(100% - 8px);
+  min-width: 0;
+  margin: 4px;
+  align-self: start;
+}
 }
 
 /* ===============================
