@@ -4724,6 +4724,8 @@ table thead th {
   flex-direction: column;
   gap: 12px;
 
+  margin: 0;
+
   padding: 14px;
   border-radius: 16px;
 
@@ -4796,12 +4798,13 @@ table thead th {
   }
 
   .inventory-table tbody {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-    width: 100% !important;
-    align-items: start;
-  }
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px; /* 🔥 increased spacing between cards */
+  padding: 4px 6px; /* 🔥 subtle outer breathing room */
+  width: 100% !important;
+  align-items: start;
+}
 
   #inventoryBody {
     display: contents !important;
