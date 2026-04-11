@@ -318,7 +318,7 @@ if (isCollapsed(lead.leadID)) {
 
           <div class="lead-card-row">
             <strong>Files:</strong>
-            <div>${files}</div>
+            <div class="lead-files-container">${files}</div>
           </div>
 
           <div class="lead-card-row">
