@@ -4798,6 +4798,10 @@ table thead th {
     width: 100%;
     margin: 0;
   }
+
+  #inventoryBody > .inventory-card {
+    align-self: start;
+  }
 }
 
 /* ===============================
