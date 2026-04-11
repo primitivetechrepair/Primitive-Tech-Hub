@@ -1298,7 +1298,8 @@ tbody tr:hover td {
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ===============================
@@ -1310,6 +1311,8 @@ tbody tr:hover td {
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 #modalMessage .notes-existing {
@@ -1322,6 +1325,7 @@ tbody tr:hover td {
   flex-shrink: 0;
   padding-top: 10px;
   border-top: 1px solid rgba(255,255,255,0.08);
+  background: inherit;
 }
 
 #modalMessage .lead-note-meta {
