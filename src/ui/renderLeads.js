@@ -768,6 +768,7 @@ const cancelBtn = document.getElementById("modalCancelBtn");
 const existingEl = document.getElementById("leadNotesExisting");
 const inputEl = document.getElementById("leadNoteInput");
 const tagEl = document.getElementById("leadNoteTag");
+const fileEl = document.getElementById("leadNoteFile");
 const selectedFilesLabelId = "leadNoteSelectedFiles";
 let pendingFiles = [];
 let highlightedNoteId = "";
@@ -800,40 +801,10 @@ if (fileEl) {
     }
 
     const selectedFilesEl = document.getElementById(selectedFilesLabelId);
-if (selectedFilesEl) {
-  selectedFilesEl.textContent = pendingFiles.length
-    ? pendingFiles.map((f) => f.name).join(", ")
-    : "No files selected";
-}
-
-fileEl.value = "";
-  };
-}
-
-if (fileEl) {
-  fileEl.onchange = async () => {
-    const files = Array.from(fileEl.files || []);
-    if (!files.length) return;
-
-    for (const f of files) {
-      try {
-        const reader = new FileReader();
-
-        await new Promise((resolve, reject) => {
-          reader.onload = () => {
-            pendingFiles.push({
-              name: f.name,
-              data: reader.result,
-            });
-            resolve();
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(f);
-        });
-
-      } catch (err) {
-        console.error("File read error:", err);
-      }
+    if (selectedFilesEl) {
+      selectedFilesEl.textContent = pendingFiles.length
+        ? pendingFiles.map((f) => f.name).join(", ")
+        : "No files selected";
     }
 
     fileEl.value = "";
@@ -943,12 +914,18 @@ if (fileEl) {
       inputEl.dataset.editNoteId = noteID;
 
       if (tagEl) {
-        tagEl.value = String(note.tag || "general");
-      }
+  tagEl.value = String(note.tag || "general");
+}
 
-      inputEl.focus();
-      confirmBtn.textContent = "Update Note";
-      return;
+const selectedFilesEl = document.getElementById(selectedFilesLabelId);
+if (selectedFilesEl) {
+  selectedFilesEl.textContent = "No files selected";
+}
+pendingFiles = [];
+
+inputEl.focus();
+confirmBtn.textContent = "Update Note";
+return;
     }
 
     // ===== DELETE =====
@@ -1120,12 +1097,12 @@ if (editNoteId) {
           }
 
                     if (tagEl) {
-            tagEl.value = "general";
-          }
+  tagEl.value = "general";
+}
 
-          pendingFiles = [];
+pendingFiles = [];
 
-          const selectedFilesEl = document.getElementById(selectedFilesLabelId);
+const selectedFilesEl = document.getElementById(selectedFilesLabelId);
 if (selectedFilesEl) {
   selectedFilesEl.textContent = "No files selected";
 }
