@@ -978,12 +978,13 @@ tbody tr:hover td {
 .lead-files-container {
   display: block;
   width: 100%;
-  max-height: 96px;
-  min-height: 0;
+  height: 96px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 6px;
   margin-top: 2px;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
 }
 
 .lead-files-container a {
@@ -4268,6 +4269,11 @@ table thead th {
   min-width: 0;
 
   flex-shrink: 0; /* ✅ prevents rows from stretching unevenly */
+  align-items: start;
+}
+
+.lead-card-row .lead-files-container {
+  align-self: start;
 }
 
 .lead-card-row strong {
