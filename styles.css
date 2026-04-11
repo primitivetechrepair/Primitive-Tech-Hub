@@ -1345,9 +1345,43 @@ tbody tr:hover td {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  border: 1px solid transparent;
+}
+
+#modalMessage .lead-note-tag-badge--general {
   background: rgba(102,252,241,0.12);
   color: var(--heading);
-  border: 1px solid rgba(102,252,241,0.22);
+  border-color: rgba(102,252,241,0.22);
+}
+
+#modalMessage .lead-note-tag-badge--repair {
+  background: rgba(56,189,248,0.14);
+  color: #7dd3fc;
+  border-color: rgba(56,189,248,0.24);
+}
+
+#modalMessage .lead-note-tag-badge--payment {
+  background: rgba(34,197,94,0.14);
+  color: #86efac;
+  border-color: rgba(34,197,94,0.24);
+}
+
+#modalMessage .lead-note-tag-badge--issue {
+  background: rgba(239,68,68,0.14);
+  color: #fca5a5;
+  border-color: rgba(239,68,68,0.24);
+}
+
+#modalMessage .lead-note-tag-badge--customer {
+  background: rgba(168,85,247,0.14);
+  color: #d8b4fe;
+  border-color: rgba(168,85,247,0.24);
+}
+
+#modalMessage .lead-note-tag-badge--internal {
+  background: rgba(148,163,184,0.14);
+  color: #cbd5e1;
+  border-color: rgba(148,163,184,0.24);
 }
 
 #modalMessage .lead-note-edited-badge {

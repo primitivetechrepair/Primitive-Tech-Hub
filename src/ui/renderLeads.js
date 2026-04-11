@@ -660,7 +660,7 @@ if (notesPreviewBtn) {
                             <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
                               <div class="lead-note-meta">
                                 <span class="muted">[${esc(note.at || "")}]</span>
-                                <span class="lead-note-tag-badge">${esc(note.tag || "general")}</span>
+                                <span class="lead-note-tag-badge lead-note-tag-badge--${esc(String(note.tag || "general").toLowerCase())}">${esc(note.tag || "general")}</span>
                                 ${note.editedAt ? `<span class="lead-note-edited-badge">Edited</span>` : ""}
                               </div>
                               <div style="display:flex;gap:6px;">
@@ -770,7 +770,7 @@ if (notesPreviewBtn) {
                       <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
                         <div class="lead-note-meta">
                           <span class="muted">[${esc(note.at || "")}]</span>
-                          <span class="lead-note-tag-badge">${esc(note.tag || "general")}</span>
+                          <span class="lead-note-tag-badge lead-note-tag-badge--${esc(String(note.tag || "general").toLowerCase())}">${esc(note.tag || "general")}</span>
                           ${note.editedAt ? `<span class="lead-note-edited-badge">Edited</span>` : ""}
                         </div>
                         <div style="display:flex;gap:6px;">
@@ -798,6 +798,16 @@ if (notesPreviewBtn) {
                 )
                 .join("")
             : "<div class='muted'>No notes yet.</div>";
+      };
+
+      const scrollToNewestNote = () => {
+        if (!existingEl) return;
+        requestAnimationFrame(() => {
+          existingEl.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        });
       };
 
       if (existingEl) {
@@ -870,6 +880,19 @@ if (notesPreviewBtn) {
     }
   };
 }
+
+      if (inputEl) {
+        inputEl.onkeydown = async (e) => {
+          if (e.key !== "Enter") return;
+          if (e.shiftKey) return;
+
+          e.preventDefault();
+
+          if (confirmBtn && !confirmBtn.disabled) {
+            await confirmBtn.onclick();
+          }
+        };
+      }
 
       confirmBtn.onclick = async () => {
         const noteText = inputEl?.value?.trim();
@@ -949,6 +972,7 @@ if (notesPreviewBtn) {
           await upsertLeadToCloud(lead);
 
           renderNotesExisting();
+          scrollToNewestNote();
 
           if (inputEl) {
             inputEl.value = "";
@@ -965,6 +989,7 @@ if (notesPreviewBtn) {
 
           setTimeout(() => {
             highlightedNoteId = "";
+            renderNotesExisting();
           }, 900);
         } catch (err) {
           console.error(err);
