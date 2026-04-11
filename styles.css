@@ -2212,6 +2212,34 @@ tbody tr:hover td {
   transform: scale(0.97);
 }
 
+/* ===============================
+   SETTINGS ACTION BUTTON ROW
+=============================== */
+
+#settingsSection > .row.wrap {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+#settingsSection > .row.wrap button {
+  width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  #settingsSection > .row.wrap {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  #settingsSection > .row.wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* =============================== 1. Settings & Utilities Section =============================== */
 
 #settingsSection {
