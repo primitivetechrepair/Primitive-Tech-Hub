@@ -1024,59 +1024,71 @@ if (fileEl) {
             : [];
         }
 
-        const prevNotes = lead.notes.map((note) => ({ ...note }));
+const prevNotes = lead.notes.map((note) => ({ ...note }));
+const prevFiles = Array.isArray(lead.files) ? lead.files.map((file) => ({ ...file })) : [];
 
-        lead.files = Array.isArray(lead.files) ? lead.files : [];
+lead.files = Array.isArray(lead.files) ? lead.files : [];
 
-        const attachedFiles = [];
+const attachedFiles = [];
 
-        if (pendingFiles.length) {
-          pendingFiles.forEach((f) => {
-            lead.files.push(f);
-            attachedFiles.push(f.name);
-          });
-        }
+if (pendingFiles.length) {
+  pendingFiles.forEach((f) => {
+    const exists = lead.files.some(
+      (existing) =>
+        existing.name === f.name &&
+        existing.size === f.size &&
+        existing.type === f.type &&
+        existing.data === f.data
+    );
 
-        if (editNoteId) {
-          const target = lead.notes.find(
-            (note) => String(note.id || "") === editNoteId
-          );
-          if (!target) {
-            toast(el, "Note not found.", "error");
-            return;
-          }
+    if (!exists) {
+      lead.files.push(f);
+    }
 
-          target.text = noteText;
-          target.tag = selectedTag;
-          target.editedAt = timestamp;
-          target.files = Array.isArray(target.files) ? target.files : [];
-          target.files.push(...attachedFiles);
+    attachedFiles.push(f.name);
+  });
+}
 
-          highlightedNoteId = String(target.id || "");
+if (editNoteId) {
+  const target = lead.notes.find(
+    (note) => String(note.id || "") === editNoteId
+  );
+  if (!target) {
+    toast(el, "Note not found.", "error");
+    return;
+  }
 
-          addAudit("lead_note_edited", {
-            leadID: lead.leadID,
-            noteID: editNoteId,
-            userAction: "note_edited",
-          });
-        } else {
-          const newNote = {
-            id: `note-${Date.now()}`,
-            text: noteText,
-            at: timestamp,
-            tag: selectedTag,
-            files: attachedFiles,
-          };
+  target.text = noteText;
+  target.tag = selectedTag;
+  target.editedAt = timestamp;
+  target.files = Array.isArray(target.files) ? target.files : [];
+  target.files.push(...attachedFiles);
 
-          lead.notes.push(newNote);
-          highlightedNoteId = String(newNote.id || "");
+  highlightedNoteId = String(target.id || "");
 
-          addAudit("lead_note_added", {
-            leadID: lead.leadID,
-            note: noteText,
-            userAction: "note_added",
-          });
-        }
+  addAudit("lead_note_edited", {
+    leadID: lead.leadID,
+    noteID: editNoteId,
+    userAction: "note_edited",
+  });
+} else {
+  const newNote = {
+    id: `note-${Date.now()}`,
+    text: noteText,
+    at: timestamp,
+    tag: selectedTag,
+    files: attachedFiles,
+  };
+
+  lead.notes.push(newNote);
+  highlightedNoteId = String(newNote.id || "");
+
+  addAudit("lead_note_added", {
+    leadID: lead.leadID,
+    note: noteText,
+    userAction: "note_added",
+  });
+}
 
         lead.lastUpdated = new Date().toISOString();
 
@@ -1113,10 +1125,11 @@ if (fileEl) {
             renderNotesExisting();
           }, 900);
         } catch (err) {
-          console.error(err);
-          lead.notes = prevNotes;
-          toast(el, editNoteId ? "Failed to update note." : "Failed to save note.", "error");
-        }
+  console.error(err);
+  lead.notes = prevNotes;
+  lead.files = prevFiles;
+  toast(el, editNoteId ? "Failed to update note." : "Failed to save note.", "error");
+}
       };
     }
 
