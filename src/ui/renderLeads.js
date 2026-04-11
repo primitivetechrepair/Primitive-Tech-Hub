@@ -185,16 +185,20 @@ const repairItemsForDisplay =
       `
       : `<span>-</span>`;
 
-    const files =
-  (lead.files || [])
-    .map((fmeta) => {
-      const href = String(fmeta?.url || fmeta?.data || "").trim();
-      if (!href) return "";
+    const leadFilesList = Array.isArray(lead.files) ? lead.files : [];
 
-      return `<a href="${href}" target="_blank" rel="noopener">${esc(fmeta.name || "File")}</a>`;
-    })
-    .filter(Boolean)
-    .join("<br/>") || "-";
+const files =
+  leadFilesList.length
+    ? leadFilesList
+        .map((fmeta) => {
+          const href = String(fmeta?.url || fmeta?.data || "").trim();
+          if (!href) return "";
+
+          return `<a href="${href}" target="_blank" rel="noopener">${esc(fmeta?.name || "File")}</a>`;
+        })
+        .filter(Boolean)
+        .join("<br/>")
+    : "-";
 
     const mapAddress = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
       lead.address || ""
@@ -697,8 +701,9 @@ ${
         ${note.files
           .map((fname) => {
             const file = (lead.files || []).find((f) => f.name === fname);
-return file
-  ? `<a href="${file.url || file.data || "#"}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
+const href = String(file?.url || file?.data || "").trim();
+return href
+  ? `<a href="${href}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
   : "";
           })
           .join("<br/>")}
@@ -855,9 +860,10 @@ if (fileEl) {
                         ${note.files
                           .map((fname) => {
                             const file = (lead.files || []).find((f) => f.name === fname);
-                            return file
-                              ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
-                              : "";
+const href = String(file?.url || file?.data || "").trim();
+return href
+  ? `<a href="${href}" target="_blank" rel="noopener" download="${esc(file.name)}">${esc(file.name)}</a>`
+  : "";
                           })
                           .join("<br/>")}
                       </div>
