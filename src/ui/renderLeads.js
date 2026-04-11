@@ -784,6 +784,8 @@ if (fileEl) {
           reader.onload = () => {
             pendingFiles.push({
               name: f.name,
+              size: f.size,
+              type: f.type,
               data: reader.result,
             });
             resolve();
@@ -842,7 +844,7 @@ if (fileEl) {
       cancelBtn.style.background = "#1f2937";
       cancelBtn.style.color = "#fff";
 
-      const renderNotesExisting = () => {
+            const renderNotesExisting = () => {
         if (!existingEl) return;
 
         existingEl.innerHTML =
@@ -880,22 +882,22 @@ if (fileEl) {
                       </div>
                       <pre>${esc(note.text || "")}</pre>
 
-${
-  Array.isArray(note.files) && note.files.length
-    ? `
-      <div class="lead-note-files">
-        ${note.files
-          .map((fname) => {
-            const file = (lead.files || []).find((f) => f.name === fname);
-            return file
-              ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
-              : "";
-          })
-          .join("<br/>")}
-      </div>
-    `
-    : ""
-}
+                      ${
+                        Array.isArray(note.files) && note.files.length
+                          ? `
+                            <div class="lead-note-files">
+                              ${note.files
+                                .map((fname) => {
+                                  const file = (lead.files || []).find((f) => f.name === fname);
+                                  return file
+                                    ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
+                                    : "";
+                                })
+                                .join("<br/>")}
+                            </div>
+                          `
+                          : ""
+                      }
                     </div>
                   `
                 )
@@ -1024,6 +1026,17 @@ ${
 
         const prevNotes = lead.notes.map((note) => ({ ...note }));
 
+        lead.files = Array.isArray(lead.files) ? lead.files : [];
+
+        const attachedFiles = [];
+
+        if (pendingFiles.length) {
+          pendingFiles.forEach((f) => {
+            lead.files.push(f);
+            attachedFiles.push(f.name);
+          });
+        }
+
         if (editNoteId) {
           const target = lead.notes.find(
             (note) => String(note.id || "") === editNoteId
@@ -1036,6 +1049,9 @@ ${
           target.text = noteText;
           target.tag = selectedTag;
           target.editedAt = timestamp;
+          target.files = Array.isArray(target.files) ? target.files : [];
+          target.files.push(...attachedFiles);
+
           highlightedNoteId = String(target.id || "");
 
           addAudit("lead_note_edited", {
@@ -1044,24 +1060,13 @@ ${
             userAction: "note_edited",
           });
         } else {
-          const attachedFiles = [];
-
-if (pendingFiles.length) {
-  lead.files = Array.isArray(lead.files) ? lead.files : [];
-
-  pendingFiles.forEach((f) => {
-    lead.files.push(f);
-    attachedFiles.push(f.name);
-  });
-}
-
-const newNote = {
-  id: `note-${Date.now()}`,
-  text: noteText,
-  at: timestamp,
-  tag: selectedTag,
-  files: attachedFiles,
-};
+          const newNote = {
+            id: `note-${Date.now()}`,
+            text: noteText,
+            at: timestamp,
+            tag: selectedTag,
+            files: attachedFiles,
+          };
 
           lead.notes.push(newNote);
           highlightedNoteId = String(newNote.id || "");
@@ -1093,11 +1098,11 @@ const newNote = {
             delete inputEl.dataset.editNoteId;
           }
 
-          if (tagEl) {
+                    if (tagEl) {
             tagEl.value = "general";
           }
 
-pendingFiles = [];
+          pendingFiles = [];
 
           confirmBtn.textContent = "Save Note";
           toast(el, editNoteId ? "Note updated." : "Note added.", "success");
