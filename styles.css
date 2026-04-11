@@ -972,21 +972,24 @@ tbody tr:hover td {
 }
 
 /* ===============================
-   LEAD FILES SCROLL FIX
+   LEAD FILES SCROLL (CARD LAYOUT)
 =============================== */
 
-.leads-table td.files-col {
+.lead-files-container {
   max-height: 100px;
   overflow-y: auto;
-  display: block;
   padding-right: 6px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.leads-table td.files-col::-webkit-scrollbar {
+.lead-files-container::-webkit-scrollbar {
   width: 6px;
 }
 
-.leads-table td.files-col::-webkit-scrollbar-thumb {
+.lead-files-container::-webkit-scrollbar-thumb {
   background: rgba(102, 252, 241, 0.35);
   border-radius: 6px;
 }
