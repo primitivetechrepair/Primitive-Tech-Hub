@@ -741,6 +741,7 @@ ${
   multiple
   style="margin-bottom:8px;"
 />
+<div id="leadNoteSelectedFiles" class="muted" style="margin-bottom:8px;">No files selected</div>
 
 <textarea
   id="leadNoteInput"
@@ -767,7 +768,7 @@ const cancelBtn = document.getElementById("modalCancelBtn");
 const existingEl = document.getElementById("leadNotesExisting");
 const inputEl = document.getElementById("leadNoteInput");
 const tagEl = document.getElementById("leadNoteTag");
-const fileEl = document.getElementById("leadNoteFile");
+const selectedFilesLabelId = "leadNoteSelectedFiles";
 let pendingFiles = [];
 let highlightedNoteId = "";
 
@@ -798,7 +799,14 @@ if (fileEl) {
       }
     }
 
-    fileEl.value = "";
+    const selectedFilesEl = document.getElementById(selectedFilesLabelId);
+if (selectedFilesEl) {
+  selectedFilesEl.textContent = pendingFiles.length
+    ? pendingFiles.map((f) => f.name).join(", ")
+    : "No files selected";
+}
+
+fileEl.value = "";
   };
 }
 
@@ -845,65 +853,66 @@ if (fileEl) {
       cancelBtn.style.color = "#fff";
 
             const renderNotesExisting = () => {
-        if (!existingEl) return;
+  if (!existingEl) return;
 
-        existingEl.innerHTML =
-          Array.isArray(lead.notes) && lead.notes.length
-            ? lead.notes
-                .slice()
-                .reverse()
-                .map(
-                  (note) => `
-                    <div class="lead-note-entry${String(note.id || "") === highlightedNoteId ? " lead-note-entry--flash" : ""}" data-note-id="${esc(String(note.id || ""))}">
-                      <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-                        <div class="lead-note-meta">
-                          <span class="muted">[${esc(note.at || "")}]</span>
-                          <span class="lead-note-tag-badge lead-note-tag-badge--${esc(String(note.tag || "general").toLowerCase())}">${esc(note.tag || "general")}</span>
-                          ${note.editedAt ? `<span class="lead-note-edited-badge">Edited</span>` : ""}
-                        </div>
-                        <div style="display:flex;gap:6px;">
-                          <button
-                            type="button"
-                            class="tiny lead-action-btn editLeadNoteBtn"
-                            data-note-id="${esc(String(note.id || ""))}"
-                            title="Edit note"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            class="tiny lead-action-btn deleteLeadNoteBtn"
-                            data-note-id="${esc(String(note.id || ""))}"
-                            title="Delete note"
-                          >
-                            Delete
-                          </button>
-                        </div>
+  existingEl.innerHTML =
+    Array.isArray(lead.notes) && lead.notes.length
+      ? lead.notes
+          .slice()
+          .reverse()
+          .map(
+            (note) => `
+              <div class="lead-note-entry${String(note.id || "") === highlightedNoteId ? " lead-note-entry--flash" : ""}" data-note-id="${esc(String(note.id || ""))}">
+                <div class="lead-note-entry-head" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                  <div class="lead-note-meta">
+                    <span class="muted">[${esc(note.at || "")}]</span>
+                    <span class="lead-note-tag-badge lead-note-tag-badge--${esc(String(note.tag || "general").toLowerCase())}">${esc(note.tag || "general")}</span>
+                    ${note.editedAt ? `<span class="lead-note-edited-badge">Edited</span>` : ""}
+                  </div>
+                  <div style="display:flex;gap:6px;">
+                    <button
+                      type="button"
+                      class="tiny lead-action-btn editLeadNoteBtn"
+                      data-note-id="${esc(String(note.id || ""))}"
+                      title="Edit note"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      class="tiny lead-action-btn deleteLeadNoteBtn"
+                      data-note-id="${esc(String(note.id || ""))}"
+                      title="Delete note"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+
+                <pre>${esc(note.text || "")}</pre>
+
+                ${
+                  Array.isArray(note.files) && note.files.length
+                    ? `
+                      <div class="lead-note-files">
+                        ${note.files
+                          .map((fname) => {
+                            const file = (lead.files || []).find((f) => f.name === fname);
+                            return file
+                              ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
+                              : "";
+                          })
+                          .join("<br/>")}
                       </div>
-                      <pre>${esc(note.text || "")}</pre>
-
-                      ${
-                        Array.isArray(note.files) && note.files.length
-                          ? `
-                            <div class="lead-note-files">
-                              ${note.files
-                                .map((fname) => {
-                                  const file = (lead.files || []).find((f) => f.name === fname);
-                                  return file
-                                    ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
-                                    : "";
-                                })
-                                .join("<br/>")}
-                            </div>
-                          `
-                          : ""
-                      }
-                    </div>
-                  `
-                )
-                .join("")
-            : "<div class='muted'>No notes yet.</div>";
-      };
+                    `
+                    : ""
+                }
+              </div>
+            `
+          )
+          .join("")
+      : "<div class='muted'>No notes yet.</div>";
+};
 
       const scrollToNewestNote = () => {
         if (!existingEl) return;
@@ -1115,6 +1124,11 @@ if (editNoteId) {
           }
 
           pendingFiles = [];
+
+          const selectedFilesEl = document.getElementById(selectedFilesLabelId);
+if (selectedFilesEl) {
+  selectedFilesEl.textContent = "No files selected";
+}
 
           confirmBtn.textContent = "Save Note";
           toast(el, editNoteId ? "Note updated." : "Note added.", "success");
