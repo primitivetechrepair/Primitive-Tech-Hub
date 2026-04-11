@@ -1013,6 +1013,23 @@ tbody tr:hover td {
   border-radius: 6px;
 }
 
+.lead-files-row {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 10px;
+}
+
+.lead-files-row strong {
+  padding-top: 2px;
+}
+
+.lead-files-row .lead-files-container {
+  height: 72px;
+  min-height: 72px;
+  max-height: 72px;
+}
+
 /* =============================== 11.5) Inventory table — match Leads behavior =============================== */
 .inventory-table {
   table-layout: auto !important;

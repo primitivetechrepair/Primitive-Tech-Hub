@@ -323,10 +323,10 @@ if (isCollapsed(lead.leadID)) {
             <button class="tiny lead-action-btn part-btn useForRepairBtn" title="Add Part">🧩 Add Part</button>
           </div>
 
-          <div class="lead-card-row">
-            <strong>Files:</strong>
-            <div class="lead-files-container">${files}</div>
-          </div>
+          <div class="lead-card-row lead-files-row">
+  <strong>Files:</strong>
+  <div class="lead-files-container">${files}</div>
+</div>
 
           <div class="lead-card-row">
             <strong>Date Reported:</strong>
