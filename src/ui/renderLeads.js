@@ -683,6 +683,23 @@ if (notesPreviewBtn) {
                               </div>
                             </div>
                             <pre>${esc(note.text || "")}</pre>
+
+${
+  Array.isArray(note.files) && note.files.length
+    ? `
+      <div class="lead-note-files">
+        ${note.files
+          .map((fname) => {
+            const file = (lead.files || []).find((f) => f.name === fname);
+            return file
+              ? `<a href="${file.data}" download="${esc(file.name)}">${esc(file.name)}</a>`
+              : "";
+          })
+          .join("<br/>")}
+      </div>
+    `
+    : ""
+}
                           </div>
                         `
                       )
@@ -718,8 +735,15 @@ if (notesPreviewBtn) {
       </select>
     </div>
 
-    <textarea
-      id="leadNoteInput"
+    <input
+  type="file"
+  id="leadNoteFile"
+  multiple
+  style="margin-bottom:8px;"
+/>
+
+<textarea
+  id="leadNoteInput"
       placeholder="Add a new note..."
       style="
         display:block;
@@ -739,11 +763,44 @@ if (notesPreviewBtn) {
     });
 
     const confirmBtn = document.getElementById("modalConfirmBtn");
-    const cancelBtn = document.getElementById("modalCancelBtn");
-    const existingEl = document.getElementById("leadNotesExisting");
-    const inputEl = document.getElementById("leadNoteInput");
-    const tagEl = document.getElementById("leadNoteTag");
-    let highlightedNoteId = "";
+const cancelBtn = document.getElementById("modalCancelBtn");
+const existingEl = document.getElementById("leadNotesExisting");
+const inputEl = document.getElementById("leadNoteInput");
+const tagEl = document.getElementById("leadNoteTag");
+const fileEl = document.getElementById("leadNoteFile");
+let pendingFiles = [];
+let highlightedNoteId = "";
+
+if (fileEl) {
+  fileEl.onchange = async () => {
+    const files = Array.from(fileEl.files || []);
+    if (!files.length) return;
+
+    for (const f of files) {
+      try {
+        const reader = new FileReader();
+
+        await new Promise((resolve, reject) => {
+          reader.onload = () => {
+            pendingFiles.push({
+              name: f.name,
+              data: reader.result,
+            });
+            resolve();
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(f);
+        });
+
+      } catch (err) {
+        console.error("File read error:", err);
+      }
+    }
+
+    fileEl.value = "";
+  };
+}
+
 
     if (confirmBtn && cancelBtn) {
       confirmBtn.dataset.keepOpen = "true";
@@ -941,13 +998,24 @@ if (notesPreviewBtn) {
             userAction: "note_edited",
           });
         } else {
-          const newNote = {
-            id: `note-${Date.now()}`,
-            text: noteText,
-            at: timestamp,
-            tag: selectedTag,
-            files: [],
-          };
+          const attachedFiles = [];
+
+if (pendingFiles.length) {
+  lead.files = Array.isArray(lead.files) ? lead.files : [];
+
+  pendingFiles.forEach((f) => {
+    lead.files.push(f);
+    attachedFiles.push(f.name);
+  });
+}
+
+const newNote = {
+  id: `note-${Date.now()}`,
+  text: noteText,
+  at: timestamp,
+  tag: selectedTag,
+  files: attachedFiles,
+};
 
           lead.notes.push(newNote);
           highlightedNoteId = String(newNote.id || "");
@@ -982,6 +1050,8 @@ if (notesPreviewBtn) {
           if (tagEl) {
             tagEl.value = "general";
           }
+
+pendingFiles = [];
 
           confirmBtn.textContent = "Save Note";
           toast(el, editNoteId ? "Note updated." : "Note added.", "success");
