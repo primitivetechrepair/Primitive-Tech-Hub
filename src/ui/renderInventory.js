@@ -357,26 +357,26 @@ if (isDesktop) {
         <input class="inline-edit inline-supplier" type="text" value="${esc(item.supplier || "")}" />
       </div>
 
-      <div class="inv-field inv-field--full">
-        <span>Part Type</span>
-        <select class="inline-edit inline-partType">
-          ${partTypeOptions.map(option =>
-            `<option value="${esc(option)}" ${
-              String(item.partType || "Other") === option ? "selected" : ""
-            }>${esc(option)}</option>`
-          ).join("")}
-        </select>
-      </div>
-
       <div class="inv-field">
-        <span>Color</span>
-        <input class="inline-edit inline-color" type="text" value="${esc(item.color || "")}" />
-      </div>
+  <span>Part Type</span>
+  <select class="inline-edit inline-partType">
+    ${partTypeOptions.map(option =>
+      `<option value="${esc(option)}" ${
+        String(item.partType || "Other") === option ? "selected" : ""
+      }>${esc(option)}</option>`
+    ).join("")}
+  </select>
+</div>
 
-      <div class="inv-field inv-field--full">
-        <span>Notes</span>
-        <input class="inline-edit inline-notes" type="text" value="${esc(item.notes || "")}" />
-      </div>
+<div class="inv-field">
+  <span>Color</span>
+  <input class="inline-edit inline-color" type="text" value="${esc(item.color || "")}" />
+</div>
+
+<div class="inv-field inv-field--full">
+  <span>Notes</span>
+  <input class="inline-edit inline-notes" type="text" value="${esc(item.notes || "")}" />
+</div>
 
     </div>
 
