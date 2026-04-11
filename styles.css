@@ -2282,10 +2282,10 @@ tbody tr:hover td {
 
 /* real settings layout */
 #settingsSection .form-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  align-items: stretch;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
 }
 
 /* keep legacy support if used elsewhere */
@@ -2298,13 +2298,15 @@ tbody tr:hover td {
 }
 
 /* top 3 manage controls */
-#settingsSection .settings-manage-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+#settingsSection .form-grid > .settings-manage-row {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-items: center !important;
+  gap: 10px !important;
 
   min-width: 0;
+  width: 100%;
+  margin: 0;
   padding: 12px 14px;
   border-radius: 14px;
   background: rgba(255,255,255,0.035);
@@ -2314,6 +2316,7 @@ tbody tr:hover td {
 
 #settingsSection .settings-manage-label {
   min-width: 0;
+  width: 100%;
   flex: 1;
   text-align: left;
   color: var(--muted);
@@ -2329,22 +2332,24 @@ tbody tr:hover td {
   line-height: 1.2;
 }
 
-#settingsSection .settings-manage-row button {
-  width: auto;
+#settingsSection .form-grid > .settings-manage-row button {
+  width: auto !important;
   min-width: 110px;
-  margin: 0;
+  margin: 0 !important;
+  justify-self: end;
 }
 
 /* bottom 3 settings fields */
 #settingsSection .form-grid > label {
   min-width: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
   gap: 6px;
   text-align: left;
-  margin-bottom: 0;
+  margin: 0;
 
   padding: 10px 12px;
   border-radius: 14px;
@@ -2376,15 +2381,15 @@ tbody tr:hover td {
 =============================== */
 
 #settingsSection > .row.wrap {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  align-items: stretch;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
 }
 
 #settingsSection > .row.wrap button {
-  width: 100%;
-  margin: 0;
+  width: 100% !important;
+  margin: 0 !important;
 }
 
 /* Line separator */
@@ -2422,17 +2427,28 @@ tbody tr:hover td {
 
 @media (max-width: 900px) {
   #settingsSection .form-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 
   #settingsSection > .row.wrap {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  #settingsSection .form-grid > .settings-manage-row {
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+  }
+
+  #settingsSection .form-grid > .settings-manage-row button {
+    width: auto !important;
+    justify-self: end;
   }
 }
 
 @media (max-width: 720px) {
   #settingsSection .form-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
   }
 
   .form-grid-row {
@@ -2444,15 +2460,56 @@ tbody tr:hover td {
     flex: 1 1 100%;
   }
 
-  #settingsSection .settings-manage-row {
-    flex-direction: column;
-    align-items: stretch;
+  #settingsSection .form-grid > .settings-manage-row {
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+  }
+
+  #settingsSection .form-grid > .settings-manage-row button {
+    width: auto !important;
+    min-width: 92px;
+    justify-self: end;
+  }
+
+  #settingsSection .form-grid > label {
+    padding: 10px !important;
+  }
+
+  #settingsSection .settings-manage-label strong,
+  #settingsSection label {
+    font-size: 10px;
+  }
+
+  #settingsSection input,
+  #settingsSection select {
+    min-height: 38px;
+    padding: 10px;
+  }
+
+  #settingsSection > .row.wrap {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  #settingsSection > .row.wrap button {
+    font-size: 11px;
+    padding: 10px 8px;
+    min-height: 38px;
   }
 }
 
 @media (max-width: 640px) {
+  #settingsSection .form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
   #settingsSection > .row.wrap {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  #settingsSection > .row.wrap button {
+    font-size: 10px;
+    padding: 10px 6px;
   }
 }
 
