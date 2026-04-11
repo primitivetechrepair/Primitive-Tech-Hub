@@ -1019,6 +1019,8 @@ lead.files = Array.isArray(lead.files) ? lead.files : [];
 const attachedFiles = [];
 
 if (pendingFiles.length) {
+  console.log("[DEBUG] pendingFiles before save:", pendingFiles);
+
   pendingFiles.forEach((f) => {
     const exists = lead.files.some(
       (existing) =>
@@ -1034,6 +1036,9 @@ if (pendingFiles.length) {
 
     attachedFiles.push(f.name);
   });
+
+  console.log("[DEBUG] attachedFiles for note:", attachedFiles);
+  console.log("[DEBUG] lead.files after merge:", lead.files);
 }
 
 if (editNoteId) {
