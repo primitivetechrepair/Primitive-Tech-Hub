@@ -4802,7 +4802,7 @@ table thead th {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: 12px;
   row-gap: 12px;
-  padding: 6px;
+  padding: 10px;
   width: 100% !important;
   align-items: start;
 }
