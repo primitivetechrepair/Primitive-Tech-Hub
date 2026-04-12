@@ -66,17 +66,18 @@ toolbar.innerHTML = `
   </div>
 `;
 
-    const form = document.getElementById("inventoryForm");
+const form = document.getElementById("inventoryForm");
+const toolbar = document.querySelector(".inventory-toolbar");
 
-    // ===============================
-// ADD "Add Part" TITLE ABOVE FORM
 // ===============================
-if (form && !document.getElementById("inventoryFormTitle")) {
+// ADD "Add Part" TITLE BELOW TOOLBAR
+// ===============================
+if (form && toolbar && !document.getElementById("inventoryFormTitle")) {
   const title = document.createElement("h2");
   title.id = "inventoryFormTitle";
   title.textContent = "Add Part";
 
-  form.parentElement.insertBefore(title, form);
+  toolbar.insertAdjacentElement("afterend", title);
 }
 
 if (form && form.parentElement) {
