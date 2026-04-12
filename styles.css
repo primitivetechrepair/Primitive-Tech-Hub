@@ -261,56 +261,111 @@ table {
   min-width: 0;
 }
 
-.analytics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+/* ===============================
+   ANALYTICS GRID (PREMIUM CARDS)
+=============================== */
+
+/* ===============================
+   DASHBOARD ANALYTICS GRID
+=============================== */
+
+#dashboardSection .analytics-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-top: 18px !important;
 }
 
-.analytics-grid > div {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: var(--radius);
-  padding: var(--space-2);
+#dashboardSection .analytics-grid > div {
+  position: relative;
+  overflow: hidden;
+
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 260px;
+
+  padding: 14px !important;
+  border-radius: 18px !important;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.96),
+    rgba(10, 15, 24, 0.99)
+  ) !important;
+
+  border: 1px solid rgba(102,252,241,0.16) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.03),
+    0 14px 28px rgba(0,0,0,0.34) !important;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease !important;
 }
 
-.analytics-grid > div {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: var(--radius);
-  padding: var(--space-2);
+#dashboardSection .analytics-grid > div::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(102,252,241,0.06),
+    transparent 30%,
+    transparent 70%,
+    rgba(69,162,158,0.05)
+  );
 }
 
-/* ===== Dashboard Tracker Totals ===== */
-.tracker-total {
-  list-style: none;
-  margin: 12px auto 0 auto;
-  padding: 10px 12px;
-  border-top: 1px solid rgba(102, 252, 241, 0.25);
+#dashboardSection .analytics-grid > div:hover {
+  transform: translateY(-2px);
+  border-color: rgba(102,252,241,0.24) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 0 0 1px rgba(102,252,241,0.06),
+    0 0 16px rgba(102,252,241,0.08),
+    0 18px 34px rgba(0,0,0,0.40) !important;
+}
 
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--heading);
+#dashboardSection .analytics-grid > div > * {
+  position: relative;
+  z-index: 1;
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
+#dashboardSection .analytics-grid h4,
+#dashboardSection .parts-cost-card h4 {
   width: 100%;
-  max-width: 320px;
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+
+  text-align: left !important;
+  background: none !important;
+  border-radius: 0 !important;
+
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: var(--heading) !important;
 }
 
-.analytics-grid .tracker-total {
-  background: rgba(102, 252, 241, 0.08);
-  border-radius: 12px;
-  padding: 10px 12px;
+/* scroll area inside analytics cards */
+#dashboardSection .analytics-grid ul {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 190px;
+  overflow: auto;
+
+  margin: 0;
+  padding: 0 2px 0 0 !important;
+  list-style: none !important;
 }
 
-.parts-cost-card h4 {
-  width: 100%;
-  text-align: center;
-  margin: 0 0 var(--space-2);
-}
-
-.analytics-grid ul,
+/* keep these other sections unchanged */
 #auditLog,
 #customerHistory {
   max-height: 184px;
@@ -321,27 +376,111 @@ table {
 #profitList,
 #laborList,
 #partsCostList {
-  padding-left: 0;
-  list-style: none;
+  padding-left: 0 !important;
+  list-style: none !important;
 }
 
-#profitList .tracker-total,
-#laborList .tracker-total {
-  list-style: none;
-  margin: 12px auto 0 auto;
+/* analytics list rows */
+#dashboardSection .analytics-grid ul li:not(.tracker-total) {
+  margin-bottom: 8px;
   padding: 10px 12px;
-  border-top: 1px solid rgba(102, 252, 241, 0.25);
+  border-radius: 12px;
 
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--heading);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+#dashboardSection .analytics-grid ul li:not(.tracker-total):last-child {
+  margin-bottom: 0;
+}
+
+/* sticky totals */
+#dashboardSection .tracker-total {
+  list-style: none;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+
+  margin: 12px 0 0 0 !important;
+  padding: 12px 14px !important;
 
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
 
-  width: 100%;
+  width: 100% !important;
+  max-width: none !important;
+
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--heading);
+
+  border-top: 1px solid rgba(102,252,241,0.22);
+  border-radius: 14px 14px 12px 12px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(18, 28, 38, 0.96),
+    rgba(10, 16, 24, 0.99)
+  ) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 -4px 14px rgba(0,0,0,0.24) !important;
+}
+
+#dashboardSection #profitList .tracker-total,
+#dashboardSection #laborList .tracker-total,
+#dashboardSection #partsCostList .tracker-total {
+  margin-top: 12px !important;
+}
+
+@media (max-width: 900px) {
+  #dashboardSection .analytics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  #dashboardSection .analytics-grid > div {
+    min-height: 240px;
+  }
+
+  #dashboardSection .analytics-grid ul {
+    max-height: 180px;
+  }
+
+  #dashboardSection .tracker-total {
+    font-size: 16px;
+    padding: 11px 12px !important;
+  }
+}
+
+/* ===============================
+   MOBILE
+=============================== */
+
+@media (max-width: 900px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .analytics-grid > div {
+    min-height: 240px;
+  }
+
+  .analytics-grid ul {
+    max-height: 180px;
+  }
+
+  .tracker-total {
+    font-size: 16px;
+    padding: 11px 12px;
+  }
 }
 
 .span-2 {
