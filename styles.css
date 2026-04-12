@@ -2518,11 +2518,11 @@ tbody tr:hover td {
   }
 
   #settingsSection .settings-manage-label strong {
-  font-size: 9px;
+  font-size: 9px !important; /* 🔧 force smaller */
 }
 
 #settingsSection label {
-  font-size: 9px !important;
+  font-size: 10px;
 }
 
   #settingsSection input,
