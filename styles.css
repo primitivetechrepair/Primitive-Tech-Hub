@@ -1087,33 +1087,54 @@ tbody tr:hover td {
 /* Inventory and Leads Search input fields */
 .inventory-search-row .search-wrapper input,
 .lead-search-row .search-wrapper input {
-  padding-left: calc(var(--space-5) + 1px + 1px) !important;  /* Adds space for the icon and shifts text to the right */
-  margin-bottom: 50px !important;
   width: 100%;
-  border-radius: var(--radius);
-  padding: var(--space-2) var(--space-2);
-  margin-bottom: var(--space-2);
-  background: #373F47;
-  color: var(--text-color);
+  min-height: 46px;
+
+  padding: 12px 14px 12px 44px !important;
+  margin-bottom: var(--space-2) !important;
+
+  border-radius: 16px !important;
+  border: 1px solid rgba(102,252,241,0.18) !important;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.96),
+    rgba(10, 15, 24, 0.98)
+  ) !important;
+
+  color: var(--text-color) !important;
   font-size: 14px;
-  transition: all 0.3s ease;  /* Smooth transitions for focus */
-  
-  /* Add the line separator */
-  border-bottom: 2px solid #66fcf1; /* Adjust the color and thickness */
+  letter-spacing: 0.02em;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.22);
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
 /* Input field focus state */
 .inventory-search-row .search-wrapper input:focus,
 .lead-search-row .search-wrapper input:focus {
   outline: none;
-  border-color: #66fcf1;
-  box-shadow: 0 0 0 3px rgba(102,252,241,.12);
+  border-color: rgba(102,252,241,0.35) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 18px rgba(102,252,241,0.10),
+    0 10px 22px rgba(0,0,0,0.28) !important;
 }
 
 /* Adjust placeholder text color */
 .inventory-search-row .search-wrapper input::placeholder,
 .lead-search-row .search-wrapper input::placeholder {
   color: var(--muted);
+  opacity: 0.82;
 }
 
 /* =============================== 10) Inventory: Notes + Submit row =============================== */
@@ -4823,54 +4844,98 @@ tbody tr:hover td {
 }
 
 /* =========================================================
-   INVENTORY SECTION — PREMIUM TABS + EVEN FILTER SPACING
+   INVENTORY SECTION — TOOLBAR / TABS / FILTERS (PREMIUM)
 ========================================================= */
 
-/* Toolbar container spacing */
 .inventory-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
   margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 20px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.97),
+    rgba(10, 15, 24, 0.99)
+  );
+
+  border: 1px solid rgba(102,252,241,0.18);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 14px 30px rgba(0,0,0,0.34);
+
+  position: relative;
+  overflow: hidden;
 }
 
-/* =========================================================
-   PREMIUM INVENTORY TABS (MOBILE FIRST)
-========================================================= */
+.inventory-toolbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 
-/* Mobile → always 3 per row */
+  background: linear-gradient(
+    135deg,
+    rgba(102,252,241,0.06),
+    transparent 28%,
+    transparent 72%,
+    rgba(69,162,158,0.05)
+  );
+}
+
+.inventory-toolbar > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* tabs */
 .inventory-tabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 
 .inv-tab {
   width: 100%;
   min-width: 0;
-  min-height: 40px;
+  min-height: 42px;
   margin: 0 !important;
-  padding: 8px 10px !important;
-
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 999px !important;
-  background: rgba(255,255,255,0.03) !important;
-  color: #ccc !important;
-
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-align: center;
-
-  box-shadow: none !important;
-  backdrop-filter: blur(6px);
-  transition: all 0.2s ease;
-  cursor: pointer;
+  padding: 10px 12px !important;
 
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.inv-tab {
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 999px !important;
+
+  background: rgba(255,255,255,0.035) !important;
+  color: var(--text-color) !important;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  letter-spacing: 0.02em;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.02),
+    0 6px 14px rgba(0,0,0,0.18) !important;
+
+  backdrop-filter: blur(6px);
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+  cursor: pointer;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -4879,31 +4944,72 @@ tbody tr:hover td {
 .inv-tab:hover {
   background: rgba(255,255,255,0.08) !important;
   color: #fff !important;
+  border-color: rgba(102,252,241,0.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.06),
+    0 8px 18px rgba(0,0,0,0.22) !important;
   transform: translateY(-1px);
 }
 
 .inv-tab.active {
-  background: linear-gradient(135deg, #00e5ff, #00bcd4) !important;
-  color: #000 !important;
-  border-color: transparent !important;
+  background: linear-gradient(
+    180deg,
+    rgba(102,252,241,0.18),
+    rgba(69,162,158,0.22)
+  ) !important;
+  color: #fff !important;
+  border-color: rgba(102,252,241,0.34) !important;
   box-shadow:
-    0 0 0 1px rgba(0,229,255,0.4),
-    0 6px 16px rgba(0,229,255,0.25) !important;
+    0 0 0 1px rgba(102,252,241,0.10),
+    0 0 16px rgba(102,252,241,0.12),
+    0 8px 18px rgba(0,0,0,0.22) !important;
   transform: translateY(-1px);
 }
 
 .inv-tab:active {
-  transform: scale(0.96);
+  transform: scale(0.97);
 }
 
-/* =========================================================
-   INVENTORY TOOLBAR CONTROLS — EVEN SPACING
-========================================================= */
-
-.inventory-toolbar-controls {
+/* sort row */
+.inventory-toolbar-sort-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
+}
+
+.inventory-sort-filter-wrap--full {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.inventory-sort-filter-wrap--full span,
+.inventory-toolbar-controls > label span {
+  display: block;
+  margin-bottom: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* device / brand / stock row */
+.inventory-toolbar-controls {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
   align-items: end;
   padding-top: 10px;
   border-top: 1px solid rgba(255,255,255,0.06);
@@ -4913,58 +5019,78 @@ tbody tr:hover td {
   margin: 0;
   width: 100%;
   min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
 
-.inventory-toolbar-controls > label span {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-}
-
+.inventory-sort-filter-wrap--full select,
 .inventory-toolbar-controls select {
   width: 100%;
   min-width: 0;
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: 12px;
+  margin: 0 !important;
+  padding: 10px 12px !important;
+  min-height: 42px;
+
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--text-color) !important;
+
+  box-shadow: none !important;
 }
 
-/* =========================================================
-   DESKTOP ONLY
-========================================================= */
+.inventory-sort-filter-wrap--full select:focus,
+.inventory-toolbar-controls select:focus {
+  border-color: rgba(102,252,241,0.35) !important;
+  box-shadow:
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 14px rgba(102,252,241,0.08) !important;
+}
+
+/* desktop */
 @media (min-width: 701px) {
   .inventory-tabs {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
   }
 
   .inventory-tabs .inv-tab {
     min-height: 42px;
-    padding: 10px !important;
     font-size: 13px;
   }
 }
 
-/* =========================================================
-   MOBILE ONLY
-========================================================= */
+/* mobile */
 @media (max-width: 700px) {
+  .inventory-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .inventory-toolbar-controls {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 10px;
     padding-top: 8px;
   }
 
+  .inventory-sort-filter-wrap--full span,
   .inventory-toolbar-controls > label span {
     font-size: 11px;
-    margin-bottom: 5px;
   }
 
+  .inventory-sort-filter-wrap--full select,
   .inventory-toolbar-controls select {
     font-size: 13px;
-    padding: 10px 12px;
+    padding: 10px 12px !important;
   }
 }
 
