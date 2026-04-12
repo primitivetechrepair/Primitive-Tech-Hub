@@ -28,7 +28,6 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
 
   if (!toolbar) {
     toolbar = document.createElement("div");
-    toolbar.className = "inventory-toolbar";
 toolbar.className = "inventory-toolbar";
 toolbar.innerHTML = `
   <div class="inventory-toolbar-sort-row">
@@ -67,10 +66,17 @@ toolbar.innerHTML = `
   </div>
 `;
 
-    el.inventoryBody.parentElement.parentElement.insertBefore(
-      toolbar,
-      el.inventoryBody.parentElement
-    );
+    const form = document.getElementById("inventoryForm");
+
+if (form && form.parentElement) {
+  form.parentElement.insertBefore(toolbar, form);
+} else {
+  // fallback (your original behavior)
+  el.inventoryBody.parentElement.parentElement.insertBefore(
+    toolbar,
+    el.inventoryBody.parentElement
+  );
+}
 
     el.inventoryToolbar = toolbar;
   }
