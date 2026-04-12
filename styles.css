@@ -2318,15 +2318,18 @@ tbody tr:hover td {
 
 /* top 3 manage controls */
 #settingsSection .form-grid > .settings-manage-row {
-  display: grid !important;
-  grid-template-columns: 1fr auto !important;
+  display: flex !important;
+  flex-direction: column !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 10px !important;
+
+  text-align: center;
 
   min-width: 0;
   width: 100%;
   margin: 0;
-  padding: 12px 14px;
+  padding: 14px 12px;
   border-radius: 14px;
   background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.08);
@@ -2336,8 +2339,7 @@ tbody tr:hover td {
 #settingsSection .settings-manage-label {
   min-width: 0;
   width: 100%;
-  flex: 1;
-  text-align: left;
+  text-align: center;
   color: var(--muted);
 }
 
@@ -2353,9 +2355,8 @@ tbody tr:hover td {
 
 #settingsSection .form-grid > .settings-manage-row button {
   width: auto !important;
-  min-width: 110px;
-  margin: 0 !important;
-  justify-self: end;
+  min-width: 120px;
+  margin: 0 auto !important;
 }
 
 /* bottom 3 settings fields */
