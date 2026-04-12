@@ -4513,6 +4513,12 @@ tbody tr:hover td {
   justify-content: center;
 }
 
+.inv-tab {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .inv-tab:hover {
   background: rgba(255,255,255,0.08) !important;
   color: #fff !important;
@@ -6251,6 +6257,6 @@ tbody tr:hover td {
 
 @media (max-width: 600px) {
   .inventory-tabs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
