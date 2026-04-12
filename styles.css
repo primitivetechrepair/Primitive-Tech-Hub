@@ -6090,3 +6090,146 @@ tbody tr:hover td {
     align-self: flex-start;
   }
 }
+
+/* ===============================
+   INVENTORY TOOLBAR (PREMIUM)
+=============================== */
+
+.inventory-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  margin-bottom: 18px;
+  padding: 16px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.96),
+    rgba(10, 15, 24, 0.98)
+  );
+
+  border: 1px solid rgba(102,252,241,0.18);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 14px 30px rgba(0,0,0,0.34);
+
+  position: relative;
+  overflow: hidden;
+}
+
+.inventory-toolbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    135deg,
+    rgba(102,252,241,0.06),
+    transparent 28%,
+    transparent 72%,
+    rgba(69,162,158,0.05)
+  );
+}
+
+/* ===============================
+   INVENTORY TABS
+=============================== */
+
+.inventory-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.inv-tab {
+  padding: 6px 12px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  color: var(--text-color);
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.18s ease;
+}
+
+.inv-tab:hover {
+  border-color: rgba(102,252,241,0.3);
+  background: rgba(102,252,241,0.08);
+}
+
+.inv-tab.active {
+  background: rgba(102,252,241,0.12);
+  border-color: rgba(102,252,241,0.4);
+  color: #66fcf1;
+
+  box-shadow:
+    0 0 10px rgba(102,252,241,0.18);
+}
+
+/* ===============================
+   INVENTORY FILTER CONTROLS
+=============================== */
+
+.inventory-toolbar-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.inventory-toolbar-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.inventory-toolbar-controls span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.inventory-toolbar-controls select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  border-radius: 10px;
+  padding: 6px 10px;
+
+  color: var(--text-color);
+}
+
+/* ===============================
+   MOBILE
+=============================== */
+
+@media (max-width: 900px) {
+  .inventory-toolbar-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .inventory-toolbar-controls {
+    grid-template-columns: 1fr;
+  }
+}
