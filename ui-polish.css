@@ -377,6 +377,202 @@ tbody button {
 }
 
 /* =========================================================
+   Inventory Bulk Import — Strong Override
+   Put here so it wins before the later risky mobile block.
+   ========================================================= */
+
+#inventorySection details {
+  position: relative !important;
+  overflow: hidden !important;
+
+  margin-top: 18px !important;
+  padding: 18px !important;
+  border-radius: 20px !important;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.98),
+    rgba(10, 15, 24, 0.99)
+  ) !important;
+
+  border: 1px solid rgba(102,252,241,0.18) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 14px 30px rgba(0,0,0,0.34) !important;
+}
+
+#inventorySection details::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    135deg,
+    rgba(102,252,241,0.06),
+    transparent 28%,
+    transparent 72%,
+    rgba(69,162,158,0.05)
+  );
+}
+
+#inventorySection details > * {
+  position: relative;
+  z-index: 1;
+}
+
+#inventorySection summary {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  margin: 0 !important;
+  padding: 6px 0 !important;
+
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+
+  color: var(--heading) !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+#inventorySection summary:hover {
+  color: #fff !important;
+  filter: none !important;
+}
+
+#inventorySection summary::-webkit-details-marker {
+  display: none;
+}
+
+#inventorySection details[open] summary {
+  margin-bottom: 14px !important;
+}
+
+#inventorySection details > p.muted {
+  margin: 0 0 12px 0 !important;
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  text-align: left !important;
+}
+
+#inventorySection #csvFile,
+#inventorySection #csvInput {
+  width: 100% !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--text-color) !important;
+  box-shadow: none !important;
+}
+
+#inventorySection #csvFile {
+  min-height: 44px !important;
+}
+
+#inventorySection #csvInput {
+  min-height: 120px !important;
+  resize: vertical !important;
+}
+
+#inventorySection #csvFile:hover,
+#inventorySection #csvInput:hover {
+  background: rgba(255,255,255,0.06) !important;
+}
+
+#inventorySection #csvFile:focus,
+#inventorySection #csvInput:focus {
+  border-color: rgba(102,252,241,0.35) !important;
+  box-shadow:
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 14px rgba(102,252,241,0.08) !important;
+}
+
+#inventorySection #importCsvBtn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  min-height: 42px !important;
+  margin-top: 12px !important;
+  margin-bottom: 0 !important;
+  padding: 10px 14px !important;
+
+  border-radius: 14px !important;
+  border: 1px solid rgba(102,252,241,0.22) !important;
+
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  ) !important;
+
+  color: var(--text-color) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.22) !important;
+
+  filter: none !important;
+  transform: none !important;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease !important;
+}
+
+#inventorySection #importCsvBtn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.98),
+    rgba(13, 21, 30, 1)
+  ) !important;
+
+  border-color: rgba(102,252,241,0.32) !important;
+  color: #fff !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 18px rgba(102,252,241,0.10),
+    0 10px 22px rgba(0,0,0,0.28) !important;
+
+  filter: none !important;
+  transform: translateY(-1px) !important;
+}
+
+#inventorySection #importCsvBtn:active {
+  transform: scale(0.97) !important;
+}
+
+/* =========================================================
    Mobile Uniform Layout
    ========================================================= */
 @media (max-width: 720px) {
