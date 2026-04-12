@@ -1254,33 +1254,31 @@ tbody tr:hover td {
 }
 
 /* ===============================
-   BULK IMPORT PANEL (PREMIUM UPGRADE)
+   BULK IMPORT PANEL (FORCED PREMIUM)
 =============================== */
 
 #inventorySection details {
   position: relative;
+  overflow: hidden;
 
-  margin-top: 18px;
-  padding: 16px 18px;
-  border-radius: 20px;
+  margin-top: 18px !important;
+  padding: 18px !important;
+  border-radius: 20px !important;
 
   background: linear-gradient(
     180deg,
     rgba(20, 28, 40, 0.98),
     rgba(10, 15, 24, 0.99)
-  );
+  ) !important;
 
-  border: 1px solid rgba(102,252,241,0.18);
+  border: 1px solid rgba(102,252,241,0.18) !important;
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.04),
     0 0 0 1px rgba(102,252,241,0.04),
-    0 14px 30px rgba(0,0,0,0.34);
-
-  overflow: hidden;
+    0 14px 30px rgba(0,0,0,0.34) !important;
 }
 
-/* subtle glow layer */
 #inventorySection details::before {
   content: "";
   position: absolute;
@@ -1296,37 +1294,35 @@ tbody tr:hover td {
   );
 }
 
-/* content above glow */
 #inventorySection details > * {
   position: relative;
   z-index: 1;
 }
 
-/* ===============================
-   SUMMARY HEADER
-=============================== */
-
+/* summary / title */
 #inventorySection summary {
   cursor: pointer;
   list-style: none;
 
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 
-  color: var(--heading);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  margin: 0 !important;
+  padding: 6px 0 !important;
 
-  padding: 6px 0;
+  color: var(--heading) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
 
   transition: color 0.18s ease;
 }
 
 #inventorySection summary:hover {
-  color: #fff;
+  color: #fff !important;
 }
 
 #inventorySection summary::-webkit-details-marker {
@@ -1334,83 +1330,98 @@ tbody tr:hover td {
 }
 
 #inventorySection details[open] summary {
-  margin-bottom: 14px;
+  margin-bottom: 14px !important;
 }
 
-/* ===============================
-   INPUTS + TEXTAREA
-=============================== */
+/* helper text under summary */
+#inventorySection details > p.muted {
+  margin: 0 0 12px 0 !important;
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
 
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  text-align: left !important;
+}
+
+/* file input + textarea */
 #inventorySection #csvFile,
 #inventorySection #csvInput {
-  width: 100%;
-  margin-top: 10px;
+  width: 100% !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
 
-  border-radius: 12px;
+  border-radius: 12px !important;
+  padding: 10px 12px !important;
 
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  color: var(--text-color) !important;
 
-  color: var(--text-color);
-  padding: 10px 12px;
+  box-shadow: none !important;
+}
+
+#inventorySection #csvFile {
+  min-height: 44px !important;
 }
 
 #inventorySection #csvInput {
-  min-height: 120px;
-  resize: vertical;
+  min-height: 120px !important;
+  resize: vertical !important;
 }
 
 #inventorySection #csvInput:focus,
 #inventorySection #csvFile:focus {
-  outline: none;
-
-  border-color: rgba(102,252,241,0.35);
+  outline: none !important;
+  border-color: rgba(102,252,241,0.35) !important;
 
   box-shadow:
     0 0 0 1px rgba(102,252,241,0.08),
-    0 0 14px rgba(102,252,241,0.08);
+    0 0 14px rgba(102,252,241,0.08) !important;
 }
 
-/* ===============================
-   IMPORT BUTTON (MATCH SYSTEM)
-=============================== */
-
+/* import button */
 #inventorySection #importCsvBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 
-  width: 100%;
-  min-height: 42px;
+  width: 100% !important;
+  min-height: 42px !important;
 
-  margin-top: 12px;
-  padding: 10px 14px;
+  margin-top: 12px !important;
+  margin-bottom: 0 !important;
+  padding: 10px 14px !important;
 
-  border-radius: 14px;
+  border-radius: 14px !important;
+  border: 1px solid rgba(102,252,241,0.22) !important;
 
   background: linear-gradient(
     180deg,
     rgba(18, 24, 34, 0.96),
     rgba(11, 16, 24, 0.98)
-  );
+  ) !important;
 
-  border: 1px solid rgba(102,252,241,0.22);
-  color: var(--text-color);
-
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  color: var(--text-color) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.03),
     0 0 0 1px rgba(102,252,241,0.04),
-    0 8px 18px rgba(0,0,0,0.22);
+    0 8px 18px rgba(0,0,0,0.22) !important;
 
+  transform: none !important;
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
     box-shadow 0.18s ease,
-    transform 0.12s ease;
+    transform 0.12s ease !important;
 }
 
 #inventorySection #importCsvBtn:hover {
@@ -1418,20 +1429,22 @@ tbody tr:hover td {
     180deg,
     rgba(24, 34, 46, 0.98),
     rgba(13, 21, 30, 1)
-  );
+  ) !important;
 
-  border-color: rgba(102,252,241,0.32);
-  color: #fff;
+  border-color: rgba(102,252,241,0.32) !important;
+  color: #fff !important;
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.04),
     0 0 0 1px rgba(102,252,241,0.08),
     0 0 18px rgba(102,252,241,0.10),
-    0 10px 22px rgba(0,0,0,0.28);
+    0 10px 22px rgba(0,0,0,0.28) !important;
+
+  transform: translateY(-1px) !important;
 }
 
 #inventorySection #importCsvBtn:active {
-  transform: scale(0.97);
+  transform: scale(0.97) !important;
 }
 
 /* =============================== 11) Repair Leads: Form + Table =============================== */
