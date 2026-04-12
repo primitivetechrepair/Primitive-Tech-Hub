@@ -380,25 +380,46 @@ tbody button {
    Mobile Uniform Layout
    ========================================================= */
 @media (max-width: 720px) {
-  #inventoryForm.form-grid,
+  /* Inventory form stays 2 columns on mobile */
+  #inventoryForm.form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 12px;
+  }
+
+  /* Lead form can remain single column */
   #leadForm.form-grid {
     grid-template-columns: 1fr;
     gap: 10px;
     padding: 12px;
   }
 
-  #inventoryForm.form-grid > *,
-  #leadForm.form-grid > * {
-    grid-column: 1 / -1;
+  /* Inventory fields keep flowing in 2 columns */
+  #inventoryForm.form-grid > * {
+    grid-column: auto;
     margin: 0;
   }
 
+  /* Notes full width */
+  #inventoryForm.form-grid > .span-full {
+    grid-column: 1 / -1;
+  }
+
+  /* Submit row full width below notes */
   #inventoryForm .inventory-notes-submit-row {
+    grid-column: 1 / -1;
     justify-content: stretch;
     padding-top: 0;
   }
+
   #inventoryForm .inventory-submit-btn {
     width: 100%;
+  }
+
+  /* Lead form stays stacked */
+  #leadForm.form-grid > * {
+    grid-column: 1 / -1;
+    margin: 0;
   }
 
   #leadForm .repair-leads-split-row {
