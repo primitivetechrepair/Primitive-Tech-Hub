@@ -2522,7 +2522,7 @@ tbody tr:hover td {
 }
 
 #settingsSection label {
-  font-size: 9px;
+  font-size: 9px !important;
 }
 
   #settingsSection input,
