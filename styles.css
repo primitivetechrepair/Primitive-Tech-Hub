@@ -203,6 +203,28 @@ h3, h4 {
   text-align: center;
 }
 
+/* ===============================
+   INVENTORY FORM SUB-TITLE
+=============================== */
+
+#inventoryFormTitle {
+  margin: 10px 0 8px 0;
+  padding: 6px 10px;
+
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+
+  color: var(--heading);
+
+  border-left: 3px solid rgba(102,252,241,0.65);
+  background: rgba(102,252,241,0.04);
+
+  border-radius: 8px;
+
+  display: inline-block;
+}
+
 /* =============================== 4) Layout / Containers =============================== */
 header {
   display: flex;
