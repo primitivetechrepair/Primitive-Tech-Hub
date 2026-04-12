@@ -42,14 +42,45 @@
   position: relative;
   width: min(860px, calc(100% - 32px));
   margin: 80px auto;
-  background: rgba(20, 20, 28, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 28, 40, 0.98),
+      rgba(10, 15, 24, 0.99)
+    );
+
+  border: 1px solid rgba(102,252,241,0.18);
+  border-radius: 18px;
+
   padding: 24px;
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 20px 50px rgba(0,0,0,0.45);
+
   transform: translateY(10px) scale(0.98);
   opacity: 0;
   transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.pt-modal__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(102,252,241,0.06),
+      transparent 30%,
+      transparent 70%,
+      rgba(69,162,158,0.05)
+    );
+
+  border-radius: inherit;
 }
 
 .pt-modal.is-open .pt-modal__panel {
@@ -99,8 +130,9 @@
 }
 
 .pt-modal__close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255,255,255,0.2);
   transform: scale(1.08);
+  box-shadow: 0 0 10px rgba(102,252,241,0.25);
 }
 
 .pt-modal__sub {
@@ -127,11 +159,32 @@
   align-items: center;
   gap: 6px;
   height: 34px;
-  padding: 0 10px;
+  padding: 0 12px;
+
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.95),
+      rgba(12, 18, 26, 0.98)
+    );
+
+  border: 1px solid rgba(102,252,241,0.18);
+
   font-size: 12px;
+  color: var(--text-color);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04);
+}
+
+.pt-chip:hover {
+  border-color: rgba(102,252,241,0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 12px rgba(102,252,241,0.15);
 }
 
 .pt-chip__x {
@@ -161,11 +214,19 @@
 .pt-modal__row input {
   height: 44px;
   padding: 0 16px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
-  color: inherit;
-  outline: none;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.95),
+      rgba(12, 18, 26, 0.98)
+    );
+
+  border: 1px solid rgba(102,252,241,0.18);
+
+  color: var(--text-color);
 }
 
 .pt-modal__row input:focus {
@@ -220,9 +281,18 @@
 }
 
 .pt-modal__add {
-  background: rgba(102, 252, 241, 0.12);
-  border: 1px solid rgba(102, 252, 241, 0.35);
-  color: var(--text-color);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.96),
+      rgba(11, 16, 24, 0.98)
+    );
+
+  border: 1px solid rgba(102,252,241,0.25);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04);
 }
 
 .pt-modal__add:hover {
