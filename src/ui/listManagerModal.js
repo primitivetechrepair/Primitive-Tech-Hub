@@ -208,11 +208,10 @@ export function createListManagerModal({
   function open({ key, title, placeholder }) {
     current.key = key;
     current.title = title || "Manage List";
-    current.sub =
-      "Add/remove items. Changes update the app immediately. Click Save to persist.";
+    current.sub = "";
 
-    titleEl.textContent = current.title;
-    subEl.textContent = current.sub;
+titleEl.textContent = current.title;
+subEl.textContent = current.sub;
 
     if (placeholder) inputEl.placeholder = placeholder;
 
