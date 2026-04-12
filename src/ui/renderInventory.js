@@ -29,38 +29,43 @@ function ensureInventoryToolbar(el, data, esc, renderAll) {
   if (!toolbar) {
     toolbar = document.createElement("div");
     toolbar.className = "inventory-toolbar";
-    toolbar.innerHTML = `
-      <div class="inventory-tabs"></div>
-      <div class="inventory-toolbar-controls">
-        <label class="inventory-device-filter-wrap">
-          <span>Device</span>
-          <select class="inventory-device-filter"></select>
-        </label>
-        <label class="inventory-brand-filter-wrap">
-          <span>Brand</span>
-          <select class="inventory-brand-filter"></select>
-        </label>
-        <label class="inventory-stock-filter-wrap">
-          <span>Stock</span>
-          <select class="inventory-stock-filter">
-            <option value="all">All Stock</option>
-            <option value="in">In Stock</option>
-            <option value="low">Low Stock</option>
-            <option value="out">Out of Stock</option>
-          </select>
-        </label>
-        <label class="inventory-sort-filter-wrap">
-          <span>Sort</span>
-          <select class="inventory-sort-filter">
-            <option value="updated_desc">Recently Updated</option>
-            <option value="qty_asc">Quantity: Low to High</option>
-            <option value="qty_desc">Quantity: High to Low</option>
-            <option value="name_asc">Name: A–Z</option>
-            <option value="name_desc">Name: Z–A</option>
-          </select>
-        </label>
-      </div>
-    `;
+toolbar.className = "inventory-toolbar";
+toolbar.innerHTML = `
+  <div class="inventory-toolbar-sort-row">
+    <label class="inventory-sort-filter-wrap inventory-sort-filter-wrap--full">
+      <span>Sort</span>
+      <select class="inventory-sort-filter">
+        <option value="updated_desc">Recently Updated</option>
+        <option value="qty_asc">Quantity: Low to High</option>
+        <option value="qty_desc">Quantity: High to Low</option>
+        <option value="name_asc">Name: A–Z</option>
+        <option value="name_desc">Name: Z–A</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="inventory-tabs"></div>
+
+  <div class="inventory-toolbar-controls">
+    <label class="inventory-device-filter-wrap">
+      <span>Device</span>
+      <select class="inventory-device-filter"></select>
+    </label>
+    <label class="inventory-brand-filter-wrap">
+      <span>Brand</span>
+      <select class="inventory-brand-filter"></select>
+    </label>
+    <label class="inventory-stock-filter-wrap">
+      <span>Stock</span>
+      <select class="inventory-stock-filter">
+        <option value="all">All Stock</option>
+        <option value="in">In Stock</option>
+        <option value="low">Low Stock</option>
+        <option value="out">Out of Stock</option>
+      </select>
+    </label>
+  </div>
+`;
 
     el.inventoryBody.parentElement.parentElement.insertBefore(
       toolbar,

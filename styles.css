@@ -6197,19 +6197,48 @@ tbody tr:hover td {
    INVENTORY FILTER CONTROLS
 =============================== */
 
-.inventory-toolbar-controls {
+.inventory-toolbar-sort-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 per row */
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
-/* force buttons to behave like equal grid items */
-.inventory-toolbar-controls button {
+.inventory-sort-filter-wrap--full {
   width: 100%;
-  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
 
-/* keep labels (filters) full width inside grid */
+.inventory-sort-filter-wrap--full span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.inventory-sort-filter-wrap--full select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 6px 10px;
+  color: var(--text-color);
+}
+
+.inventory-toolbar-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .inventory-toolbar-controls label {
   width: 100%;
 }
@@ -6257,6 +6286,65 @@ tbody tr:hover td {
 
 @media (max-width: 600px) {
   .inventory-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+.inventory-toolbar-sort-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.inventory-sort-filter-wrap--full {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.inventory-sort-filter-wrap--full span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.inventory-sort-filter-wrap--full select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 6px 10px;
+  color: var(--text-color);
+}
+
+/* keep 3-across filters on both desktop and mobile */
+.inventory-toolbar-controls {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.inventory-toolbar-controls label {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .inventory-toolbar-controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .inventory-toolbar-controls {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
