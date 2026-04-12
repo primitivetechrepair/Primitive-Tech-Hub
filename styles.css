@@ -6183,8 +6183,19 @@ tbody tr:hover td {
 
 .inventory-toolbar-controls {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 per row */
   gap: 12px;
+}
+
+/* force buttons to behave like equal grid items */
+.inventory-toolbar-controls button {
+  width: 100%;
+  min-height: 40px;
+}
+
+/* keep labels (filters) full width inside grid */
+.inventory-toolbar-controls label {
+  width: 100%;
 }
 
 .inventory-toolbar-controls label {
@@ -6228,7 +6239,7 @@ tbody tr:hover td {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
   .inventory-toolbar-controls {
     grid-template-columns: 1fr;
   }
