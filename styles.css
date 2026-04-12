@@ -6142,13 +6142,22 @@ tbody tr:hover td {
 =============================== */
 
 .inventory-tabs {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
 .inv-tab {
-  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 38px;
+  margin: 0 !important;
+  padding: 8px 10px;
+
   border-radius: 999px;
 
   background: rgba(255,255,255,0.04);
@@ -6157,6 +6166,7 @@ tbody tr:hover td {
   color: var(--text-color);
   font-size: 12px;
   font-weight: 600;
+  text-align: center;
 
   cursor: pointer;
 
@@ -6234,13 +6244,13 @@ tbody tr:hover td {
 =============================== */
 
 @media (max-width: 900px) {
-  .inventory-toolbar-controls {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .inventory-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 500px) {
-  .inventory-toolbar-controls {
-    grid-template-columns: 1fr;
+@media (max-width: 600px) {
+  .inventory-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
