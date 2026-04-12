@@ -67,21 +67,18 @@ toolbar.innerHTML = `
 `;
 
 const form = document.getElementById("inventoryForm");
-const toolbar = document.querySelector(".inventory-toolbar");
-
-// ===============================
-// ADD "Add Part" TITLE BELOW TOOLBAR
-// ===============================
-if (form && toolbar && !document.getElementById("inventoryFormTitle")) {
-  const title = document.createElement("h2");
-  title.id = "inventoryFormTitle";
-  title.textContent = "Add Part";
-
-  toolbar.insertAdjacentElement("afterend", title);
-}
 
 if (form && form.parentElement) {
   form.parentElement.insertBefore(toolbar, form);
+
+  let title = document.getElementById("inventoryFormTitle");
+  if (!title) {
+    title = document.createElement("h2");
+    title.id = "inventoryFormTitle";
+    title.textContent = "Add Part";
+  }
+
+  form.parentElement.insertBefore(title, form);
 } else {
   // fallback (your original behavior)
   el.inventoryBody.parentElement.parentElement.insertBefore(
