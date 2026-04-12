@@ -2369,6 +2369,9 @@ tbody tr:hover td {
   align-self: center !important;
   justify-self: center !important;
   flex: 0 0 auto !important;
+
+  font-size: 12px !important;
+  line-height: 1 !important;
 }
 
 /* bottom 3 settings fields */
@@ -2481,6 +2484,9 @@ tbody tr:hover td {
   align-self: center !important;
   justify-self: center !important;
   flex: 0 0 auto !important;
+
+  font-size: 11px !important;
+  line-height: 1 !important;
 }
 }
 
