@@ -75,7 +75,7 @@ if (form && form.parentElement) {
   if (!title) {
     title = document.createElement("h2");
     title.id = "inventoryFormTitle";
-    title.textContent = "Add Part";
+    title.textContent = "New Inventory Item";
   }
 
   form.parentElement.insertBefore(title, form);
