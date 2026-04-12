@@ -1243,3 +1243,10 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 #inventorySection #importCsvBtn:active {
   transform: scale(0.97) !important;
 }
+
+/* FINAL TEST OVERRIDE — INVENTORY PART TABS */
+.inventory-tabs .inv-tab {
+  background: red !important;
+  color: white !important;
+  border: 2px solid yellow !important;
+}
