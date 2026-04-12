@@ -2280,23 +2280,29 @@ tbody tr:hover td {
   z-index: 1;
 }
 
+/* real settings layout */
 #settingsSection .form-grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
   gap: 12px !important;
-  align-items: stretch !important;
+}
+
+/* each item = 3 columns */
+#settingsSection .form-grid > * {
+  flex: 1 1 calc(33.333% - 8px);
+  min-width: 0;
 }
 
 /* ===============================
    SETTINGS VISUAL ORDER FIX
 =============================== */
 
-/* Move manage rows to top */
-#settingsSection .form-grid > .settings-manage-row:nth-of-type(1) { order: 1; }
-#settingsSection .form-grid > .settings-manage-row:nth-of-type(2) { order: 2; }
-#settingsSection .form-grid > .settings-manage-row:nth-of-type(3) { order: 3; }
+/* Top row: manage controls */
+#settingsSection .settings-manage-row:nth-of-type(1) { order: 1; }
+#settingsSection .settings-manage-row:nth-of-type(2) { order: 2; }
+#settingsSection .settings-manage-row:nth-of-type(3) { order: 3; }
 
-/* Move input fields below */
+/* Second row: inputs */
 #settingsSection .form-grid > label:nth-of-type(1) { order: 4; }
 #settingsSection .form-grid > label:nth-of-type(2) { order: 5; }
 #settingsSection .form-grid > label:nth-of-type(3) { order: 6; }
