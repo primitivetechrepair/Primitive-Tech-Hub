@@ -574,60 +574,103 @@ tbody tr:hover td {
 }
 
 /* ===============================
-   DASHBOARD GRID (CLEAN + PREMIUM)
+   DASHBOARD GRID (VISIBLE TECH UPGRADE)
 =============================== */
 
 .charts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
+  margin-top: 14px;
   margin-bottom: var(--space-4);
-}
-
-/* Mobile */
-@media (max-width: 900px) {
-  .charts {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
 }
 
 /* Adjust individual chart card styling */
 .charts > div {
+  position: relative;
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 12px;
 
-  padding: 16px;
-  border-radius: 18px;
+  min-height: 100%;
+  padding: 18px;
+  border-radius: 20px;
 
-  background: linear-gradient(
-    180deg,
-    rgba(20, 28, 40, 0.96),
-    rgba(10, 15, 24, 0.98)
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(24, 34, 48, 0.98),
+      rgba(10, 16, 24, 1)
+    );
 
   border: 1px solid rgba(102,252,241,0.18);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.05),
     0 0 0 1px rgba(102,252,241,0.04),
-    0 14px 30px rgba(0,0,0,0.34);
+    0 16px 34px rgba(0,0,0,0.38);
 
   transition:
     transform 0.18s ease,
-    box-shadow 0.18s ease;
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+/* visible glow layer */
+.charts > div::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(102,252,241,0.08),
+      transparent 28%,
+      transparent 72%,
+      rgba(69,162,158,0.06)
+    );
+}
+
+/* subtle inner bottom tint */
+.charts > div::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44%;
+  pointer-events: none;
+
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0),
+    rgba(0,0,0,0.12)
+  );
 }
 
 /* Hover effect for cards */
 .charts > div:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: rgba(102,252,241,0.26);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.06),
     0 0 0 1px rgba(102,252,241,0.08),
-    0 0 18px rgba(102,252,241,0.10),
-    0 16px 34px rgba(0,0,0,0.4);
+    0 0 22px rgba(102,252,241,0.12),
+    0 18px 38px rgba(0,0,0,0.44);
+}
+
+/* make real content sit above glow layers */
+.charts > div > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Title style for charts inside the cards */
@@ -635,110 +678,189 @@ tbody tr:hover td {
   text-align: left;
   background: none;
   padding: 0;
-  margin: 0 0 6px 0;
+  margin: 0 0 4px 0;
 
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--heading);
 }
 
 /* Bar chart container adjustments */
 .bar-chart {
   display: grid;
-  gap: var(--space-1);  /* Space between chart components */
+  gap: 10px;
+  padding: 2px 0;
+}
+
+/* Improve generated bar rows */
+.bar {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.bar-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-color);
+  letter-spacing: 0.02em;
+}
+
+.bar-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    rgba(102,252,241,0.75),
+    rgba(69,162,158,0.95)
+  );
+  box-shadow:
+    0 0 12px rgba(102,252,241,0.18);
 }
 
 /* Pie chart specific styles */
 .pie {
-  width: 144px;
-  height: 144px;
+  width: 148px;
+  height: 148px;
+  margin: 4px auto 2px;
   border-radius: 50%;
-  border: 2px solid #3d4957;
+  border: 2px solid rgba(102,252,241,0.22);
+  box-shadow:
+    0 0 0 1px rgba(102,252,241,0.05),
+    0 10px 24px rgba(0,0,0,0.28);
 }
 
 /* Legend styling */
 .legend {
   list-style: none;
-  margin: 0;
+  margin: 8px 0 0;
   padding: 0;
   display: grid;
-  gap: var(--space-1);
+  gap: 8px;
 }
 
 .legend li {
   display: flex;
-  gap: var(--space-1);
+  gap: 10px;
   align-items: center;
-  font-size: 14px;
-  padding: 2px 0;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .dot {
-  width: var(--space-1);
-  height: var(--space-1);
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: inline-block;
+  flex: 0 0 auto;
 }
 
-/* =============================== Button: Hide Device Pie =============================== */
+/* ===============================
+   BUTTON: HIDE DEVICE PIE
+=============================== */
 .dashboard-toggle-btn {
-  background: #66fcf1;  /* Same as other buttons */
-  color: #001517;
-  border: none;
-  padding: var(--space-2) var(--space-3);  /* Padding for consistent button size */
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 10px 14px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  );
+
+  border: 1px solid rgba(102,252,241,0.18);
+  border-radius: 12px;
+
+  color: var(--text-color);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.22);
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
 }
 
 /* Hover effect for the button */
 .dashboard-toggle-btn:hover {
-  background: #45a29e;  /* Hover color to match the rest */
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.98),
+    rgba(13, 21, 30, 1)
+  );
+
+  border-color: rgba(102,252,241,0.30);
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 18px rgba(102,252,241,0.10),
+    0 10px 22px rgba(0,0,0,0.28);
 }
 
-/* Optional: Specific alignment or adjustments (if needed) */
-.dashboard-toggle-btn {
-  display: inline-block;
-  margin-top: var(--space-3);  /* Optional: Adjust margin as needed */
-  width: 100%;  /* Optional: Stretch button to full width */
-}
-
-/* =============================== 8) Mobile Layout (Single Column) =============================== */
-
-/* Adjust the layout for mobile devices */
+/* ===============================
+   MOBILE
+=============================== */
 @media (max-width: 900px) {
   .charts {
-    grid-template-columns: 1fr;  /* Single column layout for mobile */
-    grid-template-rows: auto auto auto auto auto auto auto auto;  /* Each section is stacked vertically */
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
 
-  /* Apply the 10px bottom margin on mobile only */
   .charts > div {
-    width: 100%;  /* Make each chart/card take up the full width of the container */
-    margin-bottom: 10px !important;  /* Apply 10px bottom margin for each card */
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 0 !important;
   }
 
-  /* Pie chart size adjustment for mobile */
   .pie {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 10px !important;  /* Ensure proper margin for mobile */
+    width: 122px;
+    height: 122px;
+    margin-bottom: 8px;
   }
 
-  /* Legends in the pie charts for mobile */
   .legend li {
     font-size: 12px;
+    padding: 7px 9px;
   }
 
-  /* Bar chart adjustments */
   .bar-chart {
-    gap: var(--space-2);  /* Adjust space between bars for mobile */
+    gap: 8px;
   }
 
-  /* Adjustments to the width and layout for all elements */
   .device-chart-card,
   .common-repair-card,
   .leads-trend-card,
@@ -746,8 +868,8 @@ tbody tr:hover td {
   .profit-tracking-card,
   .restock-suggestions-card,
   .follow-up-reminders-card {
-    width: 100%;  /* Make all cards take full width on mobile */
-    margin-bottom: 10px !important;  /* Apply 10px bottom margin to each card */
+    width: 100%;
+    margin-bottom: 0 !important;
   }
 }
 
