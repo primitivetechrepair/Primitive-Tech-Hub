@@ -2383,7 +2383,7 @@ tbody tr:hover td {
   align-items: stretch;
   justify-content: center;
   gap: 6px;
-  text-align: left;
+  text-align: center;
   margin: 0;
 
   padding: 10px 12px;
@@ -2457,7 +2457,7 @@ tbody tr:hover td {
 /* Ensure the labels have consistent styling */
 #settingsSection label {
   color: var(--muted);
-  text-align: left;
+  text-align: center; /* 👈 center the titles */
 }
 
 @media (max-width: 900px) {
