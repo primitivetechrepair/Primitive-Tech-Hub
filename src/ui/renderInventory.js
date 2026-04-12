@@ -124,14 +124,14 @@ if (form && form.parentElement) {
 
   const fixedTabs = [
     "All",
-    "Screen",
-    "Battery",
-    "Charge Port",
-    "Camera",
-    "Back Glass",
-    "Accessory",
-    "Tool",
-    "Other",
+    "Screen TEST",
+    "Battery TEST",
+    "Charge Port TEST",
+    "Camera TEST",
+    "Back Glass TEST",
+    "Accessory TEST",
+    "Tool TEST",
+    "Other TEST",
   ];
 
   const tabsWrap = toolbar.querySelector(".inventory-tabs");
