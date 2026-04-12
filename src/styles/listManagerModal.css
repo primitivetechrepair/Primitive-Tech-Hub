@@ -375,12 +375,37 @@
 }
 
 .pt-modal__add {
-  border-color: rgba(102, 252, 241, 0.25);
+  background: linear-gradient(
+    180deg,
+    rgba(16, 36, 36, 0.95),
+    rgba(8, 22, 22, 0.98)
+  );
+
+  border: 1px solid rgba(102, 252, 241, 0.35);
   color: #66fcf1;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.06),
+    0 8px 18px rgba(0,0,0,0.25),
+    0 0 12px rgba(102,252,241,0.12);
 }
 
 .pt-modal__add:hover {
-  border-color: rgba(102, 252, 241, 0.40);
+  background: linear-gradient(
+    180deg,
+    rgba(22, 50, 50, 1),
+    rgba(10, 28, 28, 1)
+  );
+
+  border-color: rgba(102, 252, 241, 0.50);
+  color: #ffffff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 0 0 1px rgba(102,252,241,0.10),
+    0 0 20px rgba(102,252,241,0.22),
+    0 10px 22px rgba(0,0,0,0.30);
 }
 
 /* ===============================
