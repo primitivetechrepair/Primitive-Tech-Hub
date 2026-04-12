@@ -2517,10 +2517,13 @@ tbody tr:hover td {
     padding: 10px !important;
   }
 
-  #settingsSection .settings-manage-label strong,
-  #settingsSection label {
-    font-size: 10px;
-  }
+  #settingsSection .settings-manage-label strong {
+  font-size: 8px;
+}
+
+#settingsSection label {
+  font-size: 10px;
+}
 
   #settingsSection input,
   #settingsSection select {
