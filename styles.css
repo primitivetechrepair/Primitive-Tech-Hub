@@ -2305,6 +2305,17 @@ tbody tr:hover td {
     flex: 1 1 100%;
   }
 
+  /* keep Inventory form at 2 columns even on smaller mobile */
+  #inventoryForm > * {
+    flex: 1 1 calc(50% - 8px) !important;
+    min-width: 0 !important;
+  }
+
+  #inventoryForm .span-full {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+  }
+
   table {
     min-width: 992px;
   }
