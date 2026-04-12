@@ -2306,13 +2306,20 @@ tbody tr:hover td {
   }
 
   /* keep Inventory form at 2 columns even on smaller mobile */
+  #inventoryForm {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    align-items: start !important;
+  }
+
   #inventoryForm > * {
-    flex: 1 1 calc(50% - 8px) !important;
     min-width: 0 !important;
+    margin: 0 !important;
   }
 
   #inventoryForm .span-full {
-    flex: 0 0 100% !important;
+    grid-column: 1 / -1 !important;
     width: 100% !important;
   }
 
@@ -2381,19 +2388,6 @@ tbody tr:hover td {
   }
 }
 
-@media (min-width: 900px) {
-  table th, table td {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  button.tiny {
-    min-height: 34px;
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-}
-
 @media (hover: none) {
   button:hover {
     transform: none;
@@ -2404,7 +2398,6 @@ tbody tr:hover td {
 
 /* =========================================================
    BOTTOM BAR — NEON TECH (5 buttons, no wrap)
-   Paste at VERY BOTTOM of styles.css
 ========================================================= */
 .bottom-bar {
   display: none !important;
