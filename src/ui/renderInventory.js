@@ -68,6 +68,17 @@ toolbar.innerHTML = `
 
     const form = document.getElementById("inventoryForm");
 
+    // ===============================
+// ADD "Add Part" TITLE ABOVE FORM
+// ===============================
+if (form && !document.getElementById("inventoryFormTitle")) {
+  const title = document.createElement("h2");
+  title.id = "inventoryFormTitle";
+  title.textContent = "Add Part";
+
+  form.parentElement.insertBefore(title, form);
+}
+
 if (form && form.parentElement) {
   form.parentElement.insertBefore(toolbar, form);
 } else {
