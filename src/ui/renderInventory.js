@@ -2,6 +2,7 @@
 
 const INVENTORY_GROUPS_STATE_KEY = "primitiveTechHubInventoryGroupState";
 
+
 function highlightMatch(value, query, esc) {
   const text = String(value ?? "");
   const safeText = esc(text);

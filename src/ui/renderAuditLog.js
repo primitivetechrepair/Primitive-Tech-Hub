@@ -1,4 +1,6 @@
 // src/ui/renderAuditLog.js
+const AUDIT_GROUPS_STATE_KEY = "primitiveTechHubAuditGroupState";
+
 export function renderAuditLog(ctx) {
   const {
     el,
@@ -24,15 +26,57 @@ export function renderAuditLog(ctx) {
 
   let lastGroup = "";
 
+  if (!el._auditCollapsedGroups) {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(AUDIT_GROUPS_STATE_KEY) || "{}"
+      );
+      el._auditCollapsedGroups =
+        saved && typeof saved === "object" ? saved : {};
+    } catch {
+      el._auditCollapsedGroups = {};
+    }
+  }
+
   entries.forEach((a) => {
     const group = getDateGroup(a.at);
 
     if (group !== lastGroup) {
+      const isCollapsed = !!el._auditCollapsedGroups[group];
+
       const groupEl = document.createElement("li");
       groupEl.className = "audit-log-group";
-      groupEl.textContent = group;
+      groupEl.innerHTML = `
+        <button
+          type="button"
+          class="audit-log-group-toggle"
+          data-group="${escapeHtml(group)}"
+          aria-expanded="${isCollapsed ? "false" : "true"}"
+        >
+          <span class="audit-log-group-toggle__caret">${isCollapsed ? "▶" : "▼"}</span>
+          <span class="audit-log-group-toggle__label">${group}</span>
+        </button>
+      `;
+
+      groupEl.querySelector(".audit-log-group-toggle").onclick = () => {
+        el._auditCollapsedGroups[group] = !el._auditCollapsedGroups[group];
+
+        try {
+          localStorage.setItem(
+            AUDIT_GROUPS_STATE_KEY,
+            JSON.stringify(el._auditCollapsedGroups)
+          );
+        } catch (err) {
+          console.error("Failed to persist audit group state:", err);
+        }
+
+        renderAuditLog(ctx);
+      };
+
       el.auditLog.appendChild(groupEl);
       lastGroup = group;
+
+      if (isCollapsed) return;
     }
 
     const li = document.createElement("li");
