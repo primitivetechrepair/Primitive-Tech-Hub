@@ -1259,71 +1259,48 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   transform: scale(0.97) !important;
 }
 
-/* ===== Inventory group wrapper cell fix ===== */
-.inventory-table tr td[colspan="12"] {
+/* ===== Inventory group row + toggle (single clean winner) ===== */
+#inventoryBody tr.inventory-group-row td[colspan="12"] {
   padding: 0 !important;
-  border: none !important;
+  border: 0 !important;
   background: transparent !important;
   background-color: transparent !important;
   box-shadow: none !important;
   overflow: visible !important;
 }
 
-.inventory-table tbody tr:hover td[colspan="12"] {
+#inventoryBody tr.inventory-group-row:nth-child(even) td[colspan="12"],
+#inventoryBody tr.inventory-group-row:hover td[colspan="12"] {
   background: transparent !important;
   background-color: transparent !important;
 }
 
-.inventory-table tr td[colspan="12"] > .inventory-group-toggle {
+#inventoryBody tr.inventory-group-row td[colspan="12"] > .inventory-group-toggle {
+  position: relative !important;
+  z-index: 3 !important;
   margin: 0 !important;
+  transform: none !important;
   border-radius: 14px !important;
   overflow: hidden !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.03),
+    0 4px 10px rgba(0,0,0,0.16) !important;
 }
 
-/* ===== FINAL Inventory group toggle fix (desktop + mobile) ===== */
-.inventory-table tr td[colspan="12"] > .inventory-group-toggle {
-  position: relative !important;
-  z-index: 5 !important;
-  transform: none !important;
-}
-
-.inventory-table tr td[colspan="12"] > .inventory-group-toggle:hover,
-.inventory-table tr td[colspan="12"] > .inventory-group-toggle:focus,
-.inventory-table tr td[colspan="12"] > .inventory-group-toggle:active {
+#inventoryBody tr.inventory-group-row td[colspan="12"] > .inventory-group-toggle:hover,
+#inventoryBody tr.inventory-group-row td[colspan="12"] > .inventory-group-toggle:focus,
+#inventoryBody tr.inventory-group-row td[colspan="12"] > .inventory-group-toggle:active {
   transform: none !important;
   margin: 0 !important;
 }
 
-.inventory-table tr td[colspan="12"] > .inventory-group-toggle:hover {
-  border-color: rgba(102,252,241,0.30) !important;
+#inventoryBody tr.inventory-group-row td[colspan="12"] > .inventory-group-toggle:hover {
+  border-color: rgba(102,252,241,0.28) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 0 1px rgba(102,252,241,0.08),
-    0 0 18px rgba(102,252,241,0.10),
-    0 8px 18px rgba(0,0,0,0.24) !important;
-}
-
-.inventory-table td[colspan="12"] .inventory-group-toggle:hover,
-.inventory-table td[colspan="12"] .inventory-group-toggle:focus,
-.inventory-table td[colspan="12"] .inventory-group-toggle:active {
-  transform: none !important;
-  margin: 0 !important;
-}
-
-.inventory-table td[colspan="12"] .inventory-group-toggle:hover {
-  border-color: rgba(102,252,241,0.30) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 0 1px rgba(102,252,241,0.08),
-    0 0 18px rgba(102,252,241,0.10),
-    0 8px 18px rgba(0,0,0,0.24) !important;
-}
-
-/* ===== FINAL: remove background from inventory group rows ===== */
-.inventory-table tr td[colspan="12"] {
-  background: transparent !important;
-}
-
-.inventory-table tbody tr:hover td[colspan="12"] {
-  background: transparent !important;
+    0 0 0 1px rgba(102,252,241,0.06),
+    0 0 10px rgba(102,252,241,0.06),
+    0 5px 12px rgba(0,0,0,0.18) !important;
 }
