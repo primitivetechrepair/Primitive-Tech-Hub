@@ -1304,3 +1304,86 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     0 0 10px rgba(102,252,241,0.06),
     0 5px 12px rgba(0,0,0,0.18) !important;
 }
+
+/* ===== Inventory group meta badges ===== */
+#inventoryBody .inventory-group-toggle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+#inventoryBody .inventory-group-title {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--heading);
+  flex: 0 0 auto;
+}
+
+#inventoryBody .inventory-group-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+#inventoryBody .inventory-group-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 24px;
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1;
+
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-color);
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+#inventoryBody .inventory-group-badge--count {
+  color: var(--heading);
+  border-color: rgba(102,252,241,0.18);
+  background: rgba(102,252,241,0.10);
+}
+
+#inventoryBody .inventory-group-badge--low {
+  color: #ffe082;
+  border-color: rgba(255,213,0,0.18);
+  background: rgba(255,213,0,0.10);
+}
+
+#inventoryBody .inventory-group-badge--out {
+  color: #ffb3b3;
+  border-color: rgba(255,82,82,0.20);
+  background: rgba(255,82,82,0.10);
+}
+
+@media (max-width: 700px) {
+  #inventoryBody .inventory-group-toggle {
+    gap: 8px !important;
+  }
+
+  #inventoryBody .inventory-group-title {
+    font-size: 13px;
+  }
+
+  #inventoryBody .inventory-group-meta {
+    gap: 6px;
+  }
+
+  #inventoryBody .inventory-group-badge {
+    min-height: 22px;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}

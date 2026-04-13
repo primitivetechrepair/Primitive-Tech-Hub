@@ -779,23 +779,39 @@ export function renderInventory(ctx) {
     const outCount = items.filter((item) => Number(item.quantity || 0) <= 0).length;
 
     const headerTr = document.createElement("tr");
-    headerTr.className = "inventory-group-row";
-    headerTr.innerHTML = `
-      <td colspan="12">
-        <button
-          type="button"
-          class="inventory-group-toggle"
-          data-group="${esc(groupName)}"
-          aria-expanded="${isCollapsed ? "false" : "true"}"
-        >
-          <span class="inventory-group-caret">${isCollapsed ? "▶" : "▼"}</span>
-          <span class="inventory-group-title">${esc(groupName)}</span>
-          <span class="inventory-group-meta">
-            (${items.length})${lowCount ? ` • Low: ${lowCount}` : ""}${outCount ? ` • Out: ${outCount}` : ""}
+headerTr.className = "inventory-group-row";
+headerTr.innerHTML = `
+  <td colspan="12">
+    <button
+      type="button"
+      class="inventory-group-toggle"
+      data-group="${esc(groupName)}"
+      aria-expanded="${isCollapsed ? "false" : "true"}"
+    >
+      <span class="inventory-group-caret">${isCollapsed ? "▶" : "▼"}</span>
+
+      <span class="inventory-group-title">${esc(groupName)}</span>
+
+      <span class="inventory-group-meta">
+        <span class="inventory-group-badge inventory-group-badge--count">
+          ${items.length}
+        </span>
+
+        ${lowCount ? `
+          <span class="inventory-group-badge inventory-group-badge--low">
+            Low: ${lowCount}
           </span>
-        </button>
-      </td>
-    `;
+        ` : ""}
+
+        ${outCount ? `
+          <span class="inventory-group-badge inventory-group-badge--out">
+            Out: ${outCount}
+          </span>
+        ` : ""}
+      </span>
+    </button>
+  </td>
+`;
 
     headerTr.querySelector(".inventory-group-toggle").onclick = () => {
       el._inventoryCollapsedGroups[groupName] = !el._inventoryCollapsedGroups[groupName];
