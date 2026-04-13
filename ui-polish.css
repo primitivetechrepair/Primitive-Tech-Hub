@@ -1244,3 +1244,14 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   transform: scale(0.97) !important;
 }
 
+/* ===== Inventory group wrapper cell fix ===== */
+.inventory-table td[colspan="12"] {
+  padding: 0 !important;
+  border-right: none !important;
+  border-left: none !important;
+  background: transparent !important;
+}
+
+.inventory-table td[colspan="12"] .inventory-group-toggle {
+  margin: 0 !important;
+}
