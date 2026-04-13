@@ -4503,17 +4503,52 @@ tbody tr:hover td {
 
 .inventory-group-title {
   font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--heading);
 }
 
 .inventory-group-meta {
-  opacity: 0.75;
-  font-size: 0.95em;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+
+  color: var(--muted);
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .inventory-group-caret {
-  width: 16px;
+  width: 18px;
+  min-width: 18px;
   display: inline-flex;
+  align-items: center;
   justify-content: center;
+
+  color: var(--heading);
+  font-size: 12px;
+  line-height: 1;
+
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease,
+    filter 0.18s ease;
+}
+
+.inventory-group-toggle:hover .inventory-group-caret {
+  color: #fff;
+  filter: drop-shadow(0 0 8px rgba(102,252,241,0.18));
+}
+
+.inventory-group-toggle[aria-expanded="true"] .inventory-group-caret {
+  transform: rotate(0deg);
+}
+
+.inventory-group-toggle[aria-expanded="false"] .inventory-group-caret {
+  transform: rotate(-90deg);
 }
 
 /* =========================================================
