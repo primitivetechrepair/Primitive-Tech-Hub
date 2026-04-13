@@ -4440,11 +4440,6 @@ tbody tr:hover td {
   }
 }
 
-.inventory-group-row td {
-  padding: 0;
-  background: rgba(255, 255, 255, 0.03);
-}
-
 .inventory-group-toggle {
   width: 100%;
   display: flex;
