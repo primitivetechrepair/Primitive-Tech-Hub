@@ -1257,10 +1257,27 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* ===== Inventory group toggle hover clipping fix ===== */
-.inventory-table td[colspan="12"] .inventory-group-toggle {
+/* ===== FINAL Inventory group toggle fix (desktop + mobile) ===== */
+.inventory-table tr td[colspan="12"] > .inventory-group-toggle {
   position: relative !important;
-  z-index: 2 !important;
+  z-index: 5 !important;
   transform: none !important;
+}
+
+.inventory-table tr td[colspan="12"] > .inventory-group-toggle:hover,
+.inventory-table tr td[colspan="12"] > .inventory-group-toggle:focus,
+.inventory-table tr td[colspan="12"] > .inventory-group-toggle:active {
+  transform: none !important;
+  margin: 0 !important;
+}
+
+.inventory-table tr td[colspan="12"] > .inventory-group-toggle:hover {
+  border-color: rgba(102,252,241,0.30) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 18px rgba(102,252,241,0.10),
+    0 8px 18px rgba(0,0,0,0.24) !important;
 }
 
 .inventory-table td[colspan="12"] .inventory-group-toggle:hover,
