@@ -201,10 +201,17 @@ tbody tr:hover td {
   background: rgba(102, 252, 242, 0.06);
 }
 
-#inventoryBody .inventory-group-row:hover td {
+#inventoryBody .inventory-group-row td,
+#inventoryBody tr.inventory-group-row td[colspan="12"] {
   background: transparent !important;
 }
 
+#inventoryBody .inventory-group-row:nth-child(even) td,
+#inventoryBody tr.inventory-group-row:nth-child(even) td[colspan="12"] {
+  background: transparent !important;
+}
+
+#inventoryBody .inventory-group-row:hover td,
 #inventoryBody tr.inventory-group-row:hover td[colspan="12"] {
   background: transparent !important;
 }
