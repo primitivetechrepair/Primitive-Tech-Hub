@@ -1245,15 +1245,24 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* ===== Inventory group wrapper cell fix ===== */
-.inventory-table td[colspan="12"] {
+.inventory-table tr td[colspan="12"] {
   padding: 0 !important;
-  border-right: none !important;
-  border-left: none !important;
+  border: none !important;
   background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
 }
 
-.inventory-table td[colspan="12"] .inventory-group-toggle {
+.inventory-table tbody tr:hover td[colspan="12"] {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.inventory-table tr td[colspan="12"] > .inventory-group-toggle {
   margin: 0 !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
 }
 
 /* ===== Inventory group toggle hover clipping fix ===== */
@@ -1295,3 +1304,4 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     0 0 18px rgba(102,252,241,0.10),
     0 8px 18px rgba(0,0,0,0.24) !important;
 }
+
