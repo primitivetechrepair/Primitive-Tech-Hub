@@ -24,8 +24,6 @@ export function renderAuditLog(ctx) {
     return;
   }
 
-  let lastGroup = "";
-
   if (!el._auditCollapsedGroups) {
     try {
       const saved = JSON.parse(
@@ -38,49 +36,56 @@ export function renderAuditLog(ctx) {
     }
   }
 
-  entries.forEach((a) => {
-    const group = getDateGroup(a.at);
+  const groupedEntries = entries.reduce((acc, entry) => {
+    const group = getDateGroup(entry.at);
+    if (!acc[group]) acc[group] = [];
+    acc[group].push(entry);
+    return acc;
+  }, {});
 
-    if (group !== lastGroup) {
-      const isCollapsed = !!el._auditCollapsedGroups[group];
+  const groupOrder = ["Today", "Yesterday", "This Week", "Earlier"];
+  const orderedGroups = groupOrder.filter((group) => groupedEntries[group]?.length);
 
-      const groupEl = document.createElement("li");
-      groupEl.className = "audit-log-group";
-      groupEl.innerHTML = `
-        <button
-          type="button"
-          class="audit-log-group-toggle"
-          data-group="${escapeHtml(group)}"
-          aria-expanded="${isCollapsed ? "false" : "true"}"
-        >
-          <span class="audit-log-group-toggle__caret">${isCollapsed ? "▶" : "▼"}</span>
-          <span class="audit-log-group-toggle__label">${group}</span>
-        </button>
-      `;
+  orderedGroups.forEach((group) => {
+    const groupItems = groupedEntries[group] || [];
+    const isCollapsed = !!el._auditCollapsedGroups[group];
 
-      groupEl.querySelector(".audit-log-group-toggle").onclick = () => {
-        el._auditCollapsedGroups[group] = !el._auditCollapsedGroups[group];
+    const groupEl = document.createElement("li");
+    groupEl.className = "audit-log-group";
+    groupEl.innerHTML = `
+      <button
+        type="button"
+        class="audit-log-group-toggle"
+        data-group="${escapeHtml(group)}"
+        aria-expanded="${isCollapsed ? "false" : "true"}"
+      >
+        <span class="audit-log-group-toggle__caret">${isCollapsed ? "▶" : "▼"}</span>
+        <span class="audit-log-group-toggle__label">${group}</span>
+      </button>
+    `;
 
-        try {
-          localStorage.setItem(
-            AUDIT_GROUPS_STATE_KEY,
-            JSON.stringify(el._auditCollapsedGroups)
-          );
-        } catch (err) {
-          console.error("Failed to persist audit group state:", err);
-        }
+    groupEl.querySelector(".audit-log-group-toggle").onclick = () => {
+      el._auditCollapsedGroups[group] = !el._auditCollapsedGroups[group];
 
-        renderAuditLog(ctx);
-      };
+      try {
+        localStorage.setItem(
+          AUDIT_GROUPS_STATE_KEY,
+          JSON.stringify(el._auditCollapsedGroups)
+        );
+      } catch (err) {
+        console.error("Failed to persist audit group state:", err);
+      }
 
-      el.auditLog.appendChild(groupEl);
-      lastGroup = group;
+      renderAuditLog(ctx);
+    };
 
-      if (isCollapsed) return;
-    }
+    el.auditLog.appendChild(groupEl);
 
-    const li = document.createElement("li");
-    li.className = `audit-log-card ${getAuditTypeClass(a.action)}`;
+    if (isCollapsed) return;
+
+    groupItems.forEach((a) => {
+      const li = document.createElement("li");
+      li.className = `audit-log-card ${getAuditTypeClass(a.action)}`;
 
     const actionLabel = formatActionLabel(a.action);
     const title = buildAuditTitle(a);
@@ -156,7 +161,8 @@ if (details) {
       li.querySelector(".audit-log-card__shell").appendChild(actions);
     }
 
-    el.auditLog.appendChild(li);
+      el.auditLog.appendChild(li);
+    });
   });
 }
 
