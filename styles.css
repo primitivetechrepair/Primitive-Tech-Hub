@@ -3500,42 +3500,50 @@ tbody tr:hover td {
 
 .audit-log-card {
   position: relative;
-  margin-left: 18px;
-  padding: 14px 16px 14px 18px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 4px solid rgba(255, 255, 255, 0.18);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  margin-left: 0;
+  padding: 16px 16px 14px;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.98),
+    rgba(10, 15, 24, 0.995)
+  );
+
+  border: 1px solid rgba(102,252,241,0.16);
+  border-left: 4px solid rgba(255, 255, 255, 0.16);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 14px 30px rgba(0,0,0,0.34);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
 }
 
-.audit-log-card::before {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: -14px;
-  bottom: -14px;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
+.audit-log-card::before,
 .audit-log-card::after {
-  content: "";
-  position: absolute;
-  left: -22px;
-  top: 18px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #9ca3af;
-  border: 2px solid #0f141a;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
+  content: none;
 }
 
 .audit-log-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
-  background: rgba(255, 255, 255, 0.055);
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.99),
+    rgba(13, 21, 30, 1)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 0 0 1px rgba(102,252,241,0.07),
+    0 0 18px rgba(102,252,241,0.09),
+    0 18px 36px rgba(0,0,0,0.40);
 }
 
 .audit-log-card.is-added {
@@ -3631,53 +3639,31 @@ tbody tr:hover td {
 
 .audit-log-empty {
   list-style: none;
-  margin-left: 18px;
-  padding: 14px 16px 14px 18px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
+  margin-left: 0;
+  padding: 14px 16px;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.96),
+    rgba(10, 15, 24, 0.99)
+  );
+
+  border: 1px solid rgba(102,252,241,0.12);
   color: var(--muted);
   position: relative;
 }
 
-.audit-log-empty::before {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
+.audit-log-empty::before,
 .audit-log-empty::after {
-  content: "";
-  position: absolute;
-  left: -22px;
-  top: 18px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #6b7280;
-  border: 2px solid #0f141a;
+  content: none;
 }
 
 @media (max-width: 700px) {
   .audit-log-card,
   .audit-log-empty {
-    margin-left: 14px;
-    padding: 12px 14px 12px 16px;
-  }
-
-  .audit-log-card::before,
-  .audit-log-empty::before {
-    left: -12px;
-  }
-
-  .audit-log-card::after,
-  .audit-log-empty::after {
-    left: -18px;
-    width: 12px;
-    height: 12px;
+    margin-left: 0;
+    padding: 12px 14px;
   }
 
   .audit-log-card__top {
