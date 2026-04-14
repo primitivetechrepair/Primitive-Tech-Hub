@@ -1688,20 +1688,8 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
   #inventorySection #auditLog .audit-log-card,
   #inventorySection #auditLog .audit-log-empty {
-    margin-left: 14px;
-    padding: 12px 14px 12px 16px;
-  }
-
-  #inventorySection #auditLog .audit-log-card::before,
-  #inventorySection #auditLog .audit-log-empty::before {
-    left: -12px;
-  }
-
-  #inventorySection #auditLog .audit-log-card::after,
-  #inventorySection #auditLog .audit-log-empty::after {
-    left: -18px;
-    width: 12px;
-    height: 12px;
+    margin-left: 0;
+    padding: 12px 14px;
   }
 
   #inventorySection #auditLog .audit-log-card__top {
@@ -1718,6 +1706,24 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     font-size: 10px;
     padding: 4px 8px;
   }
+
+  #inventorySection #auditLog .audit-log-group-toggle {
+    min-height: 38px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  #inventorySection #auditLog .audit-log-group-toggle__caret {
+    width: 14px;
+    min-width: 14px;
+  }
+
+  #inventorySection #auditLog .audit-log-group-toggle__count {
+    min-width: 24px;
+    min-height: 20px;
+    padding: 2px 7px;
+    font-size: 10px;
+  }
 }
 
 /* ===== Audit log group toggles ===== */
@@ -1728,21 +1734,21 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 #inventorySection #auditLog .audit-log-group-toggle {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 
   width: 100%;
-  min-height: 38px;
+  min-height: 42px;
   margin: 0;
-  padding: 8px 12px;
+  padding: 10px 12px;
 
   background: linear-gradient(
     180deg,
-    rgba(18, 24, 34, 0.92),
-    rgba(11, 16, 24, 0.96)
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
   );
-  border: 1px solid rgba(102,252,241,0.14);
+  border: 1px solid rgba(102,252,241,0.18);
   border-radius: 14px;
 
   color: var(--heading);
@@ -1750,11 +1756,12 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.10em;
+  text-align: left;
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.03),
-    0 0 0 1px rgba(102,252,241,0.03),
-    0 8px 18px rgba(0,0,0,0.18);
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.22);
 
   transition:
     background 0.18s ease,
@@ -1766,29 +1773,33 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 #inventorySection #auditLog .audit-log-group-toggle:hover {
   background: linear-gradient(
     180deg,
-    rgba(24, 34, 46, 0.96),
+    rgba(24, 34, 46, 0.98),
     rgba(13, 21, 30, 1)
   );
-  border-color: rgba(102,252,241,0.24);
+  border-color: rgba(102,252,241,0.28);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 0 1px rgba(102,252,241,0.06),
-    0 0 14px rgba(102,252,241,0.06),
-    0 10px 22px rgba(0,0,0,0.24);
+    0 0 0 1px rgba(102,252,241,0.07),
+    0 0 16px rgba(102,252,241,0.08),
+    0 10px 22px rgba(0,0,0,0.26);
 }
 
 #inventorySection #auditLog .audit-log-group-toggle__caret {
-  width: 14px;
+  width: 16px;
+  min-width: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   line-height: 1;
+  opacity: 0.95;
 }
 
 #inventorySection #auditLog .audit-log-group-toggle__label {
   display: inline-flex;
   align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 #inventorySection #auditLog .audit-log-group-toggle__count {
@@ -1796,14 +1807,15 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
 
-  min-width: 28px;
+  min-width: 30px;
   min-height: 22px;
   padding: 2px 8px;
 
   border-radius: 999px;
   border: 1px solid rgba(102,252,241,0.18);
-  background: rgba(102,252,241,0.10);
+  background: rgba(102,252,241,0.09);
   color: var(--heading);
 
   font-size: 10px;
