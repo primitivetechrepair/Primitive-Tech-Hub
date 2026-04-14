@@ -1398,3 +1398,152 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   background: blue !important;
   color: white !important;
 }
+
+/* =========================================================
+   AUDIT LOG MODAL
+   ========================================================= */
+
+.audit-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3200;
+}
+
+.audit-modal.hidden {
+  display: none !important;
+}
+
+.audit-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.audit-modal__panel {
+  position: relative;
+  z-index: 1;
+
+  width: min(980px, calc(100% - 32px));
+  max-height: calc(100vh - 48px);
+  margin: 24px auto;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  border-radius: 22px;
+  border: 1px solid rgba(102,252,241,0.16);
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.97),
+    rgba(10, 15, 24, 0.99)
+  );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 24px 60px rgba(0,0,0,0.50);
+}
+
+.audit-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.audit-modal__header h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border-radius: 0 !important;
+  text-align: left !important;
+
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: var(--heading) !important;
+}
+
+.audit-modal__close {
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--text-color) !important;
+  box-shadow: none !important;
+}
+
+.audit-modal__close:hover {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(102,252,241,0.22) !important;
+  transform: none !important;
+}
+
+.audit-modal__sub {
+  margin: 0 !important;
+  padding: 10px 20px 14px !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.audit-modal__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 18px 20px 22px;
+}
+
+.stock-history-launch {
+  margin: 8px 0 18px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+#openAuditLogBtn {
+  width: auto !important;
+  min-width: 220px;
+}
+
+@media (max-width: 700px) {
+  .audit-modal__panel {
+    width: calc(100% - 20px);
+    max-height: calc(100vh - 20px);
+    margin: 10px auto;
+    border-radius: 18px;
+  }
+
+  .audit-modal__header {
+    padding: 16px 16px 10px;
+  }
+
+  .audit-modal__sub {
+    padding: 10px 16px 12px !important;
+  }
+
+  .audit-modal__body {
+    padding: 14px 16px 18px;
+  }
+
+  #openAuditLogBtn {
+    width: 100% !important;
+    min-width: 0;
+  }
+}
