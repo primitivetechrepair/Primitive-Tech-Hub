@@ -259,8 +259,17 @@
           <tbody id="inventoryBody"></tbody>
         </table>
       </div>
-      <h3 id="stockHistoryTitle">Stock History / Audit Log</h3>
-      <ul id="auditLog"></ul>
+      <div class="stock-history-launch">
+  <button
+    type="button"
+    id="openAuditLogBtn"
+    class="secondary"
+    aria-haspopup="dialog"
+    aria-controls="auditLogModal"
+  >
+    Open Stock History / Audit Log
+  </button>
+</div>
       <h3>Per-Item History</h3>
       <p class="muted" id="itemHistoryTitle">Select an inventory row history button.</p>
       <ul id="itemHistoryList"></ul>
@@ -448,6 +457,37 @@
     <div class="pt-modal__footer">
       <button type="button" class="pt-modal__btn" data-close="true">Cancel</button>
       <button type="button" class="pt-modal__btn pt-modal__btn--primary" id="listManagerSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="auditLogModal" class="audit-modal hidden" aria-hidden="true">
+  <div class="audit-modal__overlay" data-close="true"></div>
+
+  <div
+    class="audit-modal__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="auditLogModalTitle"
+  >
+    <div class="audit-modal__header">
+      <h3 id="auditLogModalTitle">Stock History / Audit Log</h3>
+      <button
+        type="button"
+        class="audit-modal__close"
+        id="closeAuditLogBtn"
+        aria-label="Close stock history"
+      >
+        ✖
+      </button>
+    </div>
+
+    <p class="audit-modal__sub muted">
+      Review inventory activity, adjustments, usage, and deletions.
+    </p>
+
+    <div class="audit-modal__body">
+      <ul id="auditLog"></ul>
     </div>
   </div>
 </div>
