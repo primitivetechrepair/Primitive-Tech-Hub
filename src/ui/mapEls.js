@@ -58,8 +58,11 @@ export function mapEls() {
     'themeToggleBtn',
 
     // Modal
-    'appModal', 'modalTitle', 'modalMessage',
-    'modalInput', 'modalCancelBtn', 'modalConfirmBtn',
+'appModal', 'modalTitle', 'modalMessage',
+'modalInput', 'modalCancelBtn', 'modalConfirmBtn',
+
+// Audit Modal
+'auditLogModal', 'openAuditLogBtn', 'closeAuditLogBtn',
 
     // Toast
     'toast'

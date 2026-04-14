@@ -34,6 +34,15 @@ export function createEventsController({
     if (wired) return;
     wired = true;
 
+    function setAuditLogModalOpen(el, isOpen) {
+      if (!el.auditLogModal) return;
+
+      el.auditLogModal.classList.toggle("hidden", !isOpen);
+      el.auditLogModal.setAttribute("aria-hidden", isOpen ? "false" : "true");
+
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    }
+
     el.logoutBtn.onclick = () => {
       sessionStorage.removeItem(sessionKey);
       location.reload();
@@ -151,8 +160,47 @@ if (newSelect) {
     el.applyScanToInventory.onclick = scannerController.applyScanToInventory;
     el.attachScanToLead.onclick = scannerController.attachScanToLead;
 
-    el.calendarBtn.onclick = () => exportAccountingService.exportCalendarIcs();
-    el.accountingBtn.onclick = () => exportAccountingService.exportQuickbooksCsv();
+    if (el.calendarBtn && exportAccountingService && exportAccountingService.exportCalendarIcs) {
+      el.calendarBtn.onclick = () => exportAccountingService.exportCalendarIcs();
+    }
+
+    if (el.accountingBtn && exportAccountingService && exportAccountingService.exportQuickbooksCsv) {
+      el.accountingBtn.onclick = () => exportAccountingService.exportQuickbooksCsv();
+    }
+
+    if (el.openAuditLogBtn) {
+      el.openAuditLogBtn.onclick = () => {
+        setAuditLogModalOpen(el, true);
+      };
+    }
+
+    if (el.closeAuditLogBtn) {
+      el.closeAuditLogBtn.onclick = () => {
+        setAuditLogModalOpen(el, false);
+      };
+    }
+
+    if (el.auditLogModal) {
+      el.auditLogModal.addEventListener("click", (e) => {
+        if (
+          e.target &&
+          e.target.dataset &&
+          e.target.dataset.close === "true"
+        ) {
+          setAuditLogModalOpen(el, false);
+        }
+      });
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "Escape" &&
+        el.auditLogModal &&
+        !el.auditLogModal.classList.contains("hidden")
+      ) {
+        setAuditLogModalOpen(el, false);
+      }
+    });
 
     bottomBarController.wireBottomBarOnce();
   }
