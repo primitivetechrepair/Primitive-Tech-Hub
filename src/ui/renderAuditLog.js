@@ -29,12 +29,26 @@ export function renderAuditLog(ctx) {
       const saved = JSON.parse(
         localStorage.getItem(AUDIT_GROUPS_STATE_KEY) || "{}"
       );
+
       el._auditCollapsedGroups =
         saved && typeof saved === "object" ? saved : {};
     } catch {
       el._auditCollapsedGroups = {};
     }
   }
+
+  const defaultAuditCollapsedGroups = {
+    Today: false,
+    Yesterday: true,
+    "This Week": true,
+    Earlier: true,
+  };
+
+  Object.keys(defaultAuditCollapsedGroups).forEach((groupName) => {
+    if (!(groupName in el._auditCollapsedGroups)) {
+      el._auditCollapsedGroups[groupName] = defaultAuditCollapsedGroups[groupName];
+    }
+  });
 
   const groupedEntries = entries.reduce((acc, entry) => {
     const group = getDateGroup(entry.at);
