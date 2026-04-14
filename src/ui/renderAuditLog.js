@@ -49,6 +49,7 @@ export function renderAuditLog(ctx) {
   orderedGroups.forEach((group) => {
     const groupItems = groupedEntries[group] || [];
     const isCollapsed = !!el._auditCollapsedGroups[group];
+    const groupCount = groupItems.length;
 
     const groupEl = document.createElement("li");
     groupEl.className = "audit-log-group";
@@ -61,6 +62,7 @@ export function renderAuditLog(ctx) {
       >
         <span class="audit-log-group-toggle__caret">${isCollapsed ? "▶" : "▼"}</span>
         <span class="audit-log-group-toggle__label">${group}</span>
+        <span class="audit-log-group-toggle__count">${groupCount}</span>
       </button>
     `;
 

@@ -1791,6 +1791,29 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   align-items: center;
 }
 
+#inventorySection #auditLog .audit-log-group-toggle__count {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 28px;
+  min-height: 22px;
+  padding: 2px 8px;
+
+  border-radius: 999px;
+  border: 1px solid rgba(102,252,241,0.18);
+  background: rgba(102,252,241,0.10);
+  color: var(--heading);
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1;
+
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
 /* =========================================================
    AUDIT LOG MODAL
    ========================================================= */
@@ -1937,6 +1960,13 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   #openAuditLogBtn {
     width: 100% !important;
     min-width: 0;
+  }
+
+  #inventorySection #auditLog .audit-log-group-toggle__count {
+    min-width: 24px;
+    min-height: 20px;
+    padding: 2px 7px;
+    font-size: 10px;
   }
 }
 
