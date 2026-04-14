@@ -101,7 +101,7 @@ export function renderAuditLog(ctx) {
 
     groupItems.forEach((a) => {
       const li = document.createElement("li");
-      li.className = `audit-log-card inventory-card ${getAuditTypeClass(a.action)}`;
+      li.className = `audit-log-card ${getAuditTypeClass(a.action)}`;
 
     const actionLabel = formatActionLabel(a.action);
     const title = buildAuditTitle(a);
