@@ -1837,3 +1837,12 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     font-size: 10px;
   }
 }
+
+/* Keep Admin Verification above Audit Log modal */
+.modal-overlay {
+  z-index: 4000 !important;
+}
+
+.modal-panel {
+  z-index: 4001 !important;
+}
