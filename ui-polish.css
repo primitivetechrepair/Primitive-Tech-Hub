@@ -1925,3 +1925,72 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     min-width: 0;
   }
 }
+
+/* =========================================================
+   AUDIT MODAL — LOG LAYOUT POLISH
+   ========================================================= */
+
+#auditLog {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#auditLog .audit-log-group {
+  margin-bottom: 10px;
+}
+
+#auditLog .audit-log-group-toggle {
+  width: 100%;
+}
+
+#auditLog .audit-log-card {
+  margin-top: 10px;
+}
+
+#auditLog .audit-log-card:first-of-type {
+  margin-top: 8px;
+}
+
+.audit-modal__body #auditLog {
+  display: grid;
+  gap: 12px;
+}
+
+.audit-modal__body #auditLog .audit-log-group {
+  margin: 0;
+}
+
+.audit-modal__body #auditLog .audit-log-card {
+  margin: 0;
+}
+
+.audit-modal__body #auditLog .audit-log-card__shell {
+  gap: 10px;
+}
+
+.audit-modal__body #auditLog .audit-log-card__top {
+  margin-bottom: 0;
+}
+
+.audit-modal__body #auditLog .audit-log-card__meta {
+  opacity: 0.92;
+}
+
+.audit-modal__body #auditLog .audit-log-card__details {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.audit-modal__body #auditLog .audit-log-empty {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .audit-modal__body #auditLog {
+    gap: 10px;
+  }
+
+  .audit-modal__body #auditLog .audit-log-card__shell {
+    gap: 8px;
+  }
+}
