@@ -37,10 +37,24 @@ export function createEventsController({
     function setAuditLogModalOpen(el, isOpen) {
       if (!el.auditLogModal) return;
 
+      if (isOpen) {
+        renderAll();
+      }
+
       el.auditLogModal.classList.toggle("hidden", !isOpen);
       el.auditLogModal.setAttribute("aria-hidden", isOpen ? "false" : "true");
 
       document.body.style.overflow = isOpen ? "hidden" : "";
+
+      if (isOpen) {
+        if (el.closeAuditLogBtn) {
+          requestAnimationFrame(() => el.closeAuditLogBtn.focus());
+        }
+      } else {
+        if (el.openAuditLogBtn) {
+          requestAnimationFrame(() => el.openAuditLogBtn.focus());
+        }
+      }
     }
 
     el.logoutBtn.onclick = () => {
