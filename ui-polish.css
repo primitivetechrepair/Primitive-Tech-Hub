@@ -1547,6 +1547,20 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   padding: 0 !important;
   display: grid;
   gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+/* Desktop: 2 per row */
+@media (min-width: 900px) {
+  .audit-modal__body #auditLog {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Make group headers span full width */
+.audit-modal__body #auditLog .audit-log-group,
+.audit-modal__body #auditLog .audit-log-group-toggle {
+  grid-column: 1 / -1;
 }
 
 .audit-modal__body #auditLog .audit-log-group {
