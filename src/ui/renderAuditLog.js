@@ -108,6 +108,8 @@ export function renderAuditLog(ctx) {
     const meta = buildAuditMeta(a);
     const details = buildAuditDetails(a);
 
+const summaryRows = buildAuditSummaryRows(a);
+
 li.innerHTML = `
   <div class="audit-log-card__shell">
 
@@ -117,6 +119,12 @@ li.innerHTML = `
     </div>
 
     <div class="audit-log-card__title">${title}</div>
+
+    ${
+      summaryRows
+        ? `<div class="audit-log-card__summary">${summaryRows}</div>`
+        : ""
+    }
 
     ${meta ? `<div class="audit-log-card__meta">${meta}</div>` : ""}
 
@@ -227,6 +235,68 @@ function buildAuditMeta(a) {
   if (a.customerID) parts.push(`Customer: ${a.customerID}`);
 
   return parts.join(" • ");
+}
+
+function buildAuditSummaryRows(a) {
+  const rows = [];
+
+  const qty = a.qty !== undefined && a.qty !== null && a.qty !== ""
+    ? String(a.qty)
+    : null;
+
+  const delta =
+    a.delta !== undefined && a.delta !== null && a.delta !== ""
+      ? `${Number(a.delta) > 0 ? "+" : ""}${a.delta}`
+      : null;
+
+  const source = a.userAction ? prettify(a.userAction) : null;
+
+  if (a.itemName || a.itemID) {
+    rows.push(`
+      <div class="audit-log-card__summaryRow">
+        <span class="audit-log-card__summaryLabel">Part</span>
+        <span class="audit-log-card__summaryValue">${escapeHtml(a.itemName || a.itemID || "-")}</span>
+      </div>
+    `);
+  }
+
+  if (qty !== null) {
+    rows.push(`
+      <div class="audit-log-card__summaryRow">
+        <span class="audit-log-card__summaryLabel">Qty</span>
+        <span class="audit-log-card__summaryValue">${escapeHtml(qty)}</span>
+      </div>
+    `);
+  }
+
+  if (delta !== null) {
+    rows.push(`
+      <div class="audit-log-card__summaryRow">
+        <span class="audit-log-card__summaryLabel">Change</span>
+        <span class="audit-log-card__summaryValue">${escapeHtml(delta)}</span>
+      </div>
+    `);
+  }
+
+  if (a.leadID) {
+    rows.push(`
+      <div class="audit-log-card__summaryRow">
+        <span class="audit-log-card__summaryLabel">Lead</span>
+        <span class="audit-log-card__summaryValue">${escapeHtml(a.leadID)}</span>
+      </div>
+    `);
+  }
+
+  if (source) {
+    rows.push(`
+      <div class="audit-log-card__summaryRow">
+        <span class="audit-log-card__summaryLabel">Source</span>
+        <span class="audit-log-card__summaryValue">${escapeHtml(source)}</span>
+      </div>
+    `);
+  }
+
+  return rows.join("");
 }
 
 function buildAuditDetails(a) {
