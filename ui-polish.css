@@ -1387,17 +1387,6 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     font-size: 10px;
   }
 }
-/* ===== AUDIT LOG TEST (FORCE OVERRIDE) ===== */
-
-.audit-modal__body #auditLog .audit-log-card {
-  background: red !important;
-  border: 3px solid yellow !important;
-}
-
-.audit-modal__body #auditLog .audit-log-group-toggle {
-  background: blue !important;
-  color: white !important;
-}
 
 /* =========================================================
    AUDIT LOG MODAL
