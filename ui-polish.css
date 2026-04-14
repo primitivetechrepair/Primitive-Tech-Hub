@@ -1536,3 +1536,290 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     min-width: 0;
   }
 }
+
+/* =========================================================
+   AUDIT MODAL — BASE REBUILD
+   ========================================================= */
+
+.audit-modal__body #auditLog {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: grid;
+  gap: 14px;
+}
+
+.audit-modal__body #auditLog .audit-log-group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.audit-modal__body #auditLog .audit-log-group-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  min-height: 42px;
+  margin: 0;
+  padding: 10px 12px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(102,252,241,0.18);
+
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  ) !important;
+
+  color: var(--heading) !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  text-align: left;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.22);
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.audit-modal__body #auditLog .audit-log-group-toggle:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.98),
+    rgba(13, 21, 30, 1)
+  ) !important;
+  border-color: rgba(102,252,241,0.28) !important;
+}
+
+.audit-modal__body #auditLog .audit-log-group-toggle__caret {
+  width: 16px;
+  min-width: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audit-modal__body #auditLog .audit-log-group-toggle__label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.audit-modal__body #auditLog .audit-log-group-toggle__count {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 30px;
+  min-height: 22px;
+  padding: 2px 8px;
+
+  border-radius: 999px;
+  border: 1px solid rgba(102,252,241,0.18);
+  background: rgba(102,252,241,0.09);
+  color: var(--heading);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.audit-modal__body #auditLog .audit-log-card {
+  position: relative;
+  margin: 0 !important;
+  padding: 16px !important;
+  border-radius: 18px !important;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.98),
+    rgba(10, 15, 24, 0.99)
+  ) !important;
+
+  border: 1px solid rgba(102,252,241,0.18) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 14px 30px rgba(0,0,0,0.34) !important;
+
+  overflow: hidden;
+}
+
+.audit-modal__body #auditLog .audit-log-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(102,252,241,0.06),
+    transparent 28%,
+    transparent 72%,
+    rgba(69,162,158,0.05)
+  );
+  opacity: 0.9;
+}
+
+.audit-modal__body #auditLog .audit-log-card.is-added {
+  border-left: 4px solid #22c55e !important;
+}
+
+.audit-modal__body #auditLog .audit-log-card.is-used {
+  border-left: 4px solid #eab308 !important;
+}
+
+.audit-modal__body #auditLog .audit-log-card.is-adjusted,
+.audit-modal__body #auditLog .audit-log-card.is-updated {
+  border-left: 4px solid #38bdf8 !important;
+}
+
+.audit-modal__body #auditLog .audit-log-card.is-deleted {
+  border-left: 4px solid #ef4444 !important;
+}
+
+.audit-modal__body #auditLog .audit-log-card__shell {
+  display: grid;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.audit-modal__body #auditLog .audit-log-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.audit-modal__body #auditLog .audit-log-card__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 24px;
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
+  color: var(--heading);
+}
+
+.audit-modal__body #auditLog .audit-log-card__date {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.audit-modal__body #auditLog .audit-log-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-color);
+}
+
+.audit-modal__body #auditLog .audit-log-card__title strong {
+  color: var(--heading);
+}
+
+.audit-modal__body #auditLog .audit-log-card__meta,
+.audit-modal__body #auditLog .audit-log-card__details {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.audit-modal__body #auditLog .audit-log-card__details.hidden {
+  display: none;
+}
+
+.audit-modal__body #auditLog .audit-log-card__expandHint {
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--heading);
+  opacity: 0.82;
+  cursor: pointer;
+}
+
+.audit-modal__body #auditLog .audit-log-card__actions {
+  margin-top: 4px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.audit-modal__body #auditLog .audit-log-empty {
+  list-style: none;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 28, 40, 0.96),
+    rgba(10, 15, 24, 0.99)
+  ) !important;
+
+  border: 1px solid rgba(102,252,241,0.12);
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .audit-modal__body #auditLog .audit-log-card,
+  .audit-modal__body #auditLog .audit-log-empty {
+    padding: 12px 14px !important;
+  }
+
+  .audit-modal__body #auditLog .audit-log-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .audit-modal__body #auditLog .audit-log-card__date {
+    white-space: normal;
+  }
+
+  .audit-modal__body #auditLog .audit-log-card__badge {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .audit-modal__body #auditLog .audit-log-group-toggle {
+    min-height: 38px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .audit-modal__body #auditLog .audit-log-group-toggle__count {
+    min-width: 24px;
+    min-height: 20px;
+    padding: 2px 7px;
+    font-size: 10px;
+  }
+}
