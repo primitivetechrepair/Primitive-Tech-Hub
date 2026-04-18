@@ -64,11 +64,11 @@ export function createCloudSyncQueueService({
       }
 
       case "audit_add": {
-        const auditEntry = (data.auditLog || []).find(
-          (entry) => String(entry.auditID || "") === String(payload.auditID || "")
+        const entry = (data.auditLog || []).find(
+          (x) => String(x.auditID || "") === String(payload.auditID || "")
         );
-        if (!auditEntry) return;
-        await upsertAuditEntryToCloud(auditEntry);
+        if (!entry) return;
+        await upsertAuditEntryToCloud(entry);
         break;
       }
 
