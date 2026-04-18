@@ -4,6 +4,8 @@ import {
   upsertInventoryItemToCloud,
   deleteInventoryItemFromCloud,
   insertInventoryUsageToCloud,
+  upsertAuditEntryToCloud,
+  deleteAuditEntryFromCloud,
 } from "./cloudInventoryService.js";
 
 export function createCloudSyncQueueService({
@@ -58,6 +60,21 @@ export function createCloudSyncQueueService({
         if (item) {
           await upsertInventoryItemToCloud(item);
         }
+        break;
+      }
+
+      case "audit_add": {
+        const auditEntry = (data.auditLog || []).find(
+          (entry) => String(entry.auditID || "") === String(payload.auditID || "")
+        );
+        if (!auditEntry) return;
+        await upsertAuditEntryToCloud(auditEntry);
+        break;
+      }
+
+      case "audit_delete": {
+        if (!payload.auditID) return;
+        await deleteAuditEntryFromCloud(payload.auditID);
         break;
       }
 

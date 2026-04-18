@@ -1,25 +1,30 @@
 // src/services/auditService.js
 
 export function createAuditService({ getData, setData, persist }) {
-  const MAX = 500; // keep last 500 entries (adjust)
+  const MAX = 500;
+
+  function createAuditID() {
+    return `A-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  }
 
   function add(action, details = {}, opts = {}) {
     const { persistNow = false } = opts;
 
     const data = getData();
-    data.auditLog = data.auditLog || [];
+    data.auditLog = Array.isArray(data.auditLog) ? data.auditLog : [];
 
     const entry = {
+      auditID: details.auditID || createAuditID(),
       at: new Date().toISOString(),
       action,
       ...details,
     };
 
-    // newest first
     data.auditLog.unshift(entry);
 
-    // cap size
-    if (data.auditLog.length > MAX) data.auditLog.length = MAX;
+    if (data.auditLog.length > MAX) {
+      data.auditLog.length = MAX;
+    }
 
     setData(data);
     if (persistNow) persist();
@@ -36,9 +41,26 @@ export function createAuditService({ getData, setData, persist }) {
     const { persistNow = false } = opts;
 
     const data = getData();
-    if (!data.auditLog || index < 0 || index >= data.auditLog.length) return false;
+    if (!Array.isArray(data.auditLog) || index < 0 || index >= data.auditLog.length) {
+      return false;
+    }
 
     data.auditLog.splice(index, 1);
+    setData(data);
+    if (persistNow) persist();
+    return true;
+  }
+
+  function removeByAuditID(auditID, opts = {}) {
+    const { persistNow = false } = opts;
+
+    const data = getData();
+    if (!Array.isArray(data.auditLog) || !auditID) return false;
+
+    const next = data.auditLog.filter((entry) => String(entry.auditID || "") !== String(auditID));
+    if (next.length === data.auditLog.length) return false;
+
+    data.auditLog = next;
     setData(data);
     if (persistNow) persist();
     return true;
@@ -54,5 +76,5 @@ export function createAuditService({ getData, setData, persist }) {
     return true;
   }
 
-  return { add, list, removeAt, clear };
+  return { add, list, removeAt, removeByAuditID, clear };
 }
