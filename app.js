@@ -221,7 +221,17 @@ const auditService = createAuditService({
   getData,
   setData,
   persist: (...args) => persist(...args),
-  queueCloudSync: (...args) => syncService.enqueue(...args),
+  queueCloudSync: (...args) => {
+    const result = syncService.enqueue(...args);
+
+    if (cloudSyncQueueService?.syncPendingData) {
+      cloudSyncQueueService.syncPendingData().catch((err) => {
+        console.error("audit syncPendingData failed:", err);
+      });
+    }
+
+    return result;
+  },
 });
 
 const syncService = createSyncService({
