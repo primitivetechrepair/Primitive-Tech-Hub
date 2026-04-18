@@ -426,6 +426,12 @@ if (!inventorySyncOnlineWired) {
     flushInventorySyncQueue().catch((err) => {
       console.error("flushInventorySyncQueue online retry failed:", err);
     });
+
+    if (cloudSyncQueueService?.syncPendingData) {
+      cloudSyncQueueService.syncPendingData().catch((err) => {
+        console.error("syncPendingData online retry failed:", err);
+      });
+    }
   });
   inventorySyncOnlineWired = true;
 }
@@ -555,6 +561,13 @@ if (!inventorySyncOnlineWired) {
   }));
 
   renderAll = () => renderAllController.renderAll();
+
+  if (cloudSyncQueueService?.syncPendingData) {
+    cloudSyncQueueService.syncPendingData().catch((err) => {
+      console.error("syncPendingData failed:", err);
+    });
+  }
+
 
   if (!listManagerModal) {
     listManagerModal = createListManagerModal({
