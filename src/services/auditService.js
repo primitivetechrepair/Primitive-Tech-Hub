@@ -1,6 +1,6 @@
 // src/services/auditService.js
 
-export function createAuditService({ getData, setData, persist }) {
+export function createAuditService({ getData, setData, persist, queueCloudSync }) {
   const MAX = 500;
 
   function createAuditID() {
@@ -27,6 +27,11 @@ export function createAuditService({ getData, setData, persist }) {
     }
 
     setData(data);
+
+    if (typeof queueCloudSync === "function") {
+      queueCloudSync("audit_add", { auditID: entry.auditID });
+    }
+
     if (persistNow) persist();
 
     return entry;
@@ -45,8 +50,14 @@ export function createAuditService({ getData, setData, persist }) {
       return false;
     }
 
+    const removed = data.auditLog[index];
     data.auditLog.splice(index, 1);
     setData(data);
+
+    if (removed?.auditID && typeof queueCloudSync === "function") {
+      queueCloudSync("audit_delete", { auditID: removed.auditID });
+    }
+
     if (persistNow) persist();
     return true;
   }
@@ -57,11 +68,21 @@ export function createAuditService({ getData, setData, persist }) {
     const data = getData();
     if (!Array.isArray(data.auditLog) || !auditID) return false;
 
-    const next = data.auditLog.filter((entry) => String(entry.auditID || "") !== String(auditID));
-    if (next.length === data.auditLog.length) return false;
+    const exists = data.auditLog.some(
+      (entry) => String(entry.auditID || "") === String(auditID)
+    );
+    if (!exists) return false;
 
-    data.auditLog = next;
+    data.auditLog = data.auditLog.filter(
+      (entry) => String(entry.auditID || "") !== String(auditID)
+    );
+
     setData(data);
+
+    if (typeof queueCloudSync === "function") {
+      queueCloudSync("audit_delete", { auditID });
+    }
+
     if (persistNow) persist();
     return true;
   }

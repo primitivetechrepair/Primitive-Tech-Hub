@@ -67,6 +67,7 @@ import { createListManagerModal } from "./src/ui/listManagerModal.js";
 import {
   fetchInventoryFromCloud,
   fetchLeadsFromCloud,
+  fetchAuditLogFromCloud,
   upsertLeadToCloud,
   fetchAppSettingsFromCloud,
   upsertAppSettingsToCloud,
@@ -220,6 +221,7 @@ const auditService = createAuditService({
   getData,
   setData,
   persist: (...args) => persist(...args),
+  queueCloudSync: (...args) => syncService.enqueue(...args),
 });
 
 const syncService = createSyncService({
@@ -364,7 +366,6 @@ async function hydrateLeadsFromCloud() {
 
     const activeCloudLeads = (cloudLeads || []).filter((lead) => !lead.deletedAt);
 
-    // Start from active cloud leads as source of truth for cross-device visibility
     const mergedLeads = mergeByTimestamp(localLeads, activeCloudLeads, {
       key: "leadID",
       timeField: "lastUpdated",
@@ -373,6 +374,27 @@ async function hydrateLeadsFromCloud() {
     data.leads = sortLeadsNewestFirst(mergedLeads);
   } catch (err) {
     console.error("hydrateLeadsFromCloud failed:", err);
+  }
+}
+
+async function hydrateAuditLogFromCloud() {
+  try {
+    const cloudAudit = await fetchAuditLogFromCloud();
+    if (!Array.isArray(cloudAudit)) return;
+
+    const localAudit = Array.isArray(data.auditLog) ? data.auditLog : [];
+    const map = new Map();
+
+    [...localAudit, ...cloudAudit].forEach((entry) => {
+      if (!entry?.auditID) return;
+      map.set(entry.auditID, entry);
+    });
+
+    data.auditLog = Array.from(map.values())
+      .sort((a, b) => new Date(b.at || 0).getTime() - new Date(a.at || 0).getTime())
+      .slice(0, 500);
+  } catch (err) {
+    console.error("hydrateAuditLogFromCloud failed:", err);
   }
 }
 
@@ -385,11 +407,12 @@ async function showApp() {
   showUnlockedUI(el);
 
   data.settings = normalizeSettingsShape(data.settings);
-  await hydrateAppSettingsFromCloud();
-  await hydrateInventoryFromCloud();
-  await hydrateLeadsFromCloud();
+await hydrateAppSettingsFromCloud();
+await hydrateInventoryFromCloud();
+await hydrateLeadsFromCloud();
+await hydrateAuditLogFromCloud();
 
-  await persist();
+await persist();
 renderAllNow();
 
 setTimeout(() => {
