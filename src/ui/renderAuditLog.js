@@ -2,7 +2,7 @@
 const AUDIT_GROUPS_STATE_KEY = "primitiveTechHubAuditGroupState";
 
 export function renderAuditLog(ctx) {
-  const {
+    const {
     el,
     data,
     fmtDate,
@@ -11,6 +11,7 @@ export function renderAuditLog(ctx) {
     verifyAdminPin,
     auditService,
     persist,
+    renderAll,
     renderAuditLog,
   } = ctx;
 
@@ -192,10 +193,7 @@ if (details) {
           return toast("Could not find this stock history entry.");
         }
 
-        data.auditLog = data.auditLog.filter((_, idx) => idx !== realIndex);
-
-        renderAuditLog(ctx);
-        toast("Stock history entry deleted.");
+        data.auditLog.splice(realIndex, 1);
 
         try {
           if (typeof persist === "function") {
@@ -205,6 +203,14 @@ if (details) {
           console.error("Failed to persist audit log delete:", err);
           toast("Entry removed locally, but save failed.");
         }
+
+        if (typeof renderAll === "function") {
+          renderAll();
+        } else {
+          renderAuditLog(ctx);
+        }
+
+        toast("Stock history entry deleted.");
       };
 
       actions.appendChild(btn);

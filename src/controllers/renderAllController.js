@@ -172,6 +172,8 @@ export function createRenderAllController({
       isAdminEnabled,
       verifyAdminPin,
       auditService,
+      persist,
+      renderAll,
       renderAuditLog,
     });
 
