@@ -10,6 +10,7 @@ export function renderAuditLog(ctx) {
     isAdminEnabled,
     verifyAdminPin,
     auditService,
+    persist,
     renderAuditLog,
   } = ctx;
 
@@ -171,46 +172,35 @@ if (details) {
       btn.className = "tiny delete-btn";
 
       btn.onclick = async () => {
-  const ok = await verifyAdminPin();
-  if (!ok) return toast("Invalid Admin PIN.");
+        const ok = await verifyAdminPin();
+        if (!ok) return toast("Invalid Admin PIN.");
 
-  const realIndex = data.auditLog.findIndex((entry) => {
-    return (
-      entry === a ||
-      (
-        entry &&
-        entry.at === a.at &&
-        entry.action === a.action &&
-        String(entry.itemID || "") === String(a.itemID || "") &&
-        String(entry.itemName || "") === String(a.itemName || "") &&
-        String(entry.leadID || "") === String(a.leadID || "") &&
-        String(entry.qty ?? "") === String(a.qty ?? "") &&
-        String(entry.delta ?? "") === String(a.delta ?? "")
-      )
-    );
-  });
+        const realIndex = data.auditLog.findIndex((entry) => {
+          return (
+            entry &&
+            entry.at === a.at &&
+            entry.action === a.action &&
+            String(entry.itemID || "") === String(a.itemID || "") &&
+            String(entry.itemName || "") === String(a.itemName || "") &&
+            String(entry.leadID || "") === String(a.leadID || "") &&
+            String(entry.qty ?? "") === String(a.qty ?? "") &&
+            String(entry.delta ?? "") === String(a.delta ?? "")
+          );
+        });
 
-  if (realIndex === -1) {
-    return toast("Could not find this stock history entry.");
-  }
+        if (realIndex === -1) {
+          return toast("Could not find this stock history entry.");
+        }
 
-  const beforeLen = Array.isArray(data.auditLog) ? data.auditLog.length : 0;
+        data.auditLog.splice(realIndex, 1);
 
-  try {
-    if (auditService && typeof auditService.removeAt === "function") {
-      await auditService.removeAt(realIndex, { persistNow: true });
-    }
-  } catch (err) {
-    console.error("auditService.removeAt failed:", err);
-  }
+        if (typeof persist === "function") {
+          await persist();
+        }
 
-  if (Array.isArray(data.auditLog) && data.auditLog.length === beforeLen) {
-    data.auditLog.splice(realIndex, 1);
-  }
-
-  renderAuditLog(ctx);
-  toast("Stock history entry deleted.");
-};
+        renderAuditLog(ctx);
+        toast("Stock history entry deleted.");
+      };
 
       actions.appendChild(btn);
       li.querySelector(".audit-log-card__shell").appendChild(actions);
