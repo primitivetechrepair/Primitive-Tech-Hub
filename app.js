@@ -383,11 +383,28 @@ async function hydrateAuditLogFromCloud() {
     if (!Array.isArray(cloudAudit)) return;
 
     const localAudit = Array.isArray(data.auditLog) ? data.auditLog : [];
+    const pendingQueue = Array.isArray(data.pendingCloudSync) ? data.pendingCloudSync : [];
+
+    const pendingDeletedAuditIDs = new Set(
+      pendingQueue
+        .filter((entry) => entry?.action === "audit_delete")
+        .map((entry) => String(entry?.payload?.auditID || ""))
+        .filter(Boolean)
+    );
+
     const map = new Map();
 
     [...localAudit, ...cloudAudit].forEach((entry) => {
       if (!entry?.auditID) return;
-      map.set(entry.auditID, entry);
+
+      const auditID = String(entry.auditID || "");
+      if (!auditID) return;
+
+      if (pendingDeletedAuditIDs.has(auditID)) {
+        return;
+      }
+
+      map.set(auditID, entry);
     });
 
     data.auditLog = Array.from(map.values())
