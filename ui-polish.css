@@ -1846,3 +1846,20 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 .modal-panel {
   z-index: 4001 !important;
 }
+
+.audit-delete-btn {
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+@media (max-width: 700px) {
+  .audit-delete-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .audit-log-card__actions {
+    width: 100%;
+  }
+}

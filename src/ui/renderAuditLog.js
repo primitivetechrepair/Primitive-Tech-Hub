@@ -166,11 +166,14 @@ if (details) {
     if (true) {
       const actions = document.createElement("div");
       actions.className = "audit-log-card__actions";
+actions.style.display = "flex";
+actions.style.justifyContent = "flex-end";
+actions.style.marginTop = "10px";
 
       const btn = document.createElement("button");
       btn.type = "button";
       btn.textContent = "Delete";
-      btn.className = "tiny delete-btn";
+      btn.className = "tiny delete-btn audit-delete-btn";
 
       btn.onclick = async () => {
         const confirmed = window.confirm("Delete this stock history entry?");
@@ -209,7 +212,7 @@ if (details) {
       };
 
       actions.appendChild(btn);
-      li.querySelector(".audit-log-card__shell").appendChild(actions);
+      li.appendChild(actions);
     }
 
       el.auditLog.appendChild(li);
