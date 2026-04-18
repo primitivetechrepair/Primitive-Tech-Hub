@@ -450,3 +450,74 @@ export async function upsertAppSettingsToCloud(settings) {
 
   return data;
 }
+
+/* ===============================
+   AUDIT LOG CLOUD SYNC
+================================ */
+
+export async function upsertAuditEntryToCloud(entry) {
+  const payload = {
+    audit_id: entry.auditID,
+    at: entry.at,
+    action: entry.action || "",
+    item_id: entry.itemID || null,
+    item_name: entry.itemName || "",
+    lead_id: entry.leadID || null,
+    qty: entry.qty ?? null,
+    delta: entry.delta ?? null,
+    user_action: entry.userAction || "",
+    notes: entry.notes || "",
+    updated_at: new Date().toISOString(),
+  };
+
+  const { data, error } = await supabase
+    .from("audit_log")
+    .upsert(payload, { onConflict: "audit_id" })
+    .select();
+
+  if (error) {
+    console.error("upsertAuditEntryToCloud error:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function deleteAuditEntryFromCloud(auditID) {
+  const { error } = await supabase
+    .from("audit_log")
+    .delete()
+    .eq("audit_id", auditID);
+
+  if (error) {
+    console.error("deleteAuditEntryFromCloud error:", error);
+    throw error;
+  }
+
+  return true;
+}
+
+export async function fetchAuditLogFromCloud() {
+  const { data, error } = await supabase
+    .from("audit_log")
+    .select("*")
+    .order("at", { ascending: false });
+
+  if (error) {
+    console.error("fetchAuditLogFromCloud error:", error);
+    throw error;
+  }
+
+  return (data || []).map((row) => ({
+    auditID: row.audit_id,
+    at: row.at,
+    action: row.action,
+    itemID: row.item_id,
+    itemName: row.item_name,
+    leadID: row.lead_id,
+    qty: row.qty,
+    delta: row.delta,
+    userAction: row.user_action,
+    notes: row.notes,
+  }));
+}
