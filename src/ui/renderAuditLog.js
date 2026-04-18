@@ -163,18 +163,18 @@ if (details) {
   });
 }
 
-    if (isAdminEnabled()) {
+    if (true) {
       const actions = document.createElement("div");
       actions.className = "audit-log-card__actions";
 
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.textContent = "Delete";a
+      btn.textContent = "Delete";
       btn.className = "tiny delete-btn";
 
       btn.onclick = async () => {
-        const ok = await verifyAdminPin();
-        if (!ok) return toast("Invalid Admin PIN.");
+        const confirmed = window.confirm("Delete this stock history entry?");
+        if (!confirmed) return;
 
         const realIndex = data.auditLog.findIndex((entry) => {
           return (
@@ -193,15 +193,10 @@ if (details) {
           return toast("Could not find this stock history entry.");
         }
 
-        data.auditLog.splice(realIndex, 1);
+        const removed = auditService?.removeAt(realIndex, { persistNow: true });
 
-        try {
-          if (typeof persist === "function") {
-            await persist();
-          }
-        } catch (err) {
-          console.error("Failed to persist audit log delete:", err);
-          toast("Entry removed locally, but save failed.");
+        if (!removed) {
+          return toast("Could not delete this stock history entry.");
         }
 
         if (typeof renderAll === "function") {
