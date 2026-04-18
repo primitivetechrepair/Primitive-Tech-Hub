@@ -168,7 +168,7 @@ if (details) {
 
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.textContent = "Delete";
+      btn.textContent = "Delete";a
       btn.className = "tiny delete-btn";
 
       btn.onclick = async () => {
@@ -192,14 +192,19 @@ if (details) {
           return toast("Could not find this stock history entry.");
         }
 
-        data.auditLog.splice(realIndex, 1);
-
-        if (typeof persist === "function") {
-          await persist();
-        }
+        data.auditLog = data.auditLog.filter((_, idx) => idx !== realIndex);
 
         renderAuditLog(ctx);
         toast("Stock history entry deleted.");
+
+        try {
+          if (typeof persist === "function") {
+            await persist();
+          }
+        } catch (err) {
+          console.error("Failed to persist audit log delete:", err);
+          toast("Entry removed locally, but save failed.");
+        }
       };
 
       actions.appendChild(btn);
