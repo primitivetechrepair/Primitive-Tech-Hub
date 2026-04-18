@@ -382,29 +382,39 @@ async function hydrateAuditLogFromCloud() {
     const cloudAudit = await fetchAuditLogFromCloud();
     if (!Array.isArray(cloudAudit)) return;
 
-    const localAudit = Array.isArray(data.auditLog) ? data.auditLog : [];
     const pendingQueue = Array.isArray(data.pendingCloudSync) ? data.pendingCloudSync : [];
 
-    const pendingDeletedAuditIDs = new Set(
+    const pendingAuditAdds = new Set(
+      pendingQueue
+        .filter((entry) => entry?.action === "audit_add")
+        .map((entry) => String(entry?.payload?.auditID || ""))
+        .filter(Boolean)
+    );
+
+    const pendingAuditDeletes = new Set(
       pendingQueue
         .filter((entry) => entry?.action === "audit_delete")
         .map((entry) => String(entry?.payload?.auditID || ""))
         .filter(Boolean)
     );
 
+    const localAudit = Array.isArray(data.auditLog) ? data.auditLog : [];
+
+    const localPendingAdds = localAudit.filter((entry) => {
+      const auditID = String(entry?.auditID || "");
+      return auditID && pendingAuditAdds.has(auditID) && !pendingAuditDeletes.has(auditID);
+    });
+
+    const cloudFiltered = cloudAudit.filter((entry) => {
+      const auditID = String(entry?.auditID || "");
+      return auditID && !pendingAuditDeletes.has(auditID);
+    });
+
     const map = new Map();
 
-    [...localAudit, ...cloudAudit].forEach((entry) => {
+    [...cloudFiltered, ...localPendingAdds].forEach((entry) => {
       if (!entry?.auditID) return;
-
-      const auditID = String(entry.auditID || "");
-      if (!auditID) return;
-
-      if (pendingDeletedAuditIDs.has(auditID)) {
-        return;
-      }
-
-      map.set(auditID, entry);
+      map.set(String(entry.auditID), entry);
     });
 
     data.auditLog = Array.from(map.values())
