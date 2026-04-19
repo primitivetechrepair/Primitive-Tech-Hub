@@ -1390,7 +1390,7 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 @media (min-width: 1280px) {
   .leads-card-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1640,6 +1640,7 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   width: 100%;
+  align-self: stretch;
 }
 
 .lead-card-actions .lead-action-btn,
@@ -1761,6 +1762,9 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 .lead-card-header {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding-bottom: 12px;
 }
 
@@ -1783,14 +1787,17 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 /* customer name */
 .lead-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--text-color);
-
-  display: block;
   line-height: 1.25;
-  min-width: 0;
 
   white-space: normal;
   overflow: visible;
@@ -1799,7 +1806,8 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 /* lead id (secondary info) */
 .lead-card-id {
-  margin-top: 4px;
+  margin-top: 0;
+  flex: 0 0 auto;
 
   font-size: 10px;
   letter-spacing: 0.08em;
@@ -1808,14 +1816,18 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   color: rgba(255,255,255,0.55);
   font-family: 'Oswald', sans-serif;
 
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* subtle grouping for text */
 .lead-card-header > div:first-child {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
+  width: 100%;
 }
 
 /* hover emphasis */
