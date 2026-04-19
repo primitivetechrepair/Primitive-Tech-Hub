@@ -170,9 +170,37 @@
     </section>
 
     <section class="card" id="inventorySection">
-      <h2>Inventory</h2>
-      <p class="section-subtitle muted">Track parts inventory with quick inline updates.</p>
-      <div class="row wrap inventory-search-row"><div class="search-wrapper"><span class="search-icon">🔍</span><input id="inventorySearch" placeholder="Search inventory by item, supplier, device, series..." aria-label="Search inventory" /></div></div>
+  <h2>Inventory</h2>
+  <p class="section-subtitle muted">Track parts inventory with quick inline updates.</p>
+
+  <div class="inventory-actions-row">
+    <button
+      type="button"
+      id="openAuditLogBtn"
+      aria-haspopup="dialog"
+      aria-controls="auditLogModal"
+    >
+      <span class="btn-ico">📦</span>
+      <span>Stock History</span>
+    </button>
+
+    <button
+      type="button"
+      id="toggleCsvImportBtn"
+    >
+      <span class="btn-ico">📄</span>
+      <span>Bulk Import</span>
+    </button>
+  </div>
+
+  <div id="csvImportPanel" class="csv-import-panel hidden">
+    <p class="muted">Headers: ItemID,ItemName,Device,Series,Quantity,CostPerItem,Supplier,Notes,Threshold</p>
+    <input id="csvFile" type="file" accept=".csv" />
+    <textarea id="csvInput" rows="4" placeholder="Paste CSV here..."></textarea>
+    <button id="importCsvBtn" type="button">Import CSV</button>
+  </div>
+
+  <div class="row wrap inventory-search-row"><div class="search-wrapper"><span class="search-icon">🔍</span><input id="inventorySearch" placeholder="Search inventory by item, supplier, device, series..." aria-label="Search inventory" /></div></div>
 <form id="inventoryForm" class="form-grid">
 
   <!-- Item Name -->
@@ -231,32 +259,6 @@
   </div>
 
 </form>
-      <div class="inventory-actions-row">
-  <button
-    type="button"
-    id="openAuditLogBtn"
-    aria-haspopup="dialog"
-    aria-controls="auditLogModal"
-  >
-    <span class="btn-ico">📦</span>
-    <span>Stock History</span>
-  </button>
-
-  <button
-    type="button"
-    id="toggleCsvImportBtn"
-  >
-    <span class="btn-ico">📄</span>
-    <span>Bulk Import</span>
-  </button>
-</div>
-
-<div id="csvImportPanel" class="csv-import-panel hidden">
-  <p class="muted">Headers: ItemID,ItemName,Device,Series,Quantity,CostPerItem,Supplier,Notes,Threshold</p>
-  <input id="csvFile" type="file" accept=".csv" />
-  <textarea id="csvInput" rows="4" placeholder="Paste CSV here..."></textarea>
-  <button id="importCsvBtn" type="button">Import CSV</button>
-</div>
       <div class="table-wrap">
         <table class="inventory-table">
 <thead>
@@ -278,16 +280,7 @@
           <tbody id="inventoryBody"></tbody>
         </table>
       </div>
-      <div class="stock-history-launch">
-<button
-  type="button"
-  id="openAuditLogBtn"
-  aria-haspopup="dialog"
-  aria-controls="auditLogModal"
->
-  <span class="btn-ico">📦</span>
-  <span>Stock History</span>
-</button>
+<!-- removed duplicate Stock History button -->
       <!-- Removed Per-Item History (replaced by Stock History modal) -->
     </section>
 
