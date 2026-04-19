@@ -2076,7 +2076,8 @@ background: linear-gradient(
   rgba(210, 220, 160, 0.98)
 ) !important;
 
-color: #1a1a1a;
+color: #ffffff;
+text-shadow: 0 1px 2px rgba(0,0,0,0.35);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -2098,6 +2099,12 @@ color: #1a1a1a;
 }
 
 #toggleCsvImportBtn:hover {
+background: linear-gradient(
+  135deg,
+  #26313d 0%,
+  #ffffff 100%
+) !important;
+
   border-color: rgba(102,252,241,0.30);
 color: #000;
 
