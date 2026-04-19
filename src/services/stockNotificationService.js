@@ -2,7 +2,14 @@ export function maybeNotifyLowStock({
   getData,
   showModal,
 }) {
-  const data = getData();
+  // ✅ ONLY SHOW ONCE PER SESSION
+const SESSION_KEY = "primitiveTechHub_stockAlertShown";
+
+if (sessionStorage.getItem(SESSION_KEY) === "true") {
+  return;
+}
+
+const data = getData();
   const inventory = Array.isArray(data.inventory) ? data.inventory : [];
   const thresholdDefault = Number(data?.settings?.defaultThreshold || 5);
 
@@ -127,6 +134,9 @@ export function maybeNotifyLowStock({
     qtyEl.classList.remove("qty-out", "qty-critical", "qty-warning", "qty-ok");
     qtyEl.classList.add(getQtySeverityClass(previewQty));
   };
+
+  // ✅ mark as shown BEFORE opening modal
+sessionStorage.setItem(SESSION_KEY, "true");
 
   showModal({
     title: "Inventory Alert",
