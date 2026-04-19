@@ -231,13 +231,32 @@
   </div>
 
 </form>
-      <details>
-        <summary>Bulk CSV Import</summary>
-        <p class="muted">Headers: ItemID,ItemName,Device,Series,Quantity,CostPerItem,Supplier,Notes,Threshold</p>
-        <input id="csvFile" type="file" accept=".csv" />
-        <textarea id="csvInput" rows="4" placeholder="Paste CSV here..."></textarea>
-        <button id="importCsvBtn" type="button">Import CSV</button>
-      </details>
+      <div class="inventory-actions-row">
+  <button
+    type="button"
+    id="openAuditLogBtn"
+    aria-haspopup="dialog"
+    aria-controls="auditLogModal"
+  >
+    <span class="btn-ico">📦</span>
+    <span>Stock History</span>
+  </button>
+
+  <button
+    type="button"
+    id="toggleCsvImportBtn"
+  >
+    <span class="btn-ico">📄</span>
+    <span>Bulk Import</span>
+  </button>
+</div>
+
+<div id="csvImportPanel" class="csv-import-panel hidden">
+  <p class="muted">Headers: ItemID,ItemName,Device,Series,Quantity,CostPerItem,Supplier,Notes,Threshold</p>
+  <input id="csvFile" type="file" accept=".csv" />
+  <textarea id="csvInput" rows="4" placeholder="Paste CSV here..."></textarea>
+  <button id="importCsvBtn" type="button">Import CSV</button>
+</div>
       <div class="table-wrap">
         <table class="inventory-table">
 <thead>

@@ -494,6 +494,18 @@ if (!inventorySyncOnlineWired) {
     });
   }
 
+// ===============================
+// CSV Import Toggle Button
+// ===============================
+const toggleCsvBtn = document.getElementById("toggleCsvImportBtn");
+const csvPanel = document.getElementById("csvImportPanel");
+
+if (toggleCsvBtn && csvPanel) {
+  toggleCsvBtn.onclick = () => {
+    csvPanel.classList.toggle("hidden");
+  };
+}
+
   ({
     connectivityController,
     settingsUI,

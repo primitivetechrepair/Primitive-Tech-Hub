@@ -2052,3 +2052,79 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     width: 100%;
   }
 }
+
+/* ===============================
+   Inventory Action Buttons Row
+=============================== */
+
+.inventory-actions-row {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0 16px;
+  flex-wrap: wrap;
+}
+
+/* ===============================
+   Bulk Import Button (Accent)
+=============================== */
+
+#toggleCsvImportBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-width: 180px;
+  min-height: 42px;
+  padding: 10px 14px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(234,179,8,0.28);
+
+  background: linear-gradient(
+    180deg,
+    rgba(40, 32, 10, 0.95),
+    rgba(24, 18, 6, 0.98)
+  ) !important;
+
+  color: #ffe7a3;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  font-family: 'Oswald', sans-serif;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(234,179,8,0.06),
+    0 8px 18px rgba(0,0,0,0.22);
+
+  cursor: pointer;
+
+  transition: all 0.18s ease;
+}
+
+#toggleCsvImportBtn:hover {
+  border-color: rgba(234,179,8,0.4);
+  color: #fff4cc;
+
+  box-shadow:
+    0 0 0 1px rgba(234,179,8,0.1),
+    0 0 18px rgba(234,179,8,0.12),
+    0 10px 22px rgba(0,0,0,0.28);
+
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   CSV PANEL
+=============================== */
+
+.csv-import-panel {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+}
