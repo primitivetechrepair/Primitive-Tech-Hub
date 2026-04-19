@@ -2072,8 +2072,8 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 background: linear-gradient(
   180deg,
-  rgba(245, 253, 198, 0.95),
-  rgba(210, 220, 160, 0.98)
+  #1F2833 0%,
+  #F5FDC6 100%
 ) !important;
 
 color: #ffffff;
@@ -2099,18 +2099,14 @@ text-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
 
 #toggleCsvImportBtn:hover {
-background: linear-gradient(
-  135deg,
-  #26313d 0%,
-  #ffffff 100%
-) !important;
-
   border-color: rgba(102,252,241,0.30);
-color: #000;
+  color: #000;
+  text-shadow: none;
 
   box-shadow:
-    0 0 0 1px rgba(234,179,8,0.1),
-    0 0 18px rgba(234,179,8,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 18px rgba(102,252,241,0.10),
     0 10px 22px rgba(0,0,0,0.28);
 
   transform: translateY(-1px);
