@@ -1210,6 +1210,218 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
+   Repair Leads Cards — Premium UI Pass
+   ========================================================= */
+
+.leads-card-wrap {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.leads-card-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  align-items: start;
+}
+
+.lead-card {
+  width: 100%;
+  min-width: 0;
+  padding: 14px;
+  border-radius: 16px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  ) !important;
+
+  border: 1px solid rgba(102,252,241,0.14) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 10px 22px rgba(0,0,0,0.28) !important;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.lead-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(102,252,241,0.24) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 18px rgba(102,252,241,0.10),
+    0 12px 26px rgba(0,0,0,0.32) !important;
+}
+
+.lead-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.lead-card-title {
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.lead-card-id {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--heading);
+  font-family: monospace;
+  letter-spacing: 0.04em;
+  word-break: break-word;
+}
+
+.lead-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lead-card-row {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.07);
+  min-width: 0;
+  align-items: start;
+}
+
+.lead-card-row strong {
+  color: var(--heading);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lead-card-row input,
+.lead-card-row select,
+.lead-card-row textarea,
+.lead-card-row button {
+  margin: 0;
+}
+
+.lead-card-row input,
+.lead-card-row select,
+.lead-card-row textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.lead-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.lead-card-actions .lead-action-btn {
+  min-width: 42px;
+  min-height: 36px;
+  padding: 8px 10px;
+  margin: 0;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--text-color) !important;
+  box-shadow: none !important;
+}
+
+.lead-card-actions .lead-action-btn:hover {
+  background: rgba(102,252,241,0.10) !important;
+  border-color: rgba(102,252,241,0.30) !important;
+  transform: translateY(-1px);
+}
+
+.lead-card-actions .deleteLeadBtn {
+  background: rgba(255,0,0,0.10) !important;
+  border-color: rgba(255,107,107,0.35) !important;
+  color: #fff !important;
+}
+
+.lead-card-actions .deleteLeadBtn:hover {
+  background: rgba(255,0,0,0.18) !important;
+}
+
+@media (min-width: 901px) {
+  .leads-card-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .leads-card-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .leads-card-wrap {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .lead-card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .lead-card-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .lead-card-actions {
+    justify-content: stretch;
+  }
+
+  .lead-card-actions .lead-action-btn {
+    flex: 1 1 calc(33.333% - 8px);
+    min-width: 0;
+  }
+}
+
+/* =========================================================
    Repair Row Animation Polish
    ========================================================= */
 
