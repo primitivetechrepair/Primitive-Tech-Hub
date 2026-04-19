@@ -273,7 +273,6 @@ function buildInventoryRow(item, ctx, q) {
     persist,
     renderAll,
     maybeNotifyLowStock,
-    showItemHistory,
     deleteInventoryItem,
     addSwipeQuickUse,
   } = ctx;
@@ -615,14 +614,7 @@ if (isDesktop) {
     await savePatch({ notes: value }, { field: "notes" });
   });
 
-  tr.querySelector(".historyBtn").onclick = () => {
-    showItemHistory({
-      el,
-      data,
-      addListItem,
-      itemID: item.itemID,
-    });
-  };
+  /* removed legacy per-item history button handler */
 
   tr.querySelector(".deleteInventoryBtn").onclick = () =>
     deleteInventoryItem(item.itemID);
@@ -648,7 +640,6 @@ export function renderInventory(ctx) {
     persist,
     renderAll,
     maybeNotifyLowStock,
-    showItemHistory,
     deleteInventoryItem,
     addSwipeQuickUse,
   } = ctx;

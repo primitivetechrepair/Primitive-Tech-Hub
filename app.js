@@ -39,7 +39,7 @@ import { renderReminders } from "./src/ui/renderReminders.js";
 import { renderInventoryOptions } from "./src/ui/renderInventoryOptions.js";
 import { renderScanLeadOptions } from "./src/ui/renderScanLeadOptions.js";
 import { applyCustomDropdowns } from "./src/ui/applyCustomDropdowns.js";
-import { showItemHistory } from "./src/ui/showItemHistory.js";
+/* removed legacy per-item history import */
 import { showSkeletonsOnce } from "./src/ui/skeletons.js";
 
 import { getWeek, fmtDate, fmtDateShort, fmtMoney, addListItem, toCsv, download, esc } from "./src/utils/helpers.js";
@@ -527,23 +527,22 @@ if (!inventorySyncOnlineWired) {
     addListItem,
 
     // generic utils / wiring
-    toast,
-    showModal,
-    val,
-    safeVal,
-    fileToMeta,
-    addAudit,
-    persist,
-    renderAll: renderAllNow,
-    download,
-    toCsv,
-    toggleTheme,
-    toggleDeviceChart,
-    inventoryStatusByColorRule,
-    ensureLeadPartsShape,
-    showItemHistory,
-    setIntegrationLog: (text) => setIntegrationLog(el, text),
-    saveAppSettingsToCloud,
+toast,
+showModal,
+val,
+safeVal,
+fileToMeta,
+addAudit,
+persist,
+renderAll: renderAllNow,
+download,
+toCsv,
+toggleTheme,
+toggleDeviceChart,
+inventoryStatusByColorRule,
+ensureLeadPartsShape,
+setIntegrationLog: (text) => setIntegrationLog(el, text),
+saveAppSettingsToCloud,
 
     // renderers/ui
     applyCustomDropdowns,

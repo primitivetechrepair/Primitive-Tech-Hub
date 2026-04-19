@@ -33,7 +33,6 @@ export function createRenderAllController({
   deleteActions,
   addPartToLead,
   removePartFromLead,
-  showItemHistory,
   addSwipeQuickUse,
 
   // lead parts shape normalizer
@@ -96,7 +95,6 @@ export function createRenderAllController({
       renderAll,
       maybeNotifyLowStock,
       quickUseItem: inventoryController.quickUseItem,
-      showItemHistory,
       deleteInventoryItem: deleteActions.deleteInventoryItem,
       addSwipeQuickUse,
     });

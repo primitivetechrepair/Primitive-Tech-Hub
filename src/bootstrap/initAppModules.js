@@ -77,7 +77,6 @@ export function initAppModules(ctx) {
     renderAuditLog,
     renderCustomerHistory,
     renderInvoiceHistory,
-    showItemHistory,
     settingsUIFactory: _settingsUIFactory, // not used (kept for compatibility)
 
     // chart primitives
@@ -399,7 +398,6 @@ export function initAppModules(ctx) {
       deleteActions: out.deleteActions,
       addPartToLead,
       removePartFromLead,
-      showItemHistory,
       addSwipeQuickUse,
 
       ensureLeadPartsShape,
