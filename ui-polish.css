@@ -1756,6 +1756,78 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
+   Repair Leads — Header / Identity Polish
+   ========================================================= */
+
+.lead-card-header {
+  position: relative;
+  padding-bottom: 12px;
+}
+
+/* subtle glow line (premium detail) */
+.lead-card-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(102,252,241,0.18),
+    transparent
+  );
+}
+
+/* customer name */
+.lead-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-color);
+
+  display: block;
+  line-height: 1.25;
+
+  /* prevent overflow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* lead id (secondary info) */
+.lead-card-id {
+  margin-top: 4px;
+
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  color: rgba(255,255,255,0.55);
+  font-family: 'Oswald', sans-serif;
+
+  display: inline-block;
+}
+
+/* subtle grouping for text */
+.lead-card-header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* hover emphasis */
+.lead-card:hover .lead-card-title {
+  color: #ffffff;
+}
+
+.lead-card:hover .lead-card-id {
+  color: rgba(102,252,241,0.75);
+}
+
+/* =========================================================
    Repair Row Animation Polish
    ========================================================= */
 
