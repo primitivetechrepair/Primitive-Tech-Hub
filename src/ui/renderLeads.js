@@ -130,7 +130,7 @@ export function renderLeads(ctx) {
     const partsCost = leadPartsCost(lead);
     const repairTotal = Number(lead.repairCost || 0);
     const labor = Number(lead.laborAmount || 0);
-    const profit = repairTotal - partsCost;
+    const profit = repairTotal - partsCost - labor;
 
 const formatRepairLabel = (type) => {
   const clean = String(type || "").trim();
@@ -375,6 +375,7 @@ if (isCollapsed(lead.leadID)) {
         data-payment="${esc(lead.paymentStatus || "")}"
         data-profit="${Number(profit || 0)}"
       >
+      >
         <div class="lead-card-header">
           <div class="lead-card-title copy-lead-id" title="Click to copy">
             ${esc(lead.customerName || "Unknown")}
@@ -499,7 +500,9 @@ if (isCollapsed(lead.leadID)) {
 
           <div class="lead-card-row">
             <strong>Profit:</strong>
-            ${fmtMoney(profit)}
+<span class="lead-profit-value">
+  ${fmtMoney(profit)}
+</span>
             <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
           </div>
 

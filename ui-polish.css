@@ -2101,6 +2101,19 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   margin-top: 2px;
 }
 
+.lead-profit-value {
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.lead-card[data-profit^="-"] .lead-profit-value {
+  color: #ff5252;
+}
+
+.lead-card[data-profit]:not([data-profit^="-"]) .lead-profit-value {
+  color: rgba(102,252,241,0.9);
+}
+
 /* =========================================================
    Date Input Calendar Icon (Mobile Friendly)
    ========================================================= */
