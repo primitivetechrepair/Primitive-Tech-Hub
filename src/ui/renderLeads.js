@@ -369,7 +369,11 @@ if (isCollapsed(lead.leadID)) {
     }
 
     tr.innerHTML = `
-      <div class="lead-card">
+      <div
+        class="lead-card"
+        data-status="${esc(lead.status || "")}"
+        data-payment="${esc(lead.paymentStatus || "")}"
+      >
         <div class="lead-card-header">
           <div class="lead-card-title copy-lead-id" title="Click to copy">
             ${esc(lead.customerName || "Unknown")}

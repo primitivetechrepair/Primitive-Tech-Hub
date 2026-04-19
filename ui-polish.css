@@ -1942,7 +1942,74 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     0 8px 18px rgba(0,0,0,0.20) !important;
 }
 
+/* =========================================================
+   Repair Leads — Status Color System (Premium Accents)
+   ========================================================= */
 
+/* Base subtle accent bar */
+.lead-card {
+  position: relative;
+}
+
+.lead-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 16px 0 0 16px;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+
+/* ===== STATUS COLORS ===== */
+
+/* Pending / New */
+.lead-card[data-status="Pending"],
+.lead-card[data-status="New"] {
+  --status-accent: rgba(255, 193, 7, 0.65);
+}
+
+/* In Progress */
+.lead-card[data-status="In Progress"] {
+  --status-accent: rgba(102, 252, 241, 0.65);
+}
+
+/* Completed */
+.lead-card[data-status="Completed"] {
+  --status-accent: rgba(34, 197, 94, 0.65);
+}
+
+/* Cancelled / Failed */
+.lead-card[data-status="Cancelled"],
+.lead-card[data-status="Failed"] {
+  --status-accent: rgba(255, 82, 82, 0.65);
+}
+
+/* Apply accent */
+.lead-card[data-status]::before {
+  background: var(--status-accent);
+}
+
+/* subtle glow on hover */
+.lead-card[data-status]:hover::before {
+  filter: brightness(1.2);
+}
+
+/* ===== PAYMENT STATUS (SUBTLE TEXT HINT) ===== */
+
+.lead-card[data-payment="Paid"] .lead-card-title {
+  color: rgba(102, 252, 241, 0.9);
+}
+
+.lead-card[data-payment="Unpaid"] .lead-card-title {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.lead-card[data-payment="Partially Paid"] .lead-card-title {
+  color: rgba(255, 215, 0, 0.9);
+}
 
 /* =========================================================
    Repair Row Animation Polish
