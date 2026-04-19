@@ -1,9 +1,13 @@
-let hasShownStockAlertThisLoad = false;
+const STOCK_ALERT_WINDOW_KEY = "__primitiveTechHubStockAlertShownThisLoad";
 
 export function maybeNotifyLowStock({
   getData,
   showModal,
 }) {
+  if (window[STOCK_ALERT_WINDOW_KEY]) {
+    return;
+  }
+
   const data = getData();
   const inventory = Array.isArray(data.inventory) ? data.inventory : [];
   const thresholdDefault = Number(data?.settings?.defaultThreshold || 5);
@@ -130,7 +134,7 @@ export function maybeNotifyLowStock({
     qtyEl.classList.add(getQtySeverityClass(previewQty));
   };
 
-  hasShownStockAlertThisLoad = true;
+  window[STOCK_ALERT_WINDOW_KEY] = true;
 
   showModal({
     title: "Inventory Alert",
