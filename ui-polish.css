@@ -833,7 +833,7 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   flex-direction: column;
   gap: 12px;
 
-  margin: 10px;
+  margin: 0;
   padding: 14px;
 
   border-radius: 16px;
@@ -1790,11 +1790,11 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
   display: block;
   line-height: 1.25;
+  min-width: 0;
 
-  /* prevent overflow */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 /* lead id (secondary info) */
@@ -2059,24 +2059,24 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   position: absolute;
   top: 0;
   right: 0;
-  width: 36%;
-  height: 36%;
+  width: 28%;
+  height: 28%;
   pointer-events: none;
-  border-radius: 0 16px 0 24px;
+  border-radius: 0 16px 0 20px;
 
   background: radial-gradient(
     circle at top right,
     var(--profit-accent) 0%,
-    transparent 72%
+    transparent 74%
   );
 
-  opacity: 0.95;
+  opacity: 0.72;
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .lead-card[data-profit]:hover::after {
-  opacity: 1;
-  transform: scale(1.03);
+  opacity: 0.9;
+  transform: scale(1.02);
 }
 
 /* profit row emphasis */
