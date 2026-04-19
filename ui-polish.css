@@ -2041,6 +2041,60 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
+   Repair Leads — High Value Profit Highlight
+   ========================================================= */
+
+.lead-card[data-profit] {
+  --profit-accent: transparent;
+}
+
+/* Strong profit */
+.lead-card[data-profit]:where([data-profit^="3"], [data-profit^="4"], [data-profit^="5"], [data-profit^="6"], [data-profit^="7"], [data-profit^="8"], [data-profit^="9"]) {
+  --profit-accent: rgba(34, 197, 94, 0.16);
+}
+
+/* 1000+ profit */
+.lead-card[data-profit^="1"][data-profit]:not([data-profit="0"]) {
+  --profit-accent: rgba(168, 85, 247, 0.18);
+}
+
+/* apply subtle top-right glow */
+.lead-card[data-profit]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36%;
+  height: 36%;
+  pointer-events: none;
+  border-radius: 0 16px 0 24px;
+
+  background: radial-gradient(
+    circle at top right,
+    var(--profit-accent) 0%,
+    transparent 72%
+  );
+
+  opacity: 0.95;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.lead-card[data-profit]:hover::after {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+/* profit row emphasis */
+.lead-card-row:has(.muted) strong + * {
+  font-weight: 700;
+}
+
+/* optional stronger value styling if the profit row is visible */
+.lead-card-row strong + .muted {
+  margin-top: 2px;
+}
+
+/* =========================================================
    Date Input Calendar Icon (Mobile Friendly)
    ========================================================= */
 
