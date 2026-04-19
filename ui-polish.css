@@ -1828,6 +1828,63 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
+   Repair Leads — Status / Payment Control Polish
+   ========================================================= */
+
+.lead-card-row .leadStatusSel,
+.lead-card-row .paymentMethodSel,
+.lead-card-row .paymentStatusSel,
+.lead-card-row .repairCostInput,
+.lead-card-row .laborAmountInput {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+
+  padding: 10px 12px !important;
+  margin: 0 !important;
+
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--text-color) !important;
+
+  box-shadow: none !important;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease !important;
+}
+
+.lead-card-row .leadStatusSel:focus,
+.lead-card-row .paymentMethodSel:focus,
+.lead-card-row .paymentStatusSel:focus,
+.lead-card-row .repairCostInput:focus,
+.lead-card-row .laborAmountInput:focus {
+  outline: none !important;
+  border-color: rgba(102,252,241,0.45) !important;
+  box-shadow: 0 0 0 3px rgba(102,252,241,0.12) !important;
+}
+
+/* status emphasis */
+.lead-card-row .leadStatusSel {
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* payment status emphasis */
+.lead-card-row .paymentStatusSel {
+  font-weight: 700;
+}
+
+/* lighter inline money fields */
+.lead-card-row .repairCostInput,
+.lead-card-row .laborAmountInput {
+  font-weight: 600;
+}
+
+/* =========================================================
    Repair Row Animation Polish
    ========================================================= */
 
