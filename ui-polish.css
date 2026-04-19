@@ -1885,6 +1885,66 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
+   Repair Leads — Collapse / Expand Animation Polish
+   ========================================================= */
+
+.lead-card-wrapper {
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.lead-card-body {
+  max-height: 2200px;
+  opacity: 1;
+  overflow: hidden;
+  transform: translateY(0);
+
+  transition:
+    max-height 0.32s ease,
+    opacity 0.22s ease,
+    transform 0.22s ease;
+  will-change: max-height, opacity, transform;
+}
+
+.lead-collapsed .lead-card-body {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
+.lead-collapsed .lead-card {
+  gap: 10px;
+}
+
+.lead-collapsed .lead-card-header {
+  padding-bottom: 0;
+  border-bottom-color: transparent;
+}
+
+.lead-collapsed .lead-card-header::after {
+  opacity: 0;
+}
+
+.collapseToggleBtn {
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    color 0.18s ease;
+}
+
+.lead-collapsed .collapseToggleBtn {
+  border-color: rgba(102,252,241,0.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.05),
+    0 8px 18px rgba(0,0,0,0.20) !important;
+}
+
+
+
+/* =========================================================
    Repair Row Animation Polish
    ========================================================= */
 
