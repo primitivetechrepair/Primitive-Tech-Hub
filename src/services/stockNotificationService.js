@@ -1,15 +1,10 @@
+let hasShownStockAlertThisLoad = false;
+
 export function maybeNotifyLowStock({
   getData,
   showModal,
 }) {
-  // ✅ ONLY SHOW ONCE PER SESSION
-const SESSION_KEY = "primitiveTechHub_stockAlertShown";
-
-if (sessionStorage.getItem(SESSION_KEY) === "true") {
-  return;
-}
-
-const data = getData();
+  const data = getData();
   const inventory = Array.isArray(data.inventory) ? data.inventory : [];
   const thresholdDefault = Number(data?.settings?.defaultThreshold || 5);
 
@@ -135,8 +130,7 @@ const data = getData();
     qtyEl.classList.add(getQtySeverityClass(previewQty));
   };
 
-  // ✅ mark as shown BEFORE opening modal
-sessionStorage.setItem(SESSION_KEY, "true");
+  hasShownStockAlertThisLoad = true;
 
   showModal({
     title: "Inventory Alert",
