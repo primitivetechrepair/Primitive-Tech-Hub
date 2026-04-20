@@ -2066,30 +2066,6 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* apply subtle top-right glow */
-.lead-card[data-profit]::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 28%;
-  height: 28%;
-  pointer-events: none;
-  border-radius: 0 16px 0 20px;
-
-  background: radial-gradient(
-    circle at top right,
-    var(--profit-accent) 0%,
-    transparent 74%
-  );
-
-  opacity: 0.72;
-  transition: opacity 0.18s ease, transform 0.18s ease;
-}
-
-.lead-card[data-profit]:hover::after {
-  opacity: 0.9;
-  transform: scale(1.02);
-}
 
 /* profit row emphasis */
 .lead-card-row:has(.muted) strong + * {
