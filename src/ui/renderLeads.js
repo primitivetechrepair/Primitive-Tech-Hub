@@ -500,9 +500,7 @@ if (isCollapsed(lead.leadID)) {
 
           <div class="lead-card-row">
             <strong>Profit:</strong>
-<span class="lead-profit-value">
-  ${fmtMoney(profit)}
-</span>
+            <span class="lead-profit-value">${fmtMoney(profit)}</span>
             <div class="muted">${esc(aiSuggestion(lead.issueDescription, lead.device))}</div>
           </div>
 
