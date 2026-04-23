@@ -3269,246 +3269,266 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
-   Global Button System — Phase 1
-   Safe CSS-only unification pass
+   Global Button System — Phase 1A
+   Stronger targeted pass for real winning selectors
    ========================================================= */
 
-/* Base app buttons only — leave nav/tabs/modal buttons alone */
-button:not(.bb-btn):not(.inv-tab):not(.inventory-group-toggle):not(.pt-modal__btn):not(.pt-modal__add):not(.pt-modal__close) {
-  min-height: 40px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(102, 252, 241, 0.18);
-  background: linear-gradient(
-    180deg,
-    rgba(18, 24, 34, 0.96),
-    rgba(11, 16, 24, 0.98)
-  );
-  color: var(--text-color);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.03),
-    0 0 0 1px rgba(102,252,241,0.04),
-    0 8px 18px rgba(0,0,0,0.22);
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.12s ease,
-    opacity 0.12s ease;
-}
-
-button:not(.bb-btn):not(.inv-tab):not(.inventory-group-toggle):not(.pt-modal__btn):not(.pt-modal__add):not(.pt-modal__close):hover {
-  background: linear-gradient(
-    180deg,
-    rgba(24, 34, 46, 0.98),
-    rgba(13, 21, 30, 1)
-  );
-  border-color: rgba(102, 252, 241, 0.30);
-  color: #fff;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 0 1px rgba(102,252,241,0.08),
-    0 0 18px rgba(102,252,241,0.10),
-    0 10px 22px rgba(0,0,0,0.28);
-  transform: translateY(-1px);
-  filter: none;
-}
-
-button:not(.bb-btn):not(.inv-tab):not(.inventory-group-toggle):not(.pt-modal__btn):not(.pt-modal__add):not(.pt-modal__close):active {
-  transform: scale(0.97);
-}
-
-button:not(.bb-btn):not(.inv-tab):not(.inventory-group-toggle):not(.pt-modal__btn):not(.pt-modal__add):not(.pt-modal__close):disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.02),
-    0 6px 14px rgba(0,0,0,0.18);
-}
-
-/* Secondary / neutral utility */
-button.secondary,
-#openScannerBtn,
-#calendarBtn,
-#accountingBtn,
-#closeScannerBtn,
-#themeToggleBtn,
-#logoutBtn,
-#exportJsonBtn,
-#exportCsvBtn,
-#modalCancelBtn {
-  background: linear-gradient(
-    180deg,
-    rgba(18, 24, 34, 0.96),
-    rgba(11, 16, 24, 0.98)
-  );
-  border: 1px solid rgba(102,252,241,0.18);
-  color: var(--text-color);
-}
-
-button.secondary:hover,
-#openScannerBtn:hover,
-#calendarBtn:hover,
-#accountingBtn:hover,
-#closeScannerBtn:hover,
-#themeToggleBtn:hover,
-#logoutBtn:hover,
-#exportJsonBtn:hover,
-#exportCsvBtn:hover,
-#modalCancelBtn:hover {
-  border-color: rgba(102,252,241,0.30);
-}
-
-/* Primary emphasis actions */
-#saveSettingsBtn,
-#applyScanToInventory,
-#attachScanToLead,
-#modalConfirmBtn,
-#inventoryForm .inventory-submit-btn,
-#leadForm .lead-submit-btn {
-  border-color: rgba(102,252,241,0.35);
-  color: #66fcf1;
-  background: linear-gradient(
-    180deg,
-    rgba(16, 36, 36, 0.95),
-    rgba(8, 22, 22, 0.98)
-  );
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 0 1px rgba(102,252,241,0.06),
-    0 8px 18px rgba(0,0,0,0.25),
-    0 0 12px rgba(102,252,241,0.12);
-}
-
-#saveSettingsBtn:hover,
-#applyScanToInventory:hover,
-#attachScanToLead:hover,
-#modalConfirmBtn:hover,
-#inventoryForm .inventory-submit-btn:hover,
-#leadForm .lead-submit-btn:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(22, 50, 50, 1),
-    rgba(10, 28, 28, 1)
-  );
-  border-color: rgba(102,252,241,0.50);
-  color: #ffffff;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 0 0 1px rgba(102,252,241,0.10),
-    0 0 20px rgba(102,252,241,0.22),
-    0 10px 22px rgba(0,0,0,0.30);
-}
-
-/* Compact buttons */
-button.tiny,
-.tiny-btn,
-.mini-btn,
-.historyBtn,
-.lead-action-btn,
-.removeRepairRowBtn {
-  width: auto;
-  min-width: 0;
-  min-height: 36px;
-  padding: 8px 12px;
-  margin: 0;
-  border-radius: 10px;
-  font-size: 12px;
-  line-height: 1.1;
-}
-
-/* Compact utility buttons */
-.historyBtn,
-.mini-btn,
-.tiny-btn,
-.lead-action-btn {
+/* Header utility buttons */
+.app-header .row.wrap > button.secondary,
+.app-header .row.wrap > #exportJsonBtn,
+.app-header .row.wrap > #exportCsvBtn,
+.app-header .row.wrap > #themeToggleBtn,
+.app-header .row.wrap > #logoutBtn {
   background: linear-gradient(
     180deg,
     rgba(18, 24, 34, 0.96),
     rgba(11, 16, 24, 0.98)
   ) !important;
-  border: 1px solid rgba(102,252,241,0.18) !important;
+  border: 1px solid rgba(102, 252, 241, 0.20) !important;
   color: var(--text-color) !important;
+  border-radius: 12px !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.03),
     0 0 0 1px rgba(102,252,241,0.04),
     0 8px 18px rgba(0,0,0,0.22) !important;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease !important;
 }
 
-.historyBtn:hover,
-.mini-btn:hover,
-.tiny-btn:hover,
-.lead-action-btn:hover {
-  border-color: rgba(102,252,241,0.30) !important;
+.app-header .row.wrap > button.secondary:hover,
+.app-header .row.wrap > #exportJsonBtn:hover,
+.app-header .row.wrap > #exportCsvBtn:hover,
+.app-header .row.wrap > #themeToggleBtn:hover,
+.app-header .row.wrap > #logoutBtn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.98),
+    rgba(13, 21, 30, 1)
+  ) !important;
+  border-color: rgba(102, 252, 241, 0.34) !important;
   color: #fff !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.04),
     0 0 0 1px rgba(102,252,241,0.08),
-    0 0 18px rgba(102,252,241,0.10),
+    0 0 18px rgba(102,252,241,0.12),
     0 10px 22px rgba(0,0,0,0.28) !important;
+  transform: translateY(-1px);
+  filter: none !important;
 }
 
-/* Compact danger buttons */
+/* Settings top manage buttons */
+#settingsSection .form-grid > .settings-manage-row > button.mini-btn {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  ) !important;
+  border: 1px solid rgba(102,252,241,0.26) !important;
+  color: #66fcf1 !important;
+  border-radius: 12px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.05),
+    0 8px 18px rgba(0,0,0,0.24),
+    0 0 12px rgba(102,252,241,0.10) !important;
+}
+
+#settingsSection .form-grid > .settings-manage-row > button.mini-btn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(22, 34, 48, 0.98),
+    rgba(12, 20, 30, 1)
+  ) !important;
+  border-color: rgba(102,252,241,0.44) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 0 0 1px rgba(102,252,241,0.10),
+    0 0 18px rgba(102,252,241,0.16),
+    0 10px 22px rgba(0,0,0,0.28) !important;
+  transform: translateY(-1px);
+}
+
+/* Settings action row */
+#settingsSection > .row.wrap > button,
+#settingsSection > .row.wrap > button.secondary,
+#settingsSection > .row.wrap > #saveSettingsBtn,
+#settingsSection > .row.wrap > #openScannerBtn,
+#settingsSection > .row.wrap > #calendarBtn,
+#settingsSection > .row.wrap > #accountingBtn {
+  border-radius: 12px !important;
+}
+
+#settingsSection > .row.wrap > #saveSettingsBtn {
+  background: linear-gradient(
+    180deg,
+    rgba(16, 36, 36, 0.95),
+    rgba(8, 22, 22, 0.98)
+  ) !important;
+  border: 1px solid rgba(102,252,241,0.34) !important;
+  color: #66fcf1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 0 1px rgba(102,252,241,0.06),
+    0 8px 18px rgba(0,0,0,0.25),
+    0 0 12px rgba(102,252,241,0.12) !important;
+}
+
+#settingsSection > .row.wrap > #saveSettingsBtn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(22, 50, 50, 1),
+    rgba(10, 28, 28, 1)
+  ) !important;
+  border-color: rgba(102,252,241,0.50) !important;
+  color: #fff !important;
+}
+
+/* Inventory actions */
+.historyBtn,
+button.historyBtn,
+#inventoryBody .historyBtn {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  ) !important;
+  border: 1px solid rgba(102,252,241,0.22) !important;
+  color: var(--text-color) !important;
+  border-radius: 10px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.20) !important;
+}
+
+.historyBtn:hover,
+button.historyBtn:hover,
+#inventoryBody .historyBtn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.98),
+    rgba(13, 21, 30, 1)
+  ) !important;
+  border-color: rgba(102,252,241,0.34) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 16px rgba(102,252,241,0.12),
+    0 10px 22px rgba(0,0,0,0.26) !important;
+}
+
 .deleteInventoryBtn,
-.deleteLeadBtn,
-.removeRepairRowBtn,
-button.delete-btn {
+button.deleteInventoryBtn,
+#inventoryBody .deleteInventoryBtn,
+#inventoryBody .tiny.delete-btn.deleteInventoryBtn {
   background: linear-gradient(
     180deg,
     rgba(60, 12, 16, 0.95),
     rgba(36, 7, 10, 0.98)
   ) !important;
-  border: 1px solid rgba(255,82,82,0.28) !important;
-  color: #ffd7d7 !important;
+  border: 1px solid rgba(255,82,82,0.30) !important;
+  color: #ffe0e0 !important;
+  border-radius: 10px !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.03),
     0 8px 18px rgba(0,0,0,0.18) !important;
 }
 
 .deleteInventoryBtn:hover,
-.deleteLeadBtn:hover,
-.removeRepairRowBtn:hover,
-button.delete-btn:hover {
+button.deleteInventoryBtn:hover,
+#inventoryBody .deleteInventoryBtn:hover,
+#inventoryBody .tiny.delete-btn.deleteInventoryBtn:hover {
   background: linear-gradient(
     180deg,
     rgba(78, 18, 22, 0.98),
     rgba(46, 10, 14, 1)
   ) !important;
-  border-color: rgba(255,110,110,0.42) !important;
-  color: #fff1f1 !important;
+  border-color: rgba(255,110,110,0.44) !important;
+  color: #fff !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.04),
     0 0 18px rgba(255,82,82,0.12),
     0 10px 22px rgba(0,0,0,0.26) !important;
 }
 
-/* Keep lead action rows wrapping cleanly */
-.lead-card-actions {
-  gap: 8px;
+/* Lead card action buttons */
+.lead-card-actions .lead-action-btn {
+  border: 1px solid rgba(102,252,241,0.18) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  ) !important;
+  color: var(--text-color) !important;
+  border-radius: 10px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.22) !important;
 }
 
-.lead-card-actions .lead-action-btn,
+.lead-card-actions .lead-action-btn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(24, 34, 46, 0.98),
+    rgba(13, 21, 30, 1)
+  ) !important;
+  border-color: rgba(102,252,241,0.34) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 18px rgba(102,252,241,0.12),
+    0 10px 22px rgba(0,0,0,0.28) !important;
+  transform: translateY(-1px);
+}
+
+.lead-card-actions .deleteLeadBtn {
+  background: linear-gradient(
+    180deg,
+    rgba(60, 12, 16, 0.95),
+    rgba(36, 7, 10, 0.98)
+  ) !important;
+  border-color: rgba(255,110,110,0.34) !important;
+  color: #fff0f0 !important;
+}
+
+.lead-card-actions .deleteLeadBtn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(78, 18, 22, 0.98),
+    rgba(46, 10, 14, 1)
+  ) !important;
+  border-color: rgba(255,110,110,0.46) !important;
+  color: #fff !important;
+}
+
+/* Deleted leads toolbar button */
 .deleted-leads-toolbar .tiny-btn,
-.settings-manage-row .mini-btn {
-  margin: 0 !important;
+#undoDeleteLeadBtn.tiny-btn {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 34, 0.96),
+    rgba(11, 16, 24, 0.98)
+  ) !important;
+  border: 1px solid rgba(102,252,241,0.20) !important;
+  color: var(--text-color) !important;
+  border-radius: 10px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(102,252,241,0.04),
+    0 8px 18px rgba(0,0,0,0.20) !important;
 }
 
-/* Mobile safety */
-@media (max-width: 700px) {
-  button:not(.bb-btn):not(.inv-tab):not(.inventory-group-toggle):not(.pt-modal__btn):not(.pt-modal__add):not(.pt-modal__close) {
-    min-height: 38px;
-  }
-
-  button.tiny,
-  .tiny-btn,
-  .mini-btn,
-  .historyBtn,
-  .lead-action-btn,
-  .removeRepairRowBtn {
-    min-height: 34px;
-    padding: 8px 10px;
-  }
+.deleted-leads-toolbar .tiny-btn:hover,
+#undoDeleteLeadBtn.tiny-btn:hover {
+  border-color: rgba(102,252,241,0.34) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 16px rgba(102,252,241,0.12),
+    0 10px 22px rgba(0,0,0,0.26) !important;
 }
