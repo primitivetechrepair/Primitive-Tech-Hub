@@ -3532,3 +3532,151 @@ button.deleteInventoryBtn:hover,
     0 0 16px rgba(102,252,241,0.12),
     0 10px 22px rgba(0,0,0,0.26) !important;
 }
+
+/* =========================================================
+   Global Button System — Mobile Pass
+   Targets only mobile-visible button groups
+   ========================================================= */
+@media (max-width: 700px) {
+  /* Header utility buttons on mobile */
+  .app-header .row.wrap > button.secondary,
+  .app-header .row.wrap > #exportJsonBtn,
+  .app-header .row.wrap > #exportCsvBtn,
+  .app-header .row.wrap > #themeToggleBtn,
+  .app-header .row.wrap > #logoutBtn {
+    background: linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.96),
+      rgba(11, 16, 24, 0.98)
+    ) !important;
+    border: 1px solid rgba(102,252,241,0.22) !important;
+    color: var(--text-color) !important;
+    border-radius: 14px !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      0 0 0 1px rgba(102,252,241,0.04),
+      0 8px 18px rgba(0,0,0,0.22) !important;
+  }
+
+  /* Settings manage buttons on mobile */
+  #settingsSection .form-grid > .settings-manage-row > button.mini-btn {
+    background: linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.96),
+      rgba(11, 16, 24, 0.98)
+    ) !important;
+    border: 1px solid rgba(102,252,241,0.28) !important;
+    color: #66fcf1 !important;
+    border-radius: 12px !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      0 0 0 1px rgba(102,252,241,0.05),
+      0 8px 18px rgba(0,0,0,0.24),
+      0 0 12px rgba(102,252,241,0.10) !important;
+  }
+
+  /* Settings action row on mobile */
+  #settingsSection > .row.wrap > #saveSettingsBtn,
+  #settingsSection > .row.wrap > #openScannerBtn,
+  #settingsSection > .row.wrap > #calendarBtn,
+  #settingsSection > .row.wrap > #accountingBtn,
+  #settingsSection > .row.wrap > #closeScannerBtn,
+  #scannerPanel .row.wrap > #applyScanToInventory,
+  #scannerPanel .row.wrap > #attachScanToLead {
+    border-radius: 14px !important;
+  }
+
+  #settingsSection > .row.wrap > #saveSettingsBtn,
+  #scannerPanel .row.wrap > #applyScanToInventory,
+  #scannerPanel .row.wrap > #attachScanToLead {
+    background: linear-gradient(
+      180deg,
+      rgba(16, 36, 36, 0.95),
+      rgba(8, 22, 22, 0.98)
+    ) !important;
+    border: 1px solid rgba(102,252,241,0.34) !important;
+    color: #66fcf1 !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      0 0 0 1px rgba(102,252,241,0.06),
+      0 8px 18px rgba(0,0,0,0.25),
+      0 0 12px rgba(102,252,241,0.12) !important;
+  }
+
+  /* Inventory mobile card buttons */
+  #inventoryBody .historyBtn,
+  #inventoryBody tr:not(.inventory-group-row):not(.empty-state-row) td:nth-child(1) .historyBtn {
+    background: linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.96),
+      rgba(11, 16, 24, 0.98)
+    ) !important;
+    border: 1px solid rgba(102,252,241,0.24) !important;
+    color: var(--text-color) !important;
+    border-radius: 12px !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      0 0 0 1px rgba(102,252,241,0.04),
+      0 8px 18px rgba(0,0,0,0.22) !important;
+  }
+
+  #inventoryBody .deleteInventoryBtn,
+  #inventoryBody .tiny.delete-btn.deleteInventoryBtn {
+    background: linear-gradient(
+      180deg,
+      rgba(60, 12, 16, 0.95),
+      rgba(36, 7, 10, 0.98)
+    ) !important;
+    border: 1px solid rgba(255,82,82,0.32) !important;
+    color: #ffe0e0 !important;
+    border-radius: 12px !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      0 8px 18px rgba(0,0,0,0.18) !important;
+  }
+
+  /* Lead card action buttons on mobile */
+  .lead-card-actions .lead-action-btn {
+    background: linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.96),
+      rgba(11, 16, 24, 0.98)
+    ) !important;
+    border: 1px solid rgba(102,252,241,0.20) !important;
+    color: var(--text-color) !important;
+    border-radius: 12px !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      0 0 0 1px rgba(102,252,241,0.04),
+      0 8px 18px rgba(0,0,0,0.22) !important;
+  }
+
+  .lead-card-actions .deleteLeadBtn,
+  .lead-card-actions .deleteLeadFileBtn,
+  .lead-card-actions .deleteLeadNoteBtn {
+    background: linear-gradient(
+      180deg,
+      rgba(60, 12, 16, 0.95),
+      rgba(36, 7, 10, 0.98)
+    ) !important;
+    border-color: rgba(255,110,110,0.34) !important;
+    color: #fff0f0 !important;
+  }
+
+  /* Deleted leads undo button on mobile */
+  .deleted-leads-toolbar .tiny-btn,
+  #undoDeleteLeadBtn.tiny-btn {
+    background: linear-gradient(
+      180deg,
+      rgba(18, 24, 34, 0.96),
+      rgba(11, 16, 24, 0.98)
+    ) !important;
+    border: 1px solid rgba(102,252,241,0.22) !important;
+    color: var(--text-color) !important;
+    border-radius: 12px !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      0 0 0 1px rgba(102,252,241,0.04),
+      0 8px 18px rgba(0,0,0,0.20) !important;
+  }
+}
