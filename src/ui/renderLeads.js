@@ -375,7 +375,6 @@ if (isCollapsed(lead.leadID)) {
         data-payment="${esc(lead.paymentStatus || "")}"
         data-profit="${Number(profit || 0)}"
       >
-      >
         <div class="lead-card-header">
           <div class="lead-card-title copy-lead-id" title="Click to copy">
             ${esc(lead.customerName || "Unknown")}
