@@ -3789,3 +3789,7 @@ button.deleteInventoryBtn:hover,
   }
 }
 
+.lead-card-actions button {
+  border-radius: 12px !important;
+  display: flex !important;
+}
