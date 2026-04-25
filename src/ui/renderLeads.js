@@ -93,34 +93,47 @@ export function renderLeads(ctx) {
 
 const activeCount = leads.filter((lead) => lead.status !== "Completed").length;
 const completedCount = leads.filter((lead) => lead.status === "Completed").length;
+const allCount = leads.length;
 
   const visibleLeads = leads.filter((lead) => {
     if (currentLeadsView === "completed") {
-      return lead.status === "Completed";
-    }
+  return lead.status === "Completed";
+}
 
-    return lead.status !== "Completed";
+if (currentLeadsView === "all") {
+  return true;
+}
+
+return lead.status !== "Completed";
   });
 
   el.leadsBody.innerHTML = `
-    <div class="leads-view-toggle">
-      <button
-        type="button"
-        class="leads-toggle-btn ${currentLeadsView === "active" ? "active" : ""}"
-        data-view="active"
-      >
-        Active (${activeCount})
-      </button>
+  <div class="leads-view-toggle">
+    <button
+      type="button"
+      class="leads-toggle-btn ${currentLeadsView === "active" ? "active" : ""}"
+      data-view="active"
+    >
+      Active (${activeCount})
+    </button>
 
-      <button
-        type="button"
-        class="leads-toggle-btn ${currentLeadsView === "completed" ? "active" : ""}"
-        data-view="completed"
-      >
-        Completed (${completedCount})
-      </button>
-    </div>
-  `;
+    <button
+      type="button"
+      class="leads-toggle-btn ${currentLeadsView === "completed" ? "active" : ""}"
+      data-view="completed"
+    >
+      Completed (${completedCount})
+    </button>
+
+    <button
+      type="button"
+      class="leads-toggle-btn ${currentLeadsView === "all" ? "active" : ""}"
+      data-view="all"
+    >
+      All (${allCount})
+    </button>
+  </div>
+`;
 
   el.leadsBody.querySelectorAll(".leads-toggle-btn").forEach((btn) => {
     btn.onclick = () => {
