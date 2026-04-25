@@ -3789,3 +3789,27 @@ button.deleteInventoryBtn:hover,
     color: #ffffff !important;
   }
 }
+
+/* =========================================================
+   Lead Card — Collapse Spacing Fix (SAFE)
+   ========================================================= */
+
+.lead-card.is-collapsed {
+  gap: 6px !important;
+}
+
+/* hide extra spacing blocks when collapsed */
+.lead-card.is-collapsed .lead-card-body {
+  display: none !important;
+}
+
+.lead-card.is-collapsed .lead-card-actions {
+  margin-top: 6px !important;
+}
+
+/* remove phantom spacing from rows */
+.lead-card.is-collapsed .lead-card-row {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
