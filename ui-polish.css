@@ -1258,7 +1258,7 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   linear-gradient(
     135deg,
     rgba(20, 60, 80, 0.55),
-    rgba(40, 20, 80, 0.35) 50%,
+    rgba(120, 60, 20, 0.25) 55%,
     rgba(10, 14, 22, 0.95)
   );
 
