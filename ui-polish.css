@@ -1287,15 +1287,14 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   position: absolute;
   inset: 0;
 
+  /* texture */
   background-image:
-  radial-gradient(rgba(102,252,241,0.07) 1px, transparent 1px);
-background-size: 12px 12px;
-opacity: 0.28;
+    radial-gradient(rgba(102,252,241,0.07) 1px, transparent 1px);
 
-  background-size:
-    14px 14px,
-    28px 28px,
-    28px 28px;
+  background-size: 12px 12px;
+
+  /* 👇 ADD THIS LINE */
+  background-blend-mode: overlay;
 
   opacity: 0.22;
   pointer-events: none;
@@ -2040,7 +2039,23 @@ opacity: 0.28;
   position: relative;
 }
 
-/* ===== STATUS COLORS ===== */
+/* ===== STATUS BANNER TINT (SUBTLE) ===== */
+
+.lead-card[data-status] .lead-card-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    135deg,
+    transparent,
+    var(--status-glow)
+  );
+
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 1;
+}
 
 .lead-card[data-status="Pending"],
 .lead-card[data-status="New"] {
@@ -2079,7 +2094,27 @@ opacity: 0.28;
     inset 0 1px 0 rgba(255,255,255,0.04),
     0 0 0 1px var(--status-accent),
     0 0 22px var(--status-glow),
-    0 12px 26px rgba(0,0,0,0.32) !important;
+    0 16px 32px rgba(0,0,0,0.38) !important;
+}
+
+.lead-card[data-status] .lead-card-header {
+  position: relative;
+}
+
+.lead-card[data-status] .lead-card-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    135deg,
+    transparent,
+    var(--status-glow)
+  );
+
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ===== PAYMENT STATUS (SUBTLE TEXT HINT) ===== */
