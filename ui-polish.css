@@ -1553,6 +1553,19 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
+   Leads Toggle — Mobile Font & Spacing Polish
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .leads-toggle-btn {
+    font-size: 10.5px !important;
+    padding: 6px 8px !important;
+    min-height: 34px !important;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* =========================================================
    Repair Leads Content Rows — Notes / Files / Parts Polish
    ========================================================= */
 
