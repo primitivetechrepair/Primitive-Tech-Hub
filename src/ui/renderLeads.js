@@ -44,6 +44,9 @@ export function renderLeads(ctx) {
     deleteLead,
   } = ctx;
 
+  const LEADS_VIEW_KEY = "primitiveTechHub_leadsView";
+  const currentLeadsView = localStorage.getItem(LEADS_VIEW_KEY) || "active";
+
   const f = el.statusFilter.value;
   const deviceFilter = el.deviceFilter.value;
   const q = el.leadSearch.value.trim().toLowerCase();
@@ -88,9 +91,42 @@ export function renderLeads(ctx) {
     );
   });
 
-  el.leadsBody.innerHTML = "";
+  const visibleLeads = leads.filter((lead) => {
+    if (currentLeadsView === "completed") {
+      return lead.status === "Completed";
+    }
 
-  if (!leads.length) {
+    return lead.status !== "Completed";
+  });
+
+  el.leadsBody.innerHTML = `
+    <div class="leads-view-toggle">
+      <button
+        type="button"
+        class="leads-toggle-btn ${currentLeadsView === "active" ? "active" : ""}"
+        data-view="active"
+      >
+        Active
+      </button>
+
+      <button
+        type="button"
+        class="leads-toggle-btn ${currentLeadsView === "completed" ? "active" : ""}"
+        data-view="completed"
+      >
+        Completed
+      </button>
+    </div>
+  `;
+
+  el.leadsBody.querySelectorAll(".leads-toggle-btn").forEach((btn) => {
+    btn.onclick = () => {
+      localStorage.setItem(LEADS_VIEW_KEY, btn.dataset.view || "active");
+      renderAll();
+    };
+  });
+
+  if (!visibleLeads.length) {
     el.leadsBody.innerHTML = `
       <div class="empty-state-row">
         <div class="empty-state">
@@ -103,7 +139,7 @@ export function renderLeads(ctx) {
     return;
   }
 
-  leads.forEach((lead) => {
+  visibleLeads.forEach((lead) => {
     ensureLeadPartsShape(lead);
 
     const used = (lead.inventoryUsed || [])

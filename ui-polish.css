@@ -1489,6 +1489,70 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
+   Leads View Toggle
+   ========================================================= */
+
+.leads-view-toggle {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.leads-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(102,252,241,0.18);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-color);
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+}
+
+.leads-toggle-btn.active {
+  background: rgba(102,252,241,0.14);
+  border-color: rgba(102,252,241,0.35);
+  color: #fff;
+
+  box-shadow:
+    0 0 0 1px rgba(102,252,241,0.08),
+    0 0 14px rgba(102,252,241,0.12);
+}
+
+.leads-toggle-btn:hover {
+  border-color: rgba(102,252,241,0.30);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 700px) {
+  .leads-view-toggle {
+    gap: 8px;
+  }
+
+  .leads-toggle-btn {
+    flex: 1;
+  }
+}
+
+/* =========================================================
    Repair Leads Content Rows — Notes / Files / Parts Polish
    ========================================================= */
 
