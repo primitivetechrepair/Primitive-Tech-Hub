@@ -1962,20 +1962,30 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   will-change: max-height, opacity, transform;
 }
 
+/* Collapsed card: body should not reserve visual space */
 .lead-collapsed .lead-card-body {
-  max-height: 0;
-  opacity: 0;
+  display: none !important;
+  max-height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
   transform: translateY(-6px);
-  pointer-events: none;
+  pointer-events: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
 }
 
+/* Collapsed card: remove bottom padding only while collapsed */
 .lead-collapsed .lead-card {
-  gap: 10px;
+  gap: 0 !important;
+  padding-bottom: 0 !important;
 }
 
+/* Collapsed card: header becomes the full visible card surface */
 .lead-collapsed .lead-card-header {
-  padding-bottom: 0;
-  border-bottom-color: transparent;
+  margin-bottom: 0 !important;
+  border-bottom-color: transparent !important;
 }
 
 .lead-collapsed .lead-card-header::after {
@@ -3788,28 +3798,4 @@ button.deleteInventoryBtn:hover,
     border-color: rgba(102,252,241,0.50) !important;
     color: #ffffff !important;
   }
-}
-
-/* =========================================================
-   Lead Card — Collapse Spacing Fix (SAFE)
-   ========================================================= */
-
-.lead-card.is-collapsed {
-  gap: 6px !important;
-}
-
-/* hide extra spacing blocks when collapsed */
-.lead-card.is-collapsed .lead-card-body {
-  display: none !important;
-}
-
-.lead-card.is-collapsed .lead-card-actions {
-  margin-top: 6px !important;
-}
-
-/* remove phantom spacing from rows */
-.lead-card.is-collapsed .lead-card-row {
-  padding: 0 !important;
-  border: none !important;
-  background: transparent !important;
 }
