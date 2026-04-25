@@ -379,9 +379,13 @@ if (isCollapsed(lead.leadID)) {
           <div class="lead-card-title copy-lead-id" title="Click to copy">
             ${esc(lead.customerName || "Unknown")}
             <span class="lead-card-id">
-              ${esc(lead.leadID)}
-              ${lead.justRestored ? ` <span class="lead-restored-badge">RESTORED</span>` : ""}
-            </span>
+  ${esc(lead.leadID)}
+  ${lead.justRestored ? ` <span class="lead-restored-badge">RESTORED</span>` : ""}
+</span>
+
+<span class="lead-card-status-badge">
+  ${esc(lead.status || "New")}
+</span>
           </div>
 
           <div class="lead-card-actions">
