@@ -1983,8 +1983,8 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 /* Collapsed card: remove bottom padding only while collapsed */
 .lead-collapsed .lead-card {
-  gap: 0 !important;
-  padding-bottom: 0 !important;
+  gap: 6px !important;
+  padding-bottom: 8px !important;
 }
 
 /* Collapsed card: header becomes the full visible card surface */
