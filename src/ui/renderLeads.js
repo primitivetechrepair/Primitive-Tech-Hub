@@ -158,23 +158,48 @@ const visibleLeads = leads.filter((lead) => {
   return;
 }
 
-  const leadsToRender =
+  const COMPLETED_SECTION_KEY = "primitiveTechHub_completedSectionOpen";
+const completedSectionOpen =
+  localStorage.getItem(COMPLETED_SECTION_KEY) === "true";
+
+const leadsToRender =
   currentLeadsView === "all"
     ? [
-        { title: `Active (${activeLeads.length})`, items: activeLeads },
-        { title: `Completed (${completedLeads.length})`, items: completedLeads },
+        { title: `Active (${activeLeads.length})`, items: activeLeads, key: "active", open: true },
+        {
+          title: `Completed (${completedLeads.length})`,
+          items: completedLeads,
+          key: "completed",
+          open: completedSectionOpen,
+        },
       ]
-    : [{ title: null, items: visibleLeads }];
+    : [{ title: null, items: visibleLeads, key: "single", open: true }];
 
 leadsToRender.forEach((section) => {
   if (section.title) {
-    const sectionHeader = document.createElement("div");
-    sectionHeader.className = "leads-section-header";
-    sectionHeader.innerHTML = section.title;
-    el.leadsBody.appendChild(sectionHeader);
+  const sectionHeader = document.createElement("button");
+  sectionHeader.type = "button";
+  sectionHeader.className = `leads-section-header ${
+    section.key === "completed" && !section.open ? "is-collapsed" : ""
+  }`;
+  sectionHeader.innerHTML =
+    section.key === "completed"
+      ? `${section.open ? "▾" : "▸"} ${section.title}`
+      : section.title;
+
+  if (section.key === "completed") {
+    sectionHeader.onclick = () => {
+      localStorage.setItem(COMPLETED_SECTION_KEY, String(!section.open));
+      renderAll();
+    };
   }
 
-  section.items.forEach((lead) => {
+  el.leadsBody.appendChild(sectionHeader);
+}
+
+if (!section.open) return;
+
+section.items.forEach((lead) => {
     ensureLeadPartsShape(lead);
 
     const used = (lead.inventoryUsed || [])
