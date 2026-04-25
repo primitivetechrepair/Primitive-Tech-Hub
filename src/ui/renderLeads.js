@@ -95,6 +95,7 @@ const activeLeads = leads.filter(
   (lead) => lead.status !== "Completed" && lead.status !== "Archived"
 );
 const completedLeads = leads.filter((lead) => lead.status === "Completed");
+const archivedLeads = leads.filter((lead) => lead.status === "Archived");
 
 const activeCount = activeLeads.length;
 const completedCount = completedLeads.length;
@@ -173,6 +174,12 @@ const leadsToRender =
           items: completedLeads,
           key: "completed",
           open: completedSectionOpen,
+        },
+        {
+          title: `Archived (${archivedLeads.length})`,
+          items: archivedLeads,
+          key: "archived",
+          open: true,
         },
       ]
     : [{ title: null, items: visibleLeads, key: "single", open: true }];
