@@ -91,7 +91,9 @@ export function renderLeads(ctx) {
     );
   });
 
-const activeLeads = leads.filter((lead) => lead.status !== "Completed");
+const activeLeads = leads.filter(
+  (lead) => lead.status !== "Completed" && lead.status !== "Archived"
+);
 const completedLeads = leads.filter((lead) => lead.status === "Completed");
 
 const activeCount = activeLeads.length;
@@ -107,7 +109,7 @@ const visibleLeads = leads.filter((lead) => {
     return true;
   }
 
-  return lead.status !== "Completed";
+  return lead.status !== "Completed" && lead.status !== "Archived";
 });
 
   el.leadsBody.innerHTML = `

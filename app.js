@@ -86,6 +86,7 @@ const STATUS_ORDER = [
   "In Progress",
   "Waiting for Parts",
   "Completed",
+  "Archived",
   "Cancelled",
 ];
 
