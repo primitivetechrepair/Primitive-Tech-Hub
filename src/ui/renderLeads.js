@@ -91,6 +91,9 @@ export function renderLeads(ctx) {
     );
   });
 
+const activeCount = leads.filter((lead) => lead.status !== "Completed").length;
+const completedCount = leads.filter((lead) => lead.status === "Completed").length;
+
   const visibleLeads = leads.filter((lead) => {
     if (currentLeadsView === "completed") {
       return lead.status === "Completed";
@@ -106,7 +109,7 @@ export function renderLeads(ctx) {
         class="leads-toggle-btn ${currentLeadsView === "active" ? "active" : ""}"
         data-view="active"
       >
-        Active
+        Active (${activeCount})
       </button>
 
       <button
@@ -114,7 +117,7 @@ export function renderLeads(ctx) {
         class="leads-toggle-btn ${currentLeadsView === "completed" ? "active" : ""}"
         data-view="completed"
       >
-        Completed
+        Completed (${completedCount})
       </button>
     </div>
   `;
