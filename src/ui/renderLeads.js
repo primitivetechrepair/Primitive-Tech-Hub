@@ -91,21 +91,24 @@ export function renderLeads(ctx) {
     );
   });
 
-const activeCount = leads.filter((lead) => lead.status !== "Completed").length;
-const completedCount = leads.filter((lead) => lead.status === "Completed").length;
+const activeLeads = leads.filter((lead) => lead.status !== "Completed");
+const completedLeads = leads.filter((lead) => lead.status === "Completed");
+
+const activeCount = activeLeads.length;
+const completedCount = completedLeads.length;
 const allCount = leads.length;
 
-  const visibleLeads = leads.filter((lead) => {
-    if (currentLeadsView === "completed") {
-  return lead.status === "Completed";
-}
+const visibleLeads = leads.filter((lead) => {
+  if (currentLeadsView === "completed") {
+    return lead.status === "Completed";
+  }
 
-if (currentLeadsView === "all") {
-  return true;
-}
+  if (currentLeadsView === "all") {
+    return true;
+  }
 
-return lead.status !== "Completed";
-  });
+  return lead.status !== "Completed";
+});
 
   el.leadsBody.innerHTML = `
   <div class="leads-view-toggle">
@@ -155,7 +158,23 @@ return lead.status !== "Completed";
   return;
 }
 
-  visibleLeads.forEach((lead) => {
+  const leadsToRender =
+  currentLeadsView === "all"
+    ? [
+        { title: `Active (${activeLeads.length})`, items: activeLeads },
+        { title: `Completed (${completedLeads.length})`, items: completedLeads },
+      ]
+    : [{ title: null, items: visibleLeads }];
+
+leadsToRender.forEach((section) => {
+  if (section.title) {
+    const sectionHeader = document.createElement("div");
+    sectionHeader.className = "leads-section-header";
+    sectionHeader.innerHTML = section.title;
+    el.leadsBody.appendChild(sectionHeader);
+  }
+
+  section.items.forEach((lead) => {
     ensureLeadPartsShape(lead);
 
     const used = (lead.inventoryUsed || [])
@@ -1469,5 +1488,6 @@ if (selectedFilesEl) {
         tr.classList.remove("lead-just-restored");
       }, 2500);
     }
+  });
   });
 }
