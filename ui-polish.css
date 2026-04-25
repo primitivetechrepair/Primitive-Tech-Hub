@@ -1427,7 +1427,7 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     border-radius: 14px;
   }
 
-    .lead-card-header {
+  .lead-card-header {
     margin: -12px -12px 12px -12px;
     padding: 18px 14px 16px;
     border-radius: 14px 14px 0 0;
@@ -1437,9 +1437,14 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     font-size: 17px;
   }
 
-    .lead-card-id {
+  .lead-card-id {
     font-size: 10px;
     padding: 5px 10px;
+  }
+
+  /* Collapsed mobile fix */
+.lead-collapsed .lead-card-header {
+  border-radius: 14px !important;
   }
 }
 
@@ -1986,6 +1991,7 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 .lead-collapsed .lead-card-header {
   margin-bottom: 0 !important;
   border-bottom-color: transparent !important;
+  border-radius: 16px !important;
 }
 
 .lead-collapsed .lead-card-header::after {
