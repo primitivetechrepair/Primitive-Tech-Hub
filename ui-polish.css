@@ -825,111 +825,6 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 /* =========================================================
-   Repair Leads Card Polish
-   ========================================================= */
-
-.lead-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  margin: 0;
-  padding: 14px;
-
-  border-radius: 16px;
-
-  background: linear-gradient(
-    180deg,
-    rgba(18, 24, 34, 0.96),
-    rgba(11, 16, 24, 0.98)
-  );
-
-  border: 1px solid rgba(102,252,241,0.12);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.03),
-    0 0 0 1px rgba(102,252,241,0.04),
-    0 10px 22px rgba(0,0,0,0.28);
-
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.12s ease;
-}
-
-.lead-card:hover {
-  border-color: rgba(102,252,241,0.22);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 0 1px rgba(102,252,241,0.08),
-    0 0 18px rgba(102,252,241,0.10),
-    0 12px 26px rgba(0,0,0,0.32);
-
-  transform: translateY(-1px);
-}
-
-.lead-card-header {
-  position: relative;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 14px 16px;
-  margin: -14px -14px 12px -14px;
-
-  border-radius: 16px 16px 0 0;
-
-  background: linear-gradient(
-    135deg,
-    rgba(0, 200, 200, 0.18),
-    rgba(0, 120, 160, 0.22)
-  );
-
-  border-bottom: 1px solid rgba(102,252,241,0.25);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 6px 14px rgba(0,0,0,0.25);
-}
-
-.lead-card-header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background-image:
-    radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size: 12px 12px;
-
-  opacity: 0.25;
-  pointer-events: none;
-}
-
-.lead-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.lead-card-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.lead-card-row strong {
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-}
-
-/* =========================================================
    Lead Repair Badges (Multi-Repair UI)
    ========================================================= */
 .lead-card-row-repairs {
@@ -1343,30 +1238,68 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 }
 
 .lead-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+
+  margin: -14px -14px 12px -14px;
+  padding: 18px 16px 16px;
+
+  border-radius: 16px 16px 0 0;
+
+  background: linear-gradient(
+    135deg,
+    rgba(0, 200, 200, 0.18),
+    rgba(0, 120, 160, 0.22)
+  );
+
+  border-bottom: 1px solid rgba(102,252,241,0.25);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 6px 14px rgba(0,0,0,0.25);
+
+  overflow: hidden;
+}
+
+/* subtle texture */
+.lead-card-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 12px 12px;
+
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .lead-card-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #ffffff;
-
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: 100%;
+
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+
+  text-align: center;
 }
 
 .lead-card-id {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  font-size: 11px;
-  font-weight: 600;
-
+  margin: 0;
   padding: 4px 10px;
 
   border-radius: 999px;
@@ -1375,6 +1308,9 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   color: rgba(255,255,255,0.85);
 
   border: 1px solid rgba(255,255,255,0.18);
+
+  font-size: 11px;
+  font-weight: 600;
 
   backdrop-filter: blur(4px);
 }
@@ -1419,48 +1355,6 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   box-sizing: border-box;
 }
 
-.lead-card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-end;
-  flex-shrink: 0;
-}
-
-.lead-card-actions .lead-action-btn {
-  min-width: 42px;
-  min-height: 36px;
-  padding: 8px 10px;
-  margin: 0;
-  border-radius: 10px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  background: rgba(255,255,255,0.04) !important;
-  color: var(--text-color) !important;
-  box-shadow: none !important;
-}
-
-.lead-card-actions .lead-action-btn:hover {
-  background: rgba(102,252,241,0.10) !important;
-  border-color: rgba(102,252,241,0.30) !important;
-  transform: translateY(-1px);
-}
-
-.lead-card-actions .deleteLeadBtn {
-  background: rgba(255,0,0,0.10) !important;
-  border-color: rgba(255,107,107,0.35) !important;
-  color: #fff !important;
-}
-
-.lead-card-actions .deleteLeadBtn:hover {
-  background: rgba(255,0,0,0.18) !important;
-}
-
 @media (min-width: 901px) {
   .leads-card-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1489,15 +1383,6 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
-  }
-
-  .lead-card-actions {
-    justify-content: stretch;
-  }
-
-  .lead-card-actions .lead-action-btn {
-    flex: 1 1 calc(33.333% - 8px);
-    min-width: 0;
   }
 }
 
@@ -1900,91 +1785,6 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 .lead-card-row .useForRepairBtn:active {
   transform: scale(0.97) !important;
-}
-
-
-
-/* =========================================================
-   Repair Leads — Header / Identity Polish
-   ========================================================= */
-
-.lead-card-header {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-bottom: 12px;
-}
-
-/* subtle glow line (premium detail) */
-.lead-card-header::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(102,252,241,0.18),
-    transparent
-  );
-}
-
-/* customer name */
-.lead-card-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  width: 100%;
-
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--text-color);
-  line-height: 1.25;
-
-  white-space: normal;
-  overflow: visible;
-  text-overflow: unset;
-}
-
-/* lead id (secondary info) */
-.lead-card-id {
-  margin-top: 0;
-  flex: 0 0 auto;
-
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-
-  color: rgba(255,255,255,0.55);
-  font-family: 'Oswald', sans-serif;
-
-  display: inline-flex;
-  align-items: center;
-}
-
-/* subtle grouping for text */
-.lead-card-header > div:first-child {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  width: 100%;
-}
-
-/* hover emphasis */
-.lead-card:hover .lead-card-title {
-  color: #ffffff;
-}
-
-.lead-card:hover .lead-card-id {
-  color: rgba(102,252,241,0.75);
 }
 
 /* =========================================================
