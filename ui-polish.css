@@ -1444,8 +1444,9 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
   /* Collapsed mobile fix */
 .lead-collapsed .lead-card-header {
+  padding-bottom: 18px !important;
   border-radius: 14px !important;
-  }
+}
 }
 
 /* =========================================================
@@ -1983,13 +1984,14 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
 /* Collapsed card: remove bottom padding only while collapsed */
 .lead-collapsed .lead-card {
-  gap: 6px !important;
-  padding-bottom: 8px !important;
+  gap: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 /* Collapsed card: header becomes the full visible card surface */
 .lead-collapsed .lead-card-header {
   margin-bottom: 0 !important;
+  padding-bottom: 20px !important;
   border-bottom-color: transparent !important;
   border-radius: 16px !important;
 }
