@@ -143,17 +143,17 @@ return lead.status !== "Completed";
   });
 
   if (!visibleLeads.length) {
-    el.leadsBody.innerHTML = `
-      <div class="empty-state-row">
-        <div class="empty-state">
-          <div class="empty-icon">🛠️</div>
-          <div class="empty-title">No Repair Leads Yet</div>
-          <div class="muted">Create a lead to start tracking repairs.</div>
-        </div>
+  el.leadsBody.innerHTML += `
+    <div class="empty-state-row">
+      <div class="empty-state">
+        <div class="empty-icon">🛠️</div>
+        <div class="empty-title">No Repair Leads</div>
+        <div class="muted">Try switching views or create a new lead.</div>
       </div>
-    `;
-    return;
-  }
+    </div>
+  `;
+  return;
+}
 
   visibleLeads.forEach((lead) => {
     ensureLeadPartsShape(lead);
