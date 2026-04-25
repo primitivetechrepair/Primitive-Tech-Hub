@@ -1437,10 +1437,11 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
     font-size: 17px;
   }
 
-  .lead-card-id {
+    .lead-card-id {
     font-size: 10px;
     padding: 5px 10px;
   }
+}
 
 /* =========================================================
    Repair Leads Content Rows — Notes / Files / Parts Polish
@@ -3787,9 +3788,4 @@ button.deleteInventoryBtn:hover,
     border-color: rgba(102,252,241,0.50) !important;
     color: #ffffff !important;
   }
-}
-
-.lead-card-actions button {
-  border-radius: 12px !important;
-  display: flex !important;
 }
