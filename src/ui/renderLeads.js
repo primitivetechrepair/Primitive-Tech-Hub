@@ -159,16 +159,19 @@ const visibleLeads = leads.filter((lead) => {
     };
   });
 
-  if (!visibleLeads.length) {
-  el.leadsBody.innerHTML += `
-    <div class="empty-state-row">
-      <div class="empty-state">
-        <div class="empty-icon">🛠️</div>
-        <div class="empty-title">No Repair Leads</div>
-        <div class="muted">Try switching views or create a new lead.</div>
+if (!visibleLeads.length) {
+  el.leadsBody.insertAdjacentHTML(
+    "beforeend",
+    `
+      <div class="empty-state-row">
+        <div class="empty-state">
+          <div class="empty-icon">🛠️</div>
+          <div class="empty-title">No Repair Leads</div>
+          <div class="muted">Try switching views or create a new lead.</div>
+        </div>
       </div>
-    </div>
-  `;
+    `
+  );
   return;
 }
 
