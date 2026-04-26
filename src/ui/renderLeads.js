@@ -141,12 +141,23 @@ const visibleLeads = leads.filter((lead) => {
   </div>
 `;
 
-  el.leadsBody.querySelectorAll(".leads-toggle-btn").forEach((btn) => {
-    btn.onclick = () => {
-      localStorage.setItem(LEADS_VIEW_KEY, btn.dataset.view || "active");
+  const leadsToggle = el.leadsBody.querySelector(".leads-view-toggle");
+
+if (leadsToggle) {
+  leadsToggle.onclick = (e) => {
+    const btn = e.target.closest(".leads-toggle-btn");
+    if (!btn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    localStorage.setItem(LEADS_VIEW_KEY, btn.dataset.view || "active");
+
+    requestAnimationFrame(() => {
       renderAll();
-    };
-  });
+    });
+  };
+}
 
   if (!visibleLeads.length) {
   el.leadsBody.innerHTML += `
