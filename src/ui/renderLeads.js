@@ -44,6 +44,8 @@ export function renderLeads(ctx) {
     deleteLead,
   } = ctx;
 
+  const normalizeStatus = (s) => String(s || "").trim().toLowerCase();
+
   const LEADS_VIEW_KEY = "primitiveTechHub_leadsView";
   const currentLeadsView = localStorage.getItem(LEADS_VIEW_KEY) || "active";
 
@@ -91,26 +93,35 @@ export function renderLeads(ctx) {
     );
   });
 
-const activeLeads = leads.filter(
-  (lead) => lead.status !== "Completed" && lead.status !== "Archived"
+const activeLeads = leads.filter((lead) => {
+  const s = normalizeStatus(lead.status);
+  return s !== "completed" && s !== "archived";
+});
+
+const completedLeads = leads.filter(
+  (lead) => normalizeStatus(lead.status) === "completed"
 );
-const completedLeads = leads.filter((lead) => lead.status === "Completed");
-const archivedLeads = leads.filter((lead) => lead.status === "Archived");
+
+const archivedLeads = leads.filter(
+  (lead) => normalizeStatus(lead.status) === "archived"
+);
 
 const activeCount = activeLeads.length;
 const completedCount = completedLeads.length;
 const allCount = leads.length;
 
 const visibleLeads = leads.filter((lead) => {
+  const s = normalizeStatus(lead.status);
+
   if (currentLeadsView === "completed") {
-    return lead.status === "Completed";
+    return s === "completed";
   }
 
   if (currentLeadsView === "all") {
     return true;
   }
 
-  return lead.status !== "Completed" && lead.status !== "Archived";
+  return s !== "completed" && s !== "archived";
 });
 
   el.leadsBody.innerHTML = `
