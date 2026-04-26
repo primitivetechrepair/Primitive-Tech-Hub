@@ -4026,3 +4026,15 @@ button.deleteInventoryBtn:hover,
     color: #ffffff !important;
   }
 }
+
+.empty-state-row,
+.empty-state {
+  pointer-events: none;
+}
+
+.leads-view-toggle,
+.leads-toggle-btn {
+  position: relative;
+  z-index: 5;
+  pointer-events: auto;
+}
