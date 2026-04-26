@@ -1200,41 +1200,48 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   width: 100%;
   min-width: 0;
   padding: 14px;
-  border-radius: 16px;
+  border-radius: 18px;
 
-  background: linear-gradient(
-    180deg,
-    rgba(18, 24, 34, 0.96),
-    rgba(11, 16, 24, 0.98)
-  ) !important;
+  /* deeper glass base */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(14, 20, 30, 0.96),
+      rgba(8, 12, 20, 0.98)
+    );
 
-  border: 1px solid rgba(102,252,241,0.14) !important;
+  border: 1px solid rgba(102,252,241,0.12);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.03),
-    0 0 0 1px rgba(102,252,241,0.04),
-    0 10px 22px rgba(0,0,0,0.28) !important;
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    inset 0 0 0 1px rgba(102,252,241,0.03),
+    0 12px 26px rgba(0,0,0,0.32),
+    0 0 18px rgba(0,0,0,0.28);
+
+  backdrop-filter: blur(10px);
 
   display: flex;
   flex-direction: column;
   gap: 12px;
 
   transition:
-  transform 0.22s cubic-bezier(.22,.61,.36,1),
-  border-color 0.18s ease,
-  box-shadow 0.22s ease,
-  background 0.18s ease;
+    transform 0.22s cubic-bezier(.22,.61,.36,1),
+    border-color 0.18s ease,
+    box-shadow 0.22s ease,
+    background 0.18s ease;
 }
 
 .lead-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(102,252,241,0.24) !important;
+  transform: translateY(-6px) scale(1.01);
+
+  border-color: rgba(102,252,241,0.22);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    inset 0 0 0 1px rgba(102,252,241,0.05),
     0 0 0 1px rgba(102,252,241,0.08),
-    0 0 22px rgba(102,252,241,0.12), /* updated */
-    0 16px 32px rgba(0,0,0,0.38) !important;
+    0 0 28px rgba(102,252,241,0.12),
+    0 20px 40px rgba(0,0,0,0.45);
 }
 
 .lead-card:hover .lead-card-header {
@@ -1264,42 +1271,43 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
   /* softer separation */
   border-bottom: 1px solid rgba(102,252,241,0.18);
 
-  /* 🔥 GLASS BASE (matches entire app) */
-  background:
-    linear-gradient(
-      135deg,
-      rgba(20, 88, 140, 0.96),
-      rgba(80, 42, 140, 0.86) 48%,
-      rgba(12, 18, 32, 0.98)
-    );
+/* refined premium gradient */
+background:
+  linear-gradient(
+    135deg,
+    rgba(18, 70, 120, 0.95),
+    rgba(52, 32, 110, 0.88) 45%,
+    rgba(10, 14, 26, 0.98)
+  );
 
-  /* subtle teal glow instead of loud gradient */
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 8px 18px rgba(0,0,0,0.32),
-    0 0 14px rgba(102,252,241,0.06);
-
-  overflow: hidden;
-}
+/* deeper layered glow */
+box-shadow:
+  inset 0 1px 0 rgba(255,255,255,0.06),
+  inset 0 -1px 0 rgba(102,252,241,0.08),
+  0 10px 24px rgba(0,0,0,0.38),
+  0 0 20px rgba(102,252,241,0.08);
 
 .lead-card-header::before {
   content: "";
   position: absolute;
   inset: 0;
 
-  /* texture */
-  background-image:
-    radial-gradient(rgba(102,252,241,0.07) 1px, transparent 1px);
+/* texture */
+background-image:
+  radial-gradient(rgba(102,252,241,0.06) 1px, transparent 1px),
+  linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
 
-  background-size: 12px 12px;
+background-size:
+  12px 12px,
+  24px 24px,
+  24px 24px;
 
-  /* 👇 ADD THIS LINE */
-  background-blend-mode: overlay;
+background-blend-mode: overlay;
 
-  opacity: 0.22;
-  pointer-events: none;
-  z-index: 0;
-}
+opacity: 0.22;
+pointer-events: none;
+z-index: 0;
 
 .lead-card-header::after {
   content: "";
