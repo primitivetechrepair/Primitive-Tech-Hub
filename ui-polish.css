@@ -4027,18 +4027,33 @@ button.deleteInventoryBtn:hover,
   }
 }
 
-.empty-state {
-  padding: 24px 16px;
-  opacity: 0.9;
+/* =========================================================
+   Empty Leads State — Desktop Center Fix
+   ========================================================= */
+
+.leads-card-list .empty-state-row,
+#leadsBody .empty-state-row {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  padding: 24px 12px !important;
+  text-align: center !important;
 }
 
-.empty-state .empty-icon {
-  font-size: 22px;
-  margin-bottom: 6px;
-}
+.leads-card-list .empty-state,
+#leadsBody .empty-state {
+  width: 100% !important;
+  max-width: 420px !important;
+  margin: 0 auto !important;
 
-.empty-state .empty-title {
-  font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 4px;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center !important;
 }
