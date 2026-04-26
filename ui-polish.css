@@ -4027,14 +4027,18 @@ button.deleteInventoryBtn:hover,
   }
 }
 
-.empty-state-row,
 .empty-state {
-  pointer-events: none;
+  padding: 24px 16px;
+  opacity: 0.9;
 }
 
-.leads-view-toggle,
-.leads-toggle-btn {
-  position: relative;
-  z-index: 5;
-  pointer-events: auto;
+.empty-state .empty-icon {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.empty-state .empty-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
 }
