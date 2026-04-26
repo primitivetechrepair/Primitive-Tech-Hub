@@ -520,6 +520,7 @@ if (isCollapsed(lead.leadID)) {
             <button class="tiny lead-action-btn callCustomerBtn" title="Call">📞</button>
             <button class="tiny lead-action-btn textCustomerBtn" title="Text">💬</button>
             <button class="tiny lead-action-btn invoiceBtn" title="Invoice">🧾</button>
+            <button class="tiny lead-action-btn archiveLeadBtn" title="Archive">📦</button>
             <button class="tiny lead-action-btn delete-btn deleteLeadBtn" title="Delete">🗑️</button>
           </div>
         </div>
@@ -915,6 +916,36 @@ if (header) {
       currentlyCollapsed ? "Show Details" : "Hide Details"
     );
   });
+}
+
+const archiveBtn = tr.querySelector(".archiveLeadBtn");
+
+if (archiveBtn) {
+  archiveBtn.onclick = async () => {
+    lead.status = "Archived";
+    lead.lastUpdated = new Date().toISOString();
+
+    addAudit("lead_archived", {
+      leadID: lead.leadID,
+    });
+
+    try {
+      await persist();
+
+      queueCloudSync("lead_status_update", {
+        leadID: lead.leadID,
+        status: "Archived",
+      });
+
+      await upsertLeadToCloud(lead);
+
+      renderAll();
+      toast(el, "Lead archived.", "success");
+    } catch (err) {
+      console.error(err);
+      toast(el, "Failed to archive lead.", "error");
+    }
+  };
 }
 
     tr.querySelector(".deleteLeadBtn").onclick = () => deleteLead(lead.leadID);
