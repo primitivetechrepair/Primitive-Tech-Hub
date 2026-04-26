@@ -47,7 +47,10 @@ export function renderLeads(ctx) {
   const LEADS_VIEW_KEY = "primitiveTechHub_leadsView";
   const currentLeadsView = localStorage.getItem(LEADS_VIEW_KEY) || "active";
 
-  const f = el.statusFilter.value;
+  const rawStatusFilter = el.statusFilter.value;
+const f = String(rawStatusFilter || "all").toLowerCase() === "all"
+  ? "all"
+  : rawStatusFilter;
   const deviceFilter = el.deviceFilter.value;
   const q = el.leadSearch.value.trim().toLowerCase();
 
