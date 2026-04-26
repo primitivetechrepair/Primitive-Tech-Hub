@@ -1266,12 +1266,13 @@ td:has(.leadStatusSel option:checked[value="Completed"]) {
 
   /* 🔥 GLASS BASE (matches entire app) */
   background:
-  linear-gradient(
-    135deg,
-    rgba(16, 52, 95, 0.92),   /* deep tech blue */
-    rgba(46, 28, 95, 0.85) 45%, /* subtle violet depth */
-    rgba(10, 14, 26, 0.98)     /* base blend */
-  );
+    linear-gradient(
+      135deg,
+      rgba(20, 88, 140, 0.96),
+      rgba(80, 42, 140, 0.86) 48%,
+      rgba(12, 18, 32, 0.98)
+    );
+
   /* subtle teal glow instead of loud gradient */
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.05),
